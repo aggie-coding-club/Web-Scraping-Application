@@ -1,3 +1,4 @@
+
 # ACC Project: Web Scraping Application
 
 ## Introduction
@@ -79,4 +80,5 @@ Here are some team-specific resources that may be helpful:
 - [Beautiful Soup](https://www.tutorialspoint.com/beautiful_soup/beautiful_soup_souping_the_page.htm)
 - [SQLite3](https://www.guru99.com/sqlite-tutorial.html )
 For additional support, please reach out to via the discord
+
 
