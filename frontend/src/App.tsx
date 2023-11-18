@@ -1,38 +1,64 @@
+import { Container } from "react-bootstrap";
+import LoginModal from "./components/LoginModal";
+import NavBar from "./components/NavBar";
+import SignUpModal from "./components/SignUpModal";
+import styles from "./styles/ObjsPage.module.css";
 import { useEffect, useState } from "react";
-import { Container, Row, Col } from "react-bootstrap"
-import { Obj as ObjModel } from "./models/object";
-import Obj from "./components/Obj";
-import styles from "./styles/ObjsPage.module.css"
+import { User } from "./models/user";
+import * as ObjsApi from "./network/objs_api";
+import ObjsPageLoggedInView from "./components/ObjsPageLoggedInView";
+import ObjsPageLoggedOutView from "./components/ObjsPageLoggedOutView";
 
 function App() {
-  const [objs, setObjs] = useState<ObjModel[]>([]);
+  const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
+
+  const [showSignUpModal, setShowSignUpModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   useEffect(() => {
-    async function loadObjs() {
+    async function fetchLoggedInUser() {
       try {
-        const response = await fetch("/api/notes", {
-          method: "GET",
-        }); // Proxy setup for localhost:5000, for local testing only
-        const objs = await response.json();
-        setObjs(objs);
+        const user = await ObjsApi.getLoggedInUser();
+        setLoggedInUser(user);
       } catch (error) {
         console.error(error);
-        alert(error);
       }
     }
-    loadObjs();
+    fetchLoggedInUser();
   }, []);
 
   return (
-    <Container>
-      <Row xs={1} md={2} xl={3} className="g-4">
-      {objs.map((obj) => (
-        <Col key={obj._id}>
-          <Obj obj={obj} className={styles.obj}/>
-        </Col>
-      ))}
-      </Row>
-    </Container>
+    <div>
+      <NavBar
+        loggedInUser={loggedInUser}
+        onLoginClicked={() => setShowLoginModal(true)}
+        onSignUpClicked={() => setShowSignUpModal(true)}
+        onLogoutSuccessful={() => setLoggedInUser(null)}
+      />
+      <Container className={styles.objsPage}>
+        <>
+          {loggedInUser ? <ObjsPageLoggedInView /> : <ObjsPageLoggedOutView />}
+        </>
+      </Container>
+      {showSignUpModal && (
+        <SignUpModal
+          onDismiss={() => setShowSignUpModal(false)}
+          onSignUpSuccessful={(user) => {
+            setLoggedInUser(user);
+            setShowSignUpModal(false);
+          }}
+        />
+      )}
+      {showLoginModal && (
+        <LoginModal
+          onDismiss={() => setShowLoginModal(false)}
+          onLoginSuccessful={(user) => {
+            setLoggedInUser(user);
+            setShowLoginModal(false);
+          }}
+        />
+      )}
+    </div>
   );
 }
 

@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 // get all
 export const getNotes: RequestHandler = async (req, res, next) => {
   try {
-    // throw Error("Error 1");
+    // throw createHttpError(401); // For testing error handling
     const notes = await NoteModel.find().exec();
     res.status(200).json(notes); // OK status
   } catch (error) {
