@@ -1,5 +1,11 @@
-const ObjssPageLoggedOutView = () => {
-  return <p>Please login</p>;
+import Home from "./Home";
+
+const ObjsPageLoggedOutView = () => {
+  return (
+    <div>
+      <Home />
+    </div>
+  );
 };
 
-export default ObjssPageLoggedOutView;
+export default ObjsPageLoggedOutView;
