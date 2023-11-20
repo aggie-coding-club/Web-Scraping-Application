@@ -1,13 +1,16 @@
-import { Container } from "react-bootstrap";
+import { useEffect, useState } from "react";
 import LoginModal from "./components/LoginModal";
 import NavBar from "./components/NavBar";
 import SignUpModal from "./components/SignUpModal";
-import styles from "./styles/ObjsPage.module.css";
-import { useEffect, useState } from "react";
 import { User } from "./models/user";
 import * as ObjsApi from "./network/objs_api";
-import ObjsPageLoggedInView from "./components/ObjsPageLoggedInView";
-import ObjsPageLoggedOutView from "./components/ObjsPageLoggedOutView";
+import { BrowserRouter } from "react-router-dom";
+import { Container } from "react-bootstrap";
+import { Route, Routes } from "react-router";
+import ObjsPage from "./pages/ObjsPage";
+import ExamplePage from "./pages/ExamplePage";
+import NotFoundPage from "./pages/NotFoundPage";
+import styles from "./styles/App.module.css";
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
@@ -28,37 +31,50 @@ function App() {
   }, []);
 
   return (
-    <div>
-      <NavBar
-        loggedInUser={loggedInUser}
-        onLoginClicked={() => setShowLoginModal(true)}
-        onSignUpClicked={() => setShowSignUpModal(true)}
-        onLogoutSuccessful={() => setLoggedInUser(null)}
-      />
-      <Container className={styles.objsPage}>
-        <>
-          {loggedInUser ? <ObjsPageLoggedInView /> : <ObjsPageLoggedOutView />}
-        </>
-      </Container>
-      {showSignUpModal && (
-        <SignUpModal
-          onDismiss={() => setShowSignUpModal(false)}
-          onSignUpSuccessful={(user) => {
-            setLoggedInUser(user);
-            setShowSignUpModal(false);
-          }}
+    <BrowserRouter>
+      <div>
+        <NavBar
+          loggedInUser={loggedInUser}
+          onLoginClicked={() => setShowLoginModal(true)}
+          onSignUpClicked={() => setShowSignUpModal(true)}
+          onLogoutSuccessful={() => setLoggedInUser(null)}
         />
-      )}
-      {showLoginModal && (
-        <LoginModal
-          onDismiss={() => setShowLoginModal(false)}
-          onLoginSuccessful={(user) => {
-            setLoggedInUser(user);
-            setShowLoginModal(false);
-          }}
-        />
-      )}
-    </div>
+        <Container className={styles.pageContainer}>
+          <Routes>
+            <Route 
+              path="/"
+              element={<ObjsPage loggedInUser={loggedInUser} />}
+            />
+            <Route 
+              path="/example"
+              element={<ExamplePage />}
+            />
+            <Route 
+              path="/*"
+              element={<NotFoundPage/>}
+            />
+          </Routes>
+        </Container>
+        {showSignUpModal && (
+          <SignUpModal
+            onDismiss={() => setShowSignUpModal(false)}
+            onSignUpSuccessful={(user) => {
+              setLoggedInUser(user);
+              setShowSignUpModal(false);
+            }}
+          />
+        )}
+        {showLoginModal && (
+          <LoginModal
+            onDismiss={() => setShowLoginModal(false)}
+            onLoginSuccessful={(user) => {
+              setLoggedInUser(user);
+              setShowLoginModal(false);
+            }}
+          />
+        )}
+      </div>
+    </BrowserRouter>
   );
 }
 
