@@ -1,13 +1,18 @@
 import { RequestHandler } from "express";
-import NoteModel from "../models/note";
+import NoteModel from "../models/obj";
 import createHttpError from "http-errors";
 import mongoose from "mongoose";
+import { assertIsDefined } from "../util/assertIsDefined";
 
 // get all
 export const getNotes: RequestHandler = async (req, res, next) => {
+  const authenticatedUserId = req.session.userId;
+
   try {
     // throw createHttpError(401); // For testing error handling
-    const notes = await NoteModel.find().exec();
+    assertIsDefined(authenticatedUserId);
+
+    const notes = await NoteModel.find({userId: authenticatedUserId}).exec();
     res.status(200).json(notes); // OK status
   } catch (error) {
     next(error);
@@ -17,7 +22,11 @@ export const getNotes: RequestHandler = async (req, res, next) => {
 // get singular
 export const getNote: RequestHandler = async (req, res, next) => {
   const noteId = req.params.noteId;
+  const authenticatedUserId = req.session.userId;
+
   try {
+    assertIsDefined(authenticatedUserId);
+
     if (!mongoose.isValidObjectId(noteId)) {
       throw createHttpError(400, "Invalid object id");
     }
@@ -26,6 +35,10 @@ export const getNote: RequestHandler = async (req, res, next) => {
 
     if (!note) {
       throw createHttpError(404, "Object not found");
+    }
+
+    if (!note.userId.equals(authenticatedUserId)) {
+      throw createHttpError(401, "You cannot access this obj");
     }
 
     res.status(200).json(note);
@@ -48,12 +61,17 @@ export const createNote: RequestHandler<
 > = async (req, res, next) => {
   const title = req.body.title;
   const text = req.body.text;
+  const authenticatedUserId = req.session.userId;
+
 
   try {
+    assertIsDefined(authenticatedUserId);
+
     if (!title) {
       throw createHttpError(400, "Must have a title"); // Bad request
     }
     const newNote = await NoteModel.create({
+      userId: authenticatedUserId,
       title: title,
       text: text,
     });
@@ -80,8 +98,11 @@ export const updateNote: RequestHandler<
   const noteId = req.params.noteId;
   const newTitle = req.body.title;
   const newText = req.body.text;
+  const authenticatedUserId = req.session.userId;
 
   try {
+    assertIsDefined(authenticatedUserId);
+
     if (!mongoose.isValidObjectId(noteId)) {
       throw createHttpError(400, "Invalid object id");
     }
@@ -96,6 +117,10 @@ export const updateNote: RequestHandler<
       throw createHttpError(404, "Object not found");
     }
 
+    if (!note.userId.equals(authenticatedUserId)) {
+      throw createHttpError(401, "You cannot access this obj");
+    }
+
     note.title = newTitle;
     note.text = newText;
 
@@ -107,24 +132,29 @@ export const updateNote: RequestHandler<
   }
 };
 
-export const deleteNote: RequestHandler = async(req, res, next) => {
+export const deleteNote: RequestHandler = async (req, res, next) => {
   const noteId = req.params.noteId;
+  const authenticatedUserId = req.session.userId;
 
   try {
+    assertIsDefined(authenticatedUserId);
+
     if (!mongoose.isValidObjectId(noteId)) {
       throw createHttpError(400, "Invalid object id");
     }
 
-    const deletedNote = await NoteModel.findByIdAndDelete(noteId);
+    const note = await NoteModel.findByIdAndDelete(noteId);
 
-    if (!deletedNote) {
+    if (!note) {
       throw createHttpError(404, "Object not found");
     }
 
-    res.sendStatus(204); // Deletion successful
+    if (!note.userId.equals(authenticatedUserId)) {
+      throw createHttpError(401, "You cannot access this obj");
+    }
 
+    res.sendStatus(204); // Deletion successful
   } catch (error) {
     next(error);
   }
-}
-
+};

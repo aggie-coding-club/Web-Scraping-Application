@@ -44,7 +44,7 @@ const ObjsPageLoggedInView = () => {
   }
 
   const objsGrid = (
-    <Row xs={1} md={2} xl={3} className={`g-4 ${styles.objGrid}`}>
+    <Row xs={1} md={2} xl={3} className={`g-4 ${styles.objsGrid}`}>
       {objs.map((obj) => (
         <Col key={obj._id}>
           <Obj
