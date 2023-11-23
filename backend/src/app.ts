@@ -2,6 +2,7 @@ import "dotenv/config";
 import express, { NextFunction, Request, Response } from "express";
 import notesRoutes from "./routes/objects";
 import userRoutes from "./routes/users";
+import scrapingRoutes from "./routes/scrapingRoutes";
 import morgan from "morgan";
 import createHttpError, { isHttpError } from "http-errors";
 import session from "express-session";
@@ -32,6 +33,7 @@ app.use(
 
 app.use("/api/users", userRoutes);
 app.use("/api/objs", requiresAuth, notesRoutes);
+app.use("/api/scrape", scrapingRoutes);  // Use scraping routes
 
 // middleware error handler
 // not setup endpoint error
