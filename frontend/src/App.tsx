@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import LoginModal from "./components/LoginModal";
 import NavBar from "./components/NavBar";
+import Footer from "./components/Footer";
 import SignUpModal from "./components/SignUpModal";
 import { User } from "./models/user";
 import * as ObjsApi from "./network/objs_api";
@@ -41,18 +42,12 @@ function App() {
         />
         <Container className={styles.pageContainer}>
           <Routes>
-            <Route 
+            <Route
               path="/"
               element={<ObjsPage loggedInUser={loggedInUser} />}
             />
-            <Route 
-              path="/example"
-              element={<ExamplePage />}
-            />
-            <Route 
-              path="/*"
-              element={<NotFoundPage/>}
-            />
+            <Route path="/example" element={<ExamplePage />} />
+            <Route path="/*" element={<NotFoundPage />} />
           </Routes>
         </Container>
         {showSignUpModal && (
@@ -73,6 +68,7 @@ function App() {
             }}
           />
         )}
+        <Footer />
       </div>
     </BrowserRouter>
   );

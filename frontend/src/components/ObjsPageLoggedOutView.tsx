@@ -1,11 +1,7 @@
 import Home from "./Home";
 
 const ObjsPageLoggedOutView = () => {
-  return (
-    <div>
-      <Home />
-    </div>
-  );
+  return <Home />;
 };
 
 export default ObjsPageLoggedOutView;
