@@ -1,23 +1,23 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import LoginModal from "./components/LoginModal";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import SignUpModal from "./components/SignUpModal";
 import { User } from "./models/user";
 import * as ObjsApi from "./network/objs_api";
-import { BrowserRouter } from "react-router-dom";
-import { Container } from "react-bootstrap";
-import { Route, Routes } from "react-router";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ObjsPage from "./pages/ObjsPage";
 import ExamplePage from "./pages/ExamplePage";
 import NotFoundPage from "./pages/NotFoundPage";
 import styles from "./styles/App.module.css";
+import { Sidebar } from "./components/Sidebar";
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
-
   const [showSignUpModal, setShowSignUpModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [sidebarExpanded, setSidebarExpanded] = useState(false);
+  const [sidebarWidth, setSidebarWidth] = useState('65px');
 
   useEffect(() => {
     async function fetchLoggedInUser() {
@@ -31,25 +31,34 @@ function App() {
     fetchLoggedInUser();
   }, []);
 
+  useEffect(() => {
+    const newWidth = sidebarExpanded ? '300px' : '65px';
+    setSidebarWidth(newWidth);
+  }, [sidebarExpanded]);
+
   return (
     <BrowserRouter>
-      <div>
+      <div className={styles.appContainer}>
+        <Sidebar onToggle={setSidebarExpanded}/>
         <NavBar
           loggedInUser={loggedInUser}
           onLoginClicked={() => setShowLoginModal(true)}
           onSignUpClicked={() => setShowSignUpModal(true)}
           onLogoutSuccessful={() => setLoggedInUser(null)}
+          sidebarExpanded={sidebarExpanded}
         />
-        <Container className={styles.pageContainer}>
-          <Routes>
-            <Route
-              path="/"
-              element={<ObjsPage loggedInUser={loggedInUser} />}
-            />
-            <Route path="/example" element={<ExamplePage />} />
-            <Route path="/*" element={<NotFoundPage />} />
-          </Routes>
-        </Container>
+
+        <div className={styles.contentWrapper} style={{ marginLeft: sidebarWidth, transition: 'margin-left 0.3s ease-in-out' }}>
+          <div className={styles.mainContent}>
+            <Routes>
+              <Route path="/" element={<ObjsPage loggedInUser={loggedInUser} />} />
+              <Route path="/example" element={<ExamplePage />} />
+              <Route path="/*" element={<NotFoundPage />} />
+              {/* Add other routes as needed */}
+            </Routes>
+          </div>
+        </div>
+
         {showSignUpModal && (
           <SignUpModal
             onDismiss={() => setShowSignUpModal(false)}

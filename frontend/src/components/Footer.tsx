@@ -1,9 +1,10 @@
 import { Container, Nav, Navbar } from "react-bootstrap";
+import '../styles/Footer.css'
 
 const Footer = () => {
   return (
     <div>
-      <Navbar bg="black" variant="dark">
+      <Navbar>
         <Container>
           <Navbar.Brand href="/">Web Scraping Application</Navbar.Brand>
           <Nav className="me-auto">

@@ -1,4 +1,5 @@
 import { Button } from "react-bootstrap";
+import '../styles/Navbar.css'
 
 interface NavBarLoggedOutViewProps {
   onSignUpClicked: () => void;
