@@ -1,6 +1,7 @@
 import { Button, Navbar } from "react-bootstrap";
 import { User } from "../models/user";
 import * as ObjsApi from "../network/objs_api";
+import '../styles/Navbar.css'
 
 interface NavBarLoggedInViewProps {
   user: User;
@@ -23,7 +24,7 @@ const NavBarLoggedInView = ({
 
   return (
     <>
-      <Navbar.Text className="me-2">Signed in as {user.username}</Navbar.Text>
+      <Navbar.Text className="me-2">Signed in as: {user.username}</Navbar.Text>
       <Button onClick={logout}>Log out</Button>
     </>
   );

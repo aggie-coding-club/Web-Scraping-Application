@@ -1,0 +1,52 @@
+.navbar.bg-primary {
+  background-color: var(--light-color) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar.bg-primary .navbar-brand,
+.navbar.bg-primary .nav-link {
+  color: var(--primary-color) !important;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+}
+
+.navbar.bg-primary .navbar-text {
+  color: var(--primary-color) !important;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  padding-right: 15px;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.navbar.bg-primary .navbar-brand {
+  font-size: 2.5rem;
+  font-weight: 500;
+  color: var(--primary-color) !important;
+}
+
+.navbar.bg-primary .container .navbar-brand {
+  color: var(--primary-color) !important;
+}
+
+.navbar.bg-primary .nav-link:hover {
+  color: var(--accent-color) !important;
+}
+
+.navbar.bg-primary .btn {
+  margin-left: 15px;
+  font-family: "Montserrat", sans-serif;
+  background-color: var(--lighter-color) !important;
+  color: var(--primary-color) !important;
+  border: none;
+  border-color: var(--primary-color);
+  height: 50px;
+}
+
+.navbar.bg-primary .btn:hover {
+  background-color: var(--accent-color) !important;
+  color: var(--lighter-color) !important;
+}
