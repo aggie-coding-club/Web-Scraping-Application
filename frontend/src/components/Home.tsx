@@ -10,10 +10,8 @@ const Home = () => {
       {/* Hero */}
       <div className="pb-5">
         <div className="hstack gap-3">
-          <h1 className="text-4xl fw-light mb-4 text-lowercase">
-            Collect data
-          </h1>
-          <h1 className="text-primary text-4xl font-bold mb-4 text-lowercase">
+          <h1 className="fw-light mb-4 text-lowercase">Collect data</h1>
+          <h1 className="text-primary font-bold mb-4 text-lowercase">
             smartly
           </h1>
         </div>
@@ -28,15 +26,15 @@ const Home = () => {
       <div className="d-flex justify-content-evenly">
         <div className="d-flex p-3 justify-content-evenly bg-secondary w-25 rounded-pill shadow fw-bold text-center text-white">
           <MdCodeOff size={40} />
-          <p>No code required</p>
+          <p className="pt-2">No code required</p>
         </div>
         <div className="d-flex p-3 justify-content-evenly bg-secondary w-25 rounded-pill shadow fw-bold text-center text-white">
           <FaCheck size={40} />
-          <p>Easy to use</p>
+          <p className="pt-2">Easy to use</p>
         </div>
         <div className="d-flex p-3 justify-content-evenly bg-secondary w-25 rounded-pill shadow fw-bold text-center text-white">
           <BsLightningFill className="" size={40} />
-          <p>Lightning fast</p>
+          <p className="pt-2">Lightning fast</p>
         </div>
       </div>
 
