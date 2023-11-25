@@ -61,9 +61,8 @@ const ObjsPageLoggedInView = () => {
   return (
     <>
       <Button
-        className={`mb-4 ${styleUtils.blockCenter} ${styleUtils.flexCenter}`}
-        onClick={() => setShowAddObjDialog(true)}
-      >
+        className={`m-4 ${styleUtils.blockCenter} ${styleUtils.flexCenter}`}
+        onClick={() => setShowAddObjDialog(true)}>
         <FaPlus />
         Add new obj
       </Button>

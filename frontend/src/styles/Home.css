@@ -1,19 +1,18 @@
 .home {
-    background-color: var(--lighter-color);
-    color: var(--primary-color);
-  }
-  
-  .home .card {
-    background-color: var(--secondary-color);
-    color: var(--lighter-color);
-  }
-  
-  .home .btn-primary {
-    background-color: var(--primary-color);
-    color: var(--lighter-color);
-  }
-  
-  .home .btn-primary:hover {
-    background-color: var(--secondary-color);
-  }
-  
+  background-color: var(--lighter-color);
+  color: var(--primary-color);
+}
+
+.home .card {
+  background-color: var(--secondary-color);
+  color: var(--lighter-color);
+}
+
+.home .btn-primary {
+  background-color: var(--primary-color);
+  color: var(--lighter-color);
+}
+
+.home .btn-primary:hover {
+  background-color: var(--secondary-color);
+}

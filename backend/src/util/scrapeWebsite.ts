@@ -1,7 +1,7 @@
 import puppeteer from "puppeteer";
 
 interface SelectorsMap {
-    [key: string]: string[];
+  [key: string]: string[];
 }
 
 const selectorsMap: SelectorsMap = {

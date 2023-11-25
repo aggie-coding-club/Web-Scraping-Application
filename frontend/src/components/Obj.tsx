@@ -31,8 +31,7 @@ const Obj = ({
   return (
     <Card
       className={`${styles.objCard} ${className}`}
-      onClick={() => onObjClicked(obj)}
-    >
+      onClick={() => onObjClicked(obj)}>
       <Card.Body className={styles.cardBody}>
         <Card.Title className={styleUtils.flexCenter}>
           {title}

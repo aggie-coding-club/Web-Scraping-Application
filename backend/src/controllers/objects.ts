@@ -12,7 +12,7 @@ export const getNotes: RequestHandler = async (req, res, next) => {
     // throw createHttpError(401); // For testing error handling
     assertIsDefined(authenticatedUserId);
 
-    const notes = await NoteModel.find({userId: authenticatedUserId}).exec();
+    const notes = await NoteModel.find({ userId: authenticatedUserId }).exec();
     res.status(200).json(notes); // OK status
   } catch (error) {
     next(error);
@@ -62,7 +62,6 @@ export const createNote: RequestHandler<
   const title = req.body.title;
   const text = req.body.text;
   const authenticatedUserId = req.session.userId;
-
 
   try {
     assertIsDefined(authenticatedUserId);

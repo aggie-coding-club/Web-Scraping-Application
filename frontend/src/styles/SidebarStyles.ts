@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 
 export const SidebarContainer = styled.div<{ expanded: boolean }>`
-  width: ${({ expanded }) => (expanded ? '300px' : '65px')};
+  width: ${({ expanded }) => (expanded ? "300px" : "65px")};
   height: 100vh;
   background-color: var(--primary-color);
   overflow-x: hidden;
@@ -12,7 +12,6 @@ export const SidebarContainer = styled.div<{ expanded: boolean }>`
   transition: width 0.3s ease-in-out;
   z-index: 1050;
 `;
-
 
 export const SidebarItem = styled(NavLink)`
   padding: 10px 15px;

@@ -17,7 +17,7 @@ function App() {
   const [showSignUpModal, setShowSignUpModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
-  const [sidebarWidth, setSidebarWidth] = useState('65px');
+  const [sidebarWidth, setSidebarWidth] = useState("65px");
 
   useEffect(() => {
     async function fetchLoggedInUser() {
@@ -32,14 +32,14 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const newWidth = sidebarExpanded ? '300px' : '65px';
+    const newWidth = sidebarExpanded ? "300px" : "65px";
     setSidebarWidth(newWidth);
   }, [sidebarExpanded]);
 
   return (
     <BrowserRouter>
       <div className={styles.appContainer}>
-        <Sidebar onToggle={setSidebarExpanded}/>
+        <Sidebar onToggle={setSidebarExpanded} />
         <NavBar
           loggedInUser={loggedInUser}
           onLoginClicked={() => setShowLoginModal(true)}
@@ -48,10 +48,18 @@ function App() {
           sidebarExpanded={sidebarExpanded}
         />
 
-        <div className={styles.contentWrapper} style={{ marginLeft: sidebarWidth, transition: 'margin-left 0.3s ease-in-out' }}>
+        <div
+          className={styles.contentWrapper}
+          style={{
+            marginLeft: sidebarWidth,
+            transition: "margin-left 0.3s ease-in-out",
+          }}>
           <div className={styles.mainContent}>
             <Routes>
-              <Route path="/" element={<ObjsPage loggedInUser={loggedInUser} />} />
+              <Route
+                path="/"
+                element={<ObjsPage loggedInUser={loggedInUser} />}
+              />
               <Route path="/example" element={<ExamplePage />} />
               <Route path="/*" element={<NotFoundPage />} />
               {/* Add other routes as needed */}

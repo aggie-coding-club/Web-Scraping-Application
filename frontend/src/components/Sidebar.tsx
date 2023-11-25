@@ -1,13 +1,18 @@
-import React, { useState } from 'react';
-import HomeIcon from '@mui/icons-material/Home';
-import SettingsIcon from '@mui/icons-material/Settings';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import MenuIcon from '@mui/icons-material/Menu';
-import { SidebarContainer, SidebarItem, IconWrapper, Text } from '../styles/SidebarStyles';
+import React, { useState } from "react";
+import HomeIcon from "@mui/icons-material/Home";
+import SettingsIcon from "@mui/icons-material/Settings";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import MenuIcon from "@mui/icons-material/Menu";
+import {
+  SidebarContainer,
+  SidebarItem,
+  IconWrapper,
+  Text,
+} from "../styles/SidebarStyles";
 
 type SidebarProps = {
-    onToggle: (expanded: boolean) => void;
-  };
+  onToggle: (expanded: boolean) => void;
+};
 
 export function Sidebar({ onToggle }: SidebarProps) {
   const [expanded, setExpanded] = useState(false);
@@ -22,29 +27,31 @@ export function Sidebar({ onToggle }: SidebarProps) {
     <SidebarContainer expanded={expanded}>
       <SidebarItem to="/" onClick={toggleSidebar}>
         <IconWrapper>
-          <MenuIcon style={{ color: '#DDF2FD' }} />
+          <MenuIcon style={{ color: "#DDF2FD" }} />
           <Text expanded={expanded}>Menu</Text>
         </IconWrapper>
       </SidebarItem>
 
-      <SidebarItem to="/home">
+      <SidebarItem to="/">
         <IconWrapper>
-          <HomeIcon style={{ color: '#DDF2FD' }} />
+          <HomeIcon style={{ color: "#DDF2FD" }} />
           <Text expanded={expanded}>Home</Text>
         </IconWrapper>
       </SidebarItem>
 
       <SidebarItem to="/settings">
         <IconWrapper>
-          <SettingsIcon style={{ color: '#DDF2FD' }} />
+          <SettingsIcon style={{ color: "#DDF2FD" }} />
           <Text expanded={expanded}>Settings</Text>
         </IconWrapper>
       </SidebarItem>
 
       <SidebarItem to="/notifications">
         <IconWrapper>
-          <NotificationsIcon style={{ color: '#DDF2FD' }} />
-          <Text expanded={expanded}>Notifications</Text>
+          <NotificationsIcon style={{ color: "#DDF2FD" }} />
+          <Text className="text-primary" expanded={expanded}>
+            Notifications
+          </Text>
         </IconWrapper>
       </SidebarItem>
     </SidebarContainer>

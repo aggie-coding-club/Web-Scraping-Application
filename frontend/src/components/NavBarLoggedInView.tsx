@@ -1,7 +1,7 @@
 import { Button, Navbar } from "react-bootstrap";
 import { User } from "../models/user";
 import * as ObjsApi from "../network/objs_api";
-import '../styles/Navbar.css'
+import "../styles/Navbar.css";
 
 interface NavBarLoggedInViewProps {
   user: User;

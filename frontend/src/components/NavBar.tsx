@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { User } from "../models/user";
 import NavBarLoggedInView from "./NavBarLoggedInView";
 import NavBarLoggedOutView from "./NavBarLoggedOutView";
 import { Link } from "react-router-dom";
-import '../styles/Navbar.css'
+import "../styles/Navbar.css";
 
 interface NavBarProps {
   loggedInUser: User | null;
@@ -22,14 +22,22 @@ const NavBar = ({
   sidebarExpanded,
 }: NavBarProps) => {
   const navbarStyle = {
-    marginLeft: sidebarExpanded ? '300px' : '0',
-    transition: 'margin-left 0.3s ease-in-out'
+    marginLeft: sidebarExpanded ? "300px" : "0",
+    transition: "margin-left 0.3s ease-in-out",
   };
 
   return (
-    <Navbar bg="primary" variant="dark" expand="sm" sticky="top" style={navbarStyle}>
+    <Navbar
+      bg="primary"
+      variant="dark"
+      expand="sm"
+      sticky="top"
+      style={navbarStyle}>
       <Container>
-        <Navbar.Brand as={Link} to="/" >Web Scraping Application</Navbar.Brand> {/* TODO: fix color of text changing slightly while transition from sidebar openening/closing is running */}
+        <Navbar.Brand as={Link} to="/">
+          Web Scraping Application
+        </Navbar.Brand>{" "}
+        {/* TODO: fix color of text changing slightly while transition from sidebar openening/closing is running */}
         <Navbar.Toggle aria-controls="main-navbar" />
         <Navbar.Collapse id="main-navbar">
           <Nav className="ms-auto">
