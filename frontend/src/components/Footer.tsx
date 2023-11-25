@@ -1,18 +1,13 @@
-import { Container, Nav, Navbar } from "react-bootstrap";
+import "../styles/Footer.css";
 
 const Footer = () => {
   return (
-    <div>
-      <Navbar bg="black" variant="dark" fixed="bottom">
-        <Container>
-          <Navbar.Brand href="/">Web Scraping Application</Navbar.Brand>
-          <Nav className="me-auto">
-            <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="/about">About</Nav.Link>
-            <Nav.Link href="/contact">Contact Us</Nav.Link>
-          </Nav>
-        </Container>
-      </Navbar>
+    <div className="d-flex flex-row justify-content-start gap-5">
+      <a className="fs-4" href="/">
+        Web Scraping Application
+      </a>
+      <a href="/about">About</a>
+      <a href="/contact">Contact Us</a>
     </div>
   );
 };

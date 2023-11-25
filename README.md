@@ -21,10 +21,12 @@ The Web Scraping Team focuses on the logic behind how to extract data from any w
 
 ## Current TODOs:
 
-- Implementing a user authentication system.
-- Developing a robust notification system.
-- Enhancing the functionality of the web interface.
-- Deploying the application for public access.
+- ~~Implementing a user authentication system.~~
+- ~~Add scraping functionality and user-specific object~~
+- Implement a sophisticated table for the user's scraped sites dashboard
+- Add more pages to enhance frontend UI/UX
+- Develop a notification system and interval scraping options
+- Deploy the application for public access.
 
 
 ## Contribution Guidelines
@@ -34,6 +36,7 @@ I welcome any member of this project to contribute to their respective team. Her
 1. **Set Up Your Environment:**
    - Ensure Git is installed on your machine and your identity is configured.
    - Clone the repository to begin local development.
+   - Watch the video posted in the discord on how to set up the database connection
 
 2. **Make Changes:**
    - Branch off for new features or fixes.
@@ -68,19 +71,16 @@ Here are some team-specific resources that may be helpful:
 ## Frontend:
 - [Vite](https://vitejs.dev/guide)
 - [React](https://react.dev/learn)
-- [Tailwindcss](https://tailwindcss.com/docs)
+- [Bootstrap](https://react-bootstrap.netlify.app/docs/components/accordion)
 
 ## Backend:
 - [Node JS](https://nodejs.org/en/learn)
 - [Express JS](https://expressjs.com/)
-- [Flask](https://flask.palletsprojects.com/en/3.0.x/)
+- [MongoDB](https://www.mongodb.com/docs/manual/)
 
 ## Web Scraping:
-- [Selenium](https://www.guru99.com/selenium-tutorial.html)
-- [Beautiful Soup](https://www.tutorialspoint.com/beautiful_soup/beautiful_soup_souping_the_page.htm)
-- [SQLite3](https://www.guru99.com/sqlite-tutorial.html )
+- [Puppeteer](https://pptr.dev/)
+- [Chromium & Puppeteer](https://medium.com/@devinred/introduction-to-scraping-and-automation-fed81d5944cf)
 
 
 For additional support, please reach out to via the discord
-
-

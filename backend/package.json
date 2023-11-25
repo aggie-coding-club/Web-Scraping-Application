@@ -33,6 +33,7 @@
     "express-session": "^1.17.3",
     "http-errors": "^2.0.0",
     "mongoose": "^8.0.1",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "puppeteer": "^21.5.2"
   }
 }
