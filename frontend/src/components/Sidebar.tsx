@@ -28,28 +28,34 @@ export function Sidebar({ onToggle }: SidebarProps) {
       <SidebarItem to="/" onClick={toggleSidebar}>
         <IconWrapper>
           <MenuIcon style={{ color: "#DDF2FD" }} />
-          <Text expanded={expanded}>Menu</Text>
+          <Text className="text-light" expanded={expanded}>
+            Menu
+          </Text>
         </IconWrapper>
       </SidebarItem>
 
       <SidebarItem to="/">
         <IconWrapper>
           <HomeIcon style={{ color: "#DDF2FD" }} />
-          <Text expanded={expanded}>Home</Text>
+          <Text className="text-light" expanded={expanded}>
+            Home
+          </Text>
         </IconWrapper>
       </SidebarItem>
 
       <SidebarItem to="/settings">
         <IconWrapper>
           <SettingsIcon style={{ color: "#DDF2FD" }} />
-          <Text expanded={expanded}>Settings</Text>
+          <Text className="text-light" expanded={expanded}>
+            Settings
+          </Text>
         </IconWrapper>
       </SidebarItem>
 
       <SidebarItem to="/notifications">
         <IconWrapper>
           <NotificationsIcon style={{ color: "#DDF2FD" }} />
-          <Text className="text-primary" expanded={expanded}>
+          <Text className="text-light" expanded={expanded}>
             Notifications
           </Text>
         </IconWrapper>
