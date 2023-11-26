@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
-import { Button, Col, Row, Spinner } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa";
 import { Obj, Obj as ObjsModel } from "../models/object";
 import * as ObjsApi from "../network/objs_api";
-import styles from "../styles/ObjsPage.module.css";
 import styleUtils from "../styles/utils.module.css";
 import AddEditObjDialog from "./AddEditObjDialog";
 
-import { Space, Table, Tag } from "antd";
+import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 
 const ObjsPageLoggedInView = () => {
@@ -47,16 +46,6 @@ const ObjsPageLoggedInView = () => {
         }
     }
 
-    // const objsGrid = (
-    //     <Row xs={1} md={2} xl={3} className={`g-4 ${styles.objsGrid}`}>
-    //         {objs.map((obj) => (
-    //             <Col key={obj._id}>
-    //                 <Obj obj={obj} className={styles.obj} onObjClicked={setObjToEdit} onDeleteObjClicked={deleteObj} />
-    //             </Col>
-    //         ))}
-    //     </Row>
-    // );
-
     const columns: ColumnsType<Obj> = [
         {
             title: "Website",
@@ -76,7 +65,11 @@ const ObjsPageLoggedInView = () => {
         {
             title: "Action",
             key: "action",
-            render: () => <a href="#">Delete</a>,
+            render: (_, record) => (
+                <a href="#" onClick={() => deleteObj(record)}>
+                    Delete
+                </a>
+            ),
         },
     ];
 
@@ -91,7 +84,6 @@ const ObjsPageLoggedInView = () => {
             </Button>
             {objsLoading && <Spinner animation="border" variant="primary" />}
             {showObjsLoadingError && <p>Something went wrong. Please refresh the page.</p>}
-            {/* {!objsLoading && !showObjsLoadingError && <>{objs.length > 0 ? objsGrid : <p>You don't have any objs yet</p>}</>} */}
             {!objsLoading && !showObjsLoadingError && <Table columns={columns} dataSource={objs} />}
             {showAddObjDialog && (
                 <AddEditObjDialog
