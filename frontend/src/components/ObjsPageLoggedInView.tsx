@@ -36,7 +36,6 @@ const ObjsPageLoggedInView = () => {
     }, []);
 
     async function deleteObj(obj: ObjsModel) {
-        console.log(objs);
         try {
             await ObjsApi.deleteObj(obj._id);
             setObjs(objs.filter((existingObj) => existingObj._id !== obj._id));
@@ -44,6 +43,11 @@ const ObjsPageLoggedInView = () => {
             console.error(error);
             alert(error);
         }
+    }
+
+    function editObj(obj: ObjsModel) {
+        setObjToEdit(obj);
+        setShowAddObjDialog(true);
     }
 
     const columns: ColumnsType<Obj> = [
@@ -60,7 +64,13 @@ const ObjsPageLoggedInView = () => {
         {
             title: "Action",
             key: "action",
-            render: () => <a href="#">Edit</a>,
+            render: (_, record) => (
+                <>
+                    <a href="#" onClick={() => editObj(record)}>
+                        Edit
+                    </a>
+                </>
+            ),
         },
         {
             title: "Action",
