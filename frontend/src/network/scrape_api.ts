@@ -19,7 +19,6 @@ export async function updateConfig(userId: string, url: string, parameter: strin
 export async function scrapeWebsite(userId: string, url: string, parameter: string = "owner-sub-count"): Promise<any> {
     const configId = await updateConfig(userId, url, parameter);
 
-    console.log(configId);
     const response = await ObjsApi.fetchData("/api/scrape/scrape", {
         method: "POST",
         headers: {
