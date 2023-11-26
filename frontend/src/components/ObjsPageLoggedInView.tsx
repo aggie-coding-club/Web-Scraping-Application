@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { Button, Col, Row, Spinner } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa";
-import { Obj as ObjsModel } from "../models/object";
+import { Obj, Obj as ObjsModel } from "../models/object";
 import * as ObjsApi from "../network/objs_api";
 import styles from "../styles/ObjsPage.module.css";
 import styleUtils from "../styles/utils.module.css";
 import AddEditObjDialog from "./AddEditObjDialog";
-import Obj from "./Obj";
+
+import { Space, Table, Tag } from "antd";
+import type { ColumnsType } from "antd/es/table";
 
 const ObjsPageLoggedInView = () => {
     const [objs, setObjs] = useState<ObjsModel[]>([]);
@@ -35,6 +37,7 @@ const ObjsPageLoggedInView = () => {
     }, []);
 
     async function deleteObj(obj: ObjsModel) {
+        console.log(objs);
         try {
             await ObjsApi.deleteObj(obj._id);
             setObjs(objs.filter((existingObj) => existingObj._id !== obj._id));
@@ -44,15 +47,38 @@ const ObjsPageLoggedInView = () => {
         }
     }
 
-    const objsGrid = (
-        <Row xs={1} md={2} xl={3} className={`g-4 ${styles.objsGrid}`}>
-            {objs.map((obj) => (
-                <Col key={obj._id}>
-                    <Obj obj={obj} className={styles.obj} onObjClicked={setObjToEdit} onDeleteObjClicked={deleteObj} />
-                </Col>
-            ))}
-        </Row>
-    );
+    // const objsGrid = (
+    //     <Row xs={1} md={2} xl={3} className={`g-4 ${styles.objsGrid}`}>
+    //         {objs.map((obj) => (
+    //             <Col key={obj._id}>
+    //                 <Obj obj={obj} className={styles.obj} onObjClicked={setObjToEdit} onDeleteObjClicked={deleteObj} />
+    //             </Col>
+    //         ))}
+    //     </Row>
+    // );
+
+    const columns: ColumnsType<Obj> = [
+        {
+            title: "Website",
+            dataIndex: "title",
+            key: "title",
+        },
+        {
+            title: "Text",
+            dataIndex: "text",
+            key: "text",
+        },
+        {
+            title: "Action",
+            key: "action",
+            render: () => <a href="#">Edit</a>,
+        },
+        {
+            title: "Action",
+            key: "action",
+            render: () => <a href="#">Delete</a>,
+        },
+    ];
 
     return (
         <>
@@ -61,11 +87,12 @@ const ObjsPageLoggedInView = () => {
                 onClick={() => setShowAddObjDialog(true)}
             >
                 <FaPlus />
-                Add new obj
+                Add New Object
             </Button>
             {objsLoading && <Spinner animation="border" variant="primary" />}
             {showObjsLoadingError && <p>Something went wrong. Please refresh the page.</p>}
-            {!objsLoading && !showObjsLoadingError && <>{objs.length > 0 ? objsGrid : <p>You don't have any objs yet</p>}</>}
+            {/* {!objsLoading && !showObjsLoadingError && <>{objs.length > 0 ? objsGrid : <p>You don't have any objs yet</p>}</>} */}
+            {!objsLoading && !showObjsLoadingError && <Table columns={columns} dataSource={objs} />}
             {showAddObjDialog && (
                 <AddEditObjDialog
                     onDismiss={() => setShowAddObjDialog(false)}
