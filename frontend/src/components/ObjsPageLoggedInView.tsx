@@ -5,6 +5,7 @@ import { Obj, Obj as ObjsModel } from "../models/object";
 import * as ObjsApi from "../network/objs_api";
 import styleUtils from "../styles/utils.module.css";
 import AddEditObjDialog from "./AddEditObjDialog";
+import { scrapeWebsite } from "../network/scrape_api";
 
 import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
@@ -45,9 +46,14 @@ const ObjsPageLoggedInView = () => {
         }
     }
 
-    function editObj(obj: ObjsModel) {
-        setObjToEdit(obj);
-        setShowAddObjDialog(true);
+    async function onObjSaved(updatedObj: ObjsModel) {
+        const url = updatedObj.title;
+        const scrapedData = await scrapeWebsite(updatedObj.userId, url);
+
+        updatedObj.text = scrapedData.join("\n");
+
+        setObjs(objs.map((existingObj) => (existingObj._id === updatedObj._id ? updatedObj : existingObj)));
+        setObjToEdit(null);
     }
 
     const columns: ColumnsType<Obj> = [
@@ -66,7 +72,7 @@ const ObjsPageLoggedInView = () => {
             key: "action",
             render: (_, record) => (
                 <>
-                    <a href="#" onClick={() => editObj(record)}>
+                    <a href="#" onClick={() => setObjToEdit(record)}>
                         Edit
                     </a>
                 </>
@@ -105,14 +111,7 @@ const ObjsPageLoggedInView = () => {
                 />
             )}
             {objToEdit && (
-                <AddEditObjDialog
-                    objToEdit={objToEdit}
-                    onDismiss={() => setObjToEdit(null)}
-                    onObjSaved={(updatedObj) => {
-                        setObjs(objs.map((existingObj) => (existingObj._id === updatedObj._id ? updatedObj : existingObj)));
-                        setObjToEdit(null);
-                    }}
-                />
+                <AddEditObjDialog objToEdit={objToEdit} onDismiss={() => setObjToEdit(null)} onObjSaved={onObjSaved} />
             )}
         </>
     );
