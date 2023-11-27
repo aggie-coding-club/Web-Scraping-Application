@@ -89,6 +89,8 @@ export async function createObj(obj: ObjInput): Promise<Obj> {
     for (let i = 0; i < scrapedData.length; i++) {
         response_json.text += scrapedData[i] + "\n";
     }
+    console.log(response_json);
+    await updateObj(response_json._id, response_json);
 
     return response_json;
 }
