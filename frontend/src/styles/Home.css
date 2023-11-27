@@ -146,7 +146,7 @@ body {
   background-color: var(--lighter-color);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   text-align: center;
-  animation: fadeIn 1s ease-in-out;
+  animation: fadeInRight 1s ease-in-out;
   flex-basis: 30%;
   min-width: 250px;
   margin: 10px;
@@ -204,18 +204,7 @@ body {
 .application-description-section,
 .real-time-notifications-section,
 .data-storage-section {
-  animation: fadeIn 0.5s ease-in-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  animation: fadeInRight 0.5s ease-in-out;
 }
 
 /* List Section */
@@ -290,15 +279,6 @@ body {
   }
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -307,5 +287,16 @@ body {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }

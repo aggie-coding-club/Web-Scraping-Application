@@ -8,6 +8,8 @@ import * as ObjsApi from "./network/objs_api";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ObjsPage from "./pages/ObjsPage";
 import ExamplePage from "./pages/ExamplePage";
+import SettingsPage from "./pages/SettingsPage";
+import NotificationsPage from "./pages/NotificationsPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import styles from "./styles/App.module.css";
 import { Sidebar } from "./components/Sidebar";
@@ -61,6 +63,8 @@ function App() {
                 element={<ObjsPage loggedInUser={loggedInUser} />}
               />
               <Route path="/example" element={<ExamplePage />} />
+              <Route path="/settings" element={<SettingsPage />} />
+              <Route path="/notifications" element={<NotificationsPage />} />
               <Route path="/*" element={<NotFoundPage />} />
               {/* Add other routes as needed */}
             </Routes>
