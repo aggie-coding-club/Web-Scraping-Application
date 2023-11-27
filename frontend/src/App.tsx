@@ -10,6 +10,8 @@ import ObjsPage from "./pages/ObjsPage";
 import ExamplePage from "./pages/ExamplePage";
 import SettingsPage from "./pages/SettingsPage";
 import NotificationsPage from "./pages/NotificationsPage";
+import AboutPage from "./pages/AboutPage";
+import ContactPage from "./pages/ContactPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import styles from "./styles/App.module.css";
 import { Sidebar } from "./components/Sidebar";
@@ -65,6 +67,8 @@ function App() {
               <Route path="/example" element={<ExamplePage />} />
               <Route path="/settings" element={<SettingsPage />} />
               <Route path="/notifications" element={<NotificationsPage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/contact" element={<ContactPage />} />
               <Route path="/*" element={<NotFoundPage />} />
               {/* Add other routes as needed */}
             </Routes>
