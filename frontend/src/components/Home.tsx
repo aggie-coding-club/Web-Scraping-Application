@@ -1,123 +1,219 @@
-import { Button } from "react-bootstrap";
+import React, { useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import { useCallback } from "react";
+import Particles from "react-tsparticles";
+import { loadFull } from "tsparticles";
 import { MdCodeOff } from "react-icons/md";
 import { FaCheck, FaShieldAlt } from "react-icons/fa";
 import { BsLightningFill } from "react-icons/bs";
 import { MdOutlineDashboardCustomize } from "react-icons/md";
 import { TiCloudStorageOutline } from "react-icons/ti";
 import "../styles/Home.css";
+import HomeTable from "../assets/Table.png";
+
+import AmazonLogo from "../assets/amazon-logo.png";
+import GoogleLogo from "../assets/google-logo.png";
+import eBayLogo from "../assets/ebay-logo.png";
+import MicrosoftLogo from "../assets/microsoft-logo.png";
+import UberLogo from "../assets/uber-logo.png";
+import SpotifyLogo from "../assets/spotify-logo.png";
 
 const Home = () => {
+  useEffect(() => {
+    AOS.init({
+      duration: 1000,
+      once: true,
+      mirror: false,
+    });
+  }, []);
+
+  const particlesInit = useCallback(async (engine) => {
+    await loadFull(engine);
+  }, []);
+
+  const particlesLoaded = useCallback(async (container) => {
+    await console.log(container);
+  }, []);
+
   return (
-    <div className="bg-white w-100 p-5">
-      {/* Hero */}
-      <div className="pb-5">
-        <div className="hstack gap-3">
-          <h1 className="fw-light mb-4 text-lowercase">Collect data</h1>
-          <h1 className="text-info font-bold mb-4 text-lowercase">smartly</h1>
+    <div className="home-container">
+      <Particles
+        id="tsparticles"
+        init={particlesInit}
+        loaded={particlesLoaded}
+        options={{
+          fullScreen: false,
+          background: {
+            image: " linear-gradient(15deg, #f5fbfe 20%, #427d9d 80%)",
+          },
+          particles: {
+            number: { value: 10, density: { enable: true, value_area: 600 } },
+            color: { value: "#ffffff" },
+            shape: {
+              type: "polygon",
+              stroke: { width: 0, color: "#000000" },
+              polygon: { nb_sides: 5 },
+            },
+            opacity: {
+              value: 0.25,
+              random: true,
+              anim: { enable: false, speed: 1, opacity_min: 0.1, sync: false },
+            },
+            size: {
+              value: 20,
+              random: true,
+              anim: { enable: false, speed: 2, size_min: 0.1, sync: false },
+            },
+            line_linked: {
+              enable: false,
+              distance: 300,
+              color: "#ffffff",
+              opacity: 0,
+              width: 0,
+            },
+            move: {
+              enable: true,
+              speed: 0.3,
+              direction: "top",
+              straight: true,
+              out_mode: "out",
+              bounce: false,
+              attract: { enable: false, rotateX: 600, rotateY: 1200 },
+            },
+          },
+        }}
+      />
+
+      {/* Hero Section */}
+      <div className="flex">
+        <div className="hero-section opacity-1 flex" data-aos="fade-up">
+          <div className="text-content">
+            <h1 className="hero-title">
+              <span className="highlight">Empower</span> your data collection
+            </h1>
+            <p className="hero-subtitle">
+              Transform your web data gathering effortlessly. Monitor websites
+              for real-time updates and stay ahead.
+            </p>
+            <button className="hero-cta">Get Started</button>
+          </div>
+          <div className="home-image">
+            <img src={HomeTable} alt="Image" />
+          </div>
+        </div>
+      </div>
+
+      {/* Company Logos Section */}
+      <div
+        className="company-logos-section"
+        data-aos="fade-up"
+        data-aos-delay="100">
+        <h3>
+          Web Scraping is an important tool utilized by the following companies
+          and more:
+        </h3>
+        <div className="company-logos">
+          {/* Row 1 */}
+          <div className="logo-item">
+            <img src={SpotifyLogo} alt="Spotify" className="company-logo" />
+          </div>
+          <div className="logo-item">
+            <img src={AmazonLogo} alt="Amazon" className="company-logo" />
+          </div>
+          <div className="logo-item">
+            <img src={GoogleLogo} alt="Google" className="company-logo" />
+          </div>
+          <div className="logo-item">
+            <img src={eBayLogo} alt="eBay" className="company-logo" />
+          </div>
+          <div className="logo-item">
+            <img src={MicrosoftLogo} alt="Microsoft" className="company-logo" />
+          </div>
+          <div className="logo-item">
+            <img src={UberLogo} alt="Uber" className="company-logo" />
+          </div>
+        </div>
+      </div>
+      {/* Feature Highlights */}
+      <div className="feature-section" data-aos="fade-up" data-aos-delay="100">
+        <div className="feature" data-aos="fade-right" data-aos-delay="200">
+          <MdCodeOff className="feature-icon" />
+          <h3 className="feature-title">No Code Required</h3>
+          <p className="feature-description">
+            Collect valuable data without any coding skills.
+          </p>
+        </div>
+        <div className="feature" data-aos="fade-right" data-aos-delay="300">
+          <FaCheck className="feature-icon" />
+          <h3 className="feature-title">Easy to Use</h3>
+          <p className="feature-description">
+            User-friendly interface for seamless data collection.
+          </p>
+        </div>
+        <div className="feature" data-aos="fade-right" data-aos-delay="400">
+          <BsLightningFill className="feature-icon" />
+          <h3 className="feature-title">Lightning Fast</h3>
+          <p className="feature-description">
+            Quick setup and rapid data extraction.
+          </p>
         </div>
 
-        <p className="fs-4 mb-6">
-          Collect data from any website, no matter how complex, with just a few
-          clicks
+        {/* List Section */}
+        <div className="list-section" data-aos="fade-left">
+          <div className="list-item">
+            <MdOutlineDashboardCustomize className="list-icon" />
+            <h3 className="list-title">Customizable</h3>
+            <p className="list-description">
+              Customize your data collection to match your specific needs. It's
+              your data, your way.
+            </p>
+          </div>
+          <div className="list-item">
+            <FaShieldAlt className="list-icon" />
+            <h3 className="list-title">Secure and Reliable</h3>
+            <p className="list-description">
+              Rest easy knowing your data is protected by industry-standard
+              security measures. We prioritize your data's safety.
+            </p>
+          </div>
+        </div>
+      </div>
+      {/* Application Description Section */}
+      <div
+        className="feature-box application-description-section"
+        data-aos="zoom-in-up">
+        <h2 className="section-heading">
+          Stay Informed with Real-Time Updates
+        </h2>
+        <p className="section-subheading">
+          Our application constantly monitors your selected websites for
+          changes. Receive instant notifications so you never miss an
+          opportunity.
+        </p>
+        <TiCloudStorageOutline className="section-icon" />
+      </div>
+      {/* Real-Time Notifications Section */}
+      <div
+        className="feature-box real-time-notifications-section"
+        data-aos="zoom-in-up"
+        data-aos-delay="100">
+        <h2 className="section-heading">Real-Time Notifications</h2>
+        <p className="section-subheading">
+          Set your preferences to receive updates via email, SMS, or push
+          notifications. Stay connected to events as they happen.
         </p>
       </div>
-
-      {/* Description */}
-      <div className="d-flex justify-content-evenly">
-        <div className="d-flex p-3 justify-content-evenly bg-secondary w-25 rounded-pill shadow fw-bold text-center text-white">
-          <MdCodeOff size={40} />
-          <p className="pt-2">No code required</p>
-        </div>
-        <div className="d-flex p-3 justify-content-evenly bg-secondary w-25 rounded-pill shadow fw-bold text-center text-white">
-          <FaCheck size={40} />
-          <p className="pt-2">Easy to use</p>
-        </div>
-        <div className="d-flex p-3 justify-content-evenly bg-secondary w-25 rounded-pill shadow fw-bold text-center text-white">
-          <BsLightningFill className="" size={40} />
-          <p className="pt-2">Lightning fast</p>
-        </div>
-      </div>
-
-      <div className="py-5 mt-5">
-        <ul className="list-group list-group-flush">
-          <div className="d-flex gap-3 list-group-item">
-            <MdOutlineDashboardCustomize size={40} />
-            <p className="fs-5 p-1">Heavily customizable</p>
-          </div>
-
-          <div className="d-flex gap-3 list-group-item">
-            <FaShieldAlt size={35} />
-            <p className="fs-5 p-1">Your data is safe with us</p>
-          </div>
-
-          <div className="d-flex gap-3 list-group-item">
-            <TiCloudStorageOutline size={40} />
-            <p className="fs-5 p-1">Unlimited storage space</p>
-          </div>
-        </ul>
-      </div>
-      <div className="d-flex justify-content-evenly py-5">
-        <div
-          className="card text-bg-secondary shadow mb-3"
-          style={{ maxWidth: "18rem" }}>
-          <div className="card-header fw-bold">
-            Real-time website monitoring
-          </div>
-          <div className="card-body">
-            <p className="card-text">
-              Automatically monitor websites for changes.
-            </p>
-          </div>
-        </div>
-
-        <div
-          className="card text-bg-secondary shadow mb-3"
-          style={{ maxWidth: "18rem" }}>
-          <div className="card-header fw-bold">Automatic data extraction</div>
-          <div className="card-body">
-            <p className="card-text">
-              Get structured data from any website, no matter how complex.
-            </p>
-          </div>
-        </div>
-
-        <div
-          className="card text-bg-secondary shadow mb-3"
-          style={{ maxWidth: "18rem" }}>
-          <div className="card-header fw-bold">Get notified instantly</div>
-          <div className="card-body">
-            <p className="card-text">
-              Get notified instantly when a website changes.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Call to action */}
-      <div className="d-flex justify-content-center pt-5">
-        <Button
-          href="/#"
-          className="btn btn-lg p-3 fw-bold shadow-lg text-white"
-          style={{
-            backgroundColor: "#427d9d",
-            transition: "background-color 0.3s",
-            borderColor: "#427d9d",
-            borderWidth: "1px",
-          }}
-          onMouseDown={(e) => {
-            e.currentTarget.style.backgroundColor = "#9bbec8";
-            e.currentTarget.style.borderColor = "#9bbec8";
-            e.currentTarget.style.borderWidth = "2px";
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = "#164863";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = "#427d9d";
-            e.currentTarget.style.borderWidth = "1px";
-          }}>
-          Get Started
-        </Button>
+      {/* Data Storage Section */}
+      <div
+        className="feature-box real-time-notifications-section"
+        data-aos="zoom-in-up"
+        data-aos-delay="200">
+        <h2 className="section-heading">Dynamic Data at Your Fingertips</h2>
+        <p className="section-subheading">
+          Access and analyze the latest data scraped from your preferred sites.
+          Your data is securely stored for future reference.
+        </p>
       </div>
     </div>
   );

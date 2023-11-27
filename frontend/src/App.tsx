@@ -13,80 +13,83 @@ import styles from "./styles/App.module.css";
 import { Sidebar } from "./components/Sidebar";
 
 function App() {
-    const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
-    const [showSignUpModal, setShowSignUpModal] = useState(false);
-    const [showLoginModal, setShowLoginModal] = useState(false);
-    const [sidebarExpanded, setSidebarExpanded] = useState(false);
-    const [sidebarWidth, setSidebarWidth] = useState("65px");
+  const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
+  const [showSignUpModal, setShowSignUpModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [sidebarExpanded, setSidebarExpanded] = useState(false);
+  const [sidebarWidth, setSidebarWidth] = useState("65px");
 
-    useEffect(() => {
-        async function fetchLoggedInUser() {
-            try {
-                const user = await ObjsApi.getLoggedInUser();
-                setLoggedInUser(user);
-            } catch (error) {
-                console.error(error);
-            }
-        }
-        fetchLoggedInUser();
-    }, []);
+  useEffect(() => {
+    async function fetchLoggedInUser() {
+      try {
+        const user = await ObjsApi.getLoggedInUser();
+        setLoggedInUser(user);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchLoggedInUser();
+  }, []);
 
-    useEffect(() => {
-        const newWidth = sidebarExpanded ? "300px" : "65px";
-        setSidebarWidth(newWidth);
-    }, [sidebarExpanded]);
+  useEffect(() => {
+    const newWidth = sidebarExpanded ? "300px" : "65px";
+    setSidebarWidth(newWidth);
+  }, [sidebarExpanded]);
 
-    return (
-        <BrowserRouter>
-            <div className={styles.appContainer}>
-                <Sidebar onToggle={setSidebarExpanded} />
-                <NavBar
-                    loggedInUser={loggedInUser}
-                    onLoginClicked={() => setShowLoginModal(true)}
-                    onSignUpClicked={() => setShowSignUpModal(true)}
-                    onLogoutSuccessful={() => setLoggedInUser(null)}
-                    sidebarExpanded={sidebarExpanded}
-                />
+  return (
+    <BrowserRouter>
+      <div className={styles.appContainer}>
+        <Sidebar onToggle={setSidebarExpanded} />
+        <NavBar
+          loggedInUser={loggedInUser}
+          onLoginClicked={() => setShowLoginModal(true)}
+          onSignUpClicked={() => setShowSignUpModal(true)}
+          onLogoutSuccessful={() => setLoggedInUser(null)}
+          sidebarExpanded={sidebarExpanded}
+        />
 
-                <div
-                    className={styles.contentWrapper}
-                    style={{
-                        marginLeft: sidebarWidth,
-                        transition: "margin-left 0.3s ease-in-out",
-                    }}
-                >
-                    <div className={styles.mainContent}>
-                        <Routes>
-                            <Route path="/" element={<ObjsPage loggedInUser={loggedInUser} />} />
-                            <Route path="/example" element={<ExamplePage />} />
-                            <Route path="/*" element={<NotFoundPage />} />
-                            {/* Add other routes as needed */}
-                        </Routes>
-                    </div>
-                </div>
+        <div
+          className={styles.contentWrapper}
+          style={{
+            marginLeft: sidebarWidth,
+            transition: "margin-left 0.3s ease-in-out",
+          }}
+        >
+          <div className={styles.mainContent}>
+            <Routes>
+              <Route
+                path="/"
+                element={<ObjsPage loggedInUser={loggedInUser} />}
+              />
+              <Route path="/example" element={<ExamplePage />} />
+              <Route path="/*" element={<NotFoundPage />} />
+              {/* Add other routes as needed */}
+            </Routes>
+          </div>
+        </div>
 
-                {showSignUpModal && (
-                    <SignUpModal
-                        onDismiss={() => setShowSignUpModal(false)}
-                        onSignUpSuccessful={(user) => {
-                            setLoggedInUser(user);
-                            setShowSignUpModal(false);
-                        }}
-                    />
-                )}
-                {showLoginModal && (
-                    <LoginModal
-                        onDismiss={() => setShowLoginModal(false)}
-                        onLoginSuccessful={(user) => {
-                            setLoggedInUser(user);
-                            setShowLoginModal(false);
-                        }}
-                    />
-                )}
-                <Footer />
-            </div>
-        </BrowserRouter>
-    );
+        {showSignUpModal && (
+          <SignUpModal
+            onDismiss={() => setShowSignUpModal(false)}
+            onSignUpSuccessful={(user) => {
+              setLoggedInUser(user);
+              setShowSignUpModal(false);
+            }}
+          />
+        )}
+        {showLoginModal && (
+          <LoginModal
+            onDismiss={() => setShowLoginModal(false)}
+            onLoginSuccessful={(user) => {
+              setLoggedInUser(user);
+              setShowLoginModal(false);
+            }}
+          />
+        )}
+        {/* <Footer /> */}
+      </div>
+    </BrowserRouter>
+  );
 }
 
 export default App;
