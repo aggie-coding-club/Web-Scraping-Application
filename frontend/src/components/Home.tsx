@@ -51,12 +51,12 @@ const Home = () => {
             image: " linear-gradient(15deg, #f5fbfe 20%, #427d9d 80%)",
           },
           particles: {
-            number: { value: 100, density: { enable: true, value_area: 600 } },
+            number: { value: 50, density: { enable: true, value_area: 600 } },
             color: { value: "#ffffff" },
             shape: {
               type: "polygon",
               stroke: { width: 0, color: "#000000" },
-              polygon: { nb_sides: 5 },
+              polygon: { nb_sides: 6 },
             },
             opacity: {
               value: 0.25,
@@ -64,7 +64,7 @@ const Home = () => {
               anim: { enable: false, speed: 1, opacity_min: 0.1, sync: false },
             },
             size: {
-              value: 5,
+              value: 50,
               random: true,
               anim: { enable: false, speed: 2, size_min: 0.1, sync: false },
             },
@@ -77,12 +77,12 @@ const Home = () => {
             },
             move: {
               enable: true,
-              speed: 0.3,
-              direction: "top",
+              speed: { min: 0.3, max: 0.6 },
+              direction: "top-right",
               straight: true,
               out_mode: "out",
-              bounce: false,
-              attract: { enable: false, rotateX: 600, rotateY: 1200 },
+              bounce: true,
+              attract: { enable: false, rotateX: 0, rotateY: 0 },
             },
           },
         }}
