@@ -53,8 +53,7 @@ function App() {
           style={{
             marginLeft: sidebarWidth,
             transition: "margin-left 0.3s ease-in-out",
-          }}
-        >
+          }}>
           <div className={styles.mainContent}>
             <Routes>
               <Route
@@ -86,7 +85,7 @@ function App() {
             }}
           />
         )}
-        {/* <Footer /> */}
+        <Footer />
       </div>
     </BrowserRouter>
   );

@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Button } from "react-bootstrap";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { useCallback } from "react";
@@ -9,6 +10,8 @@ import { FaCheck, FaShieldAlt } from "react-icons/fa";
 import { BsLightningFill } from "react-icons/bs";
 import { MdOutlineDashboardCustomize } from "react-icons/md";
 import { TiCloudStorageOutline } from "react-icons/ti";
+import { LuClock4 } from "react-icons/lu";
+import { IoIosNotifications } from "react-icons/io";
 import "../styles/Home.css";
 import HomeTable from "../assets/Table.png";
 
@@ -48,7 +51,7 @@ const Home = () => {
             image: " linear-gradient(15deg, #f5fbfe 20%, #427d9d 80%)",
           },
           particles: {
-            number: { value: 10, density: { enable: true, value_area: 600 } },
+            number: { value: 100, density: { enable: true, value_area: 600 } },
             color: { value: "#ffffff" },
             shape: {
               type: "polygon",
@@ -61,7 +64,7 @@ const Home = () => {
               anim: { enable: false, speed: 1, opacity_min: 0.1, sync: false },
             },
             size: {
-              value: 20,
+              value: 5,
               random: true,
               anim: { enable: false, speed: 2, size_min: 0.1, sync: false },
             },
@@ -87,7 +90,7 @@ const Home = () => {
 
       {/* Hero Section */}
       <div className="flex">
-        <div className="hero-section opacity-1 flex" data-aos="fade-up">
+        <div className="hero-section opacity-1 d-flex" data-aos="fade-up">
           <div className="text-content">
             <h1 className="hero-title">
               <span className="highlight">Empower</span> your data collection
@@ -96,9 +99,31 @@ const Home = () => {
               Transform your web data gathering effortlessly. Monitor websites
               for real-time updates and stay ahead.
             </p>
-            <button className="hero-cta">Get Started</button>
+            <Button
+              href="/#"
+              className="hero-cta"
+              style={{
+                backgroundColor: "#164863",
+                transition: "background-color 0.3s",
+                borderColor: "#427d9d",
+                borderWidth: "1px",
+              }}
+              onMouseDown={(e) => {
+                e.currentTarget.style.backgroundColor = "#9bbec8";
+                e.currentTarget.style.borderColor = "#9bbec8";
+                e.currentTarget.style.borderWidth = "2px";
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "#427d9d";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "#164863";
+                e.currentTarget.style.borderWidth = "1px";
+              }}>
+              Get Started
+            </Button>
           </div>
-          <div className="home-image">
+          <div className="home-image ms-auto">
             <img src={HomeTable} alt="Image" />
           </div>
         </div>
@@ -137,21 +162,30 @@ const Home = () => {
       </div>
       {/* Feature Highlights */}
       <div className="feature-section" data-aos="fade-up" data-aos-delay="100">
-        <div className="feature" data-aos="fade-right" data-aos-delay="200">
+        <div
+          className="d-flex flex-column justify-content-center align-items-center feature"
+          data-aos="fade-right"
+          data-aos-delay="200">
           <MdCodeOff className="feature-icon" />
           <h3 className="feature-title">No Code Required</h3>
           <p className="feature-description">
             Collect valuable data without any coding skills.
           </p>
         </div>
-        <div className="feature" data-aos="fade-right" data-aos-delay="300">
+        <div
+          className="d-flex flex-column justify-content-center align-items-center feature"
+          data-aos="fade-right"
+          data-aos-delay="300">
           <FaCheck className="feature-icon" />
           <h3 className="feature-title">Easy to Use</h3>
           <p className="feature-description">
             User-friendly interface for seamless data collection.
           </p>
         </div>
-        <div className="feature" data-aos="fade-right" data-aos-delay="400">
+        <div
+          className="d-flex flex-column justify-content-center align-items-center feature"
+          data-aos="fade-right"
+          data-aos-delay="400">
           <BsLightningFill className="feature-icon" />
           <h3 className="feature-title">Lightning Fast</h3>
           <p className="feature-description">
@@ -162,7 +196,7 @@ const Home = () => {
         {/* List Section */}
         <div className="list-section" data-aos="fade-left">
           <div className="list-item">
-            <MdOutlineDashboardCustomize className="list-icon" />
+            <MdOutlineDashboardCustomize className="list-icon m-2" />
             <h3 className="list-title">Customizable</h3>
             <p className="list-description">
               Customize your data collection to match your specific needs. It's
@@ -170,7 +204,7 @@ const Home = () => {
             </p>
           </div>
           <div className="list-item">
-            <FaShieldAlt className="list-icon" />
+            <FaShieldAlt className="list-icon m-2" />
             <h3 className="list-title">Secure and Reliable</h3>
             <p className="list-description">
               Rest easy knowing your data is protected by industry-standard
@@ -183,6 +217,7 @@ const Home = () => {
       <div
         className="feature-box application-description-section"
         data-aos="zoom-in-up">
+        <LuClock4 className="section-icon" />
         <h2 className="section-heading">
           Stay Informed with Real-Time Updates
         </h2>
@@ -191,13 +226,13 @@ const Home = () => {
           changes. Receive instant notifications so you never miss an
           opportunity.
         </p>
-        <TiCloudStorageOutline className="section-icon" />
       </div>
       {/* Real-Time Notifications Section */}
       <div
         className="feature-box real-time-notifications-section"
         data-aos="zoom-in-up"
         data-aos-delay="100">
+        <IoIosNotifications className="section-icon" />
         <h2 className="section-heading">Real-Time Notifications</h2>
         <p className="section-subheading">
           Set your preferences to receive updates via email, SMS, or push
@@ -209,6 +244,7 @@ const Home = () => {
         className="feature-box real-time-notifications-section"
         data-aos="zoom-in-up"
         data-aos-delay="200">
+        <TiCloudStorageOutline className="section-icon" />
         <h2 className="section-heading">Dynamic Data at Your Fingertips</h2>
         <p className="section-subheading">
           Access and analyze the latest data scraped from your preferred sites.

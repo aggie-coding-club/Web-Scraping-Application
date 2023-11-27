@@ -36,49 +36,29 @@ const ObjsPageLoggedInView = () => {
     loadObjs();
   }, []);
 
-    async function onObjSaved(updatedObj: ObjsModel) {
-        const url = updatedObj.title;
-        const scrapedData = await scrapeWebsite(updatedObj.userId, url);
-
-        updatedObj.text = scrapedData.join("\n");
-
-        setObjs(objs.map((existingObj) => (existingObj._id === updatedObj._id ? updatedObj : existingObj)));
-        setObjToEdit(null);
+  async function deleteObj(obj: ObjsModel) {
+    try {
+      await ObjsApi.deleteObj(obj._id);
+      setObjs(objs.filter((existingObj) => existingObj._id !== obj._id));
+    } catch (error) {
+      console.error(error);
+      alert(error);
     }
   }
 
-    const columns: ColumnsType<Obj> = [
-        {
-            title: "Website",
-            dataIndex: "title",
-            key: "title",
-        },
-        {
-            title: "Text",
-            dataIndex: "text",
-            key: "text",
-        },
-        {
-            title: "Action",
-            key: "action",
-            render: (_, record) => (
-                <>
-                    <a href="#" onClick={() => setObjToEdit(record)}>
-                        Edit
-                    </a>
-                </>
-            ),
-        },
-        {
-            title: "Action",
-            key: "action",
-            render: (_, record) => (
-                <a href="#" onClick={() => deleteObj(record)}>
-                    Delete
-                </a>
-            ),
-        },
-    ];
+  async function onObjSaved(updatedObj: ObjsModel) {
+    const url = updatedObj.title;
+    const scrapedData = await scrapeWebsite(updatedObj.userId, url);
+
+    updatedObj.text = scrapedData.join("\n");
+
+    setObjs(
+      objs.map((existingObj) =>
+        existingObj._id === updatedObj._id ? updatedObj : existingObj
+      )
+    );
+    setObjToEdit(null);
+  }
 
   const columns: ColumnsType<Obj> = [
     {
@@ -96,28 +76,12 @@ const ObjsPageLoggedInView = () => {
       key: "action",
       render: (_, record) => (
         <>
-            <Button
-                className={`m-4 ${styleUtils.blockCenter} ${styleUtils.flexCenter}`}
-                onClick={() => setShowAddObjDialog(true)}
-            >
-                <FaPlus />
-                Add New Object
-            </Button>
-            {objsLoading && <Spinner animation="border" variant="primary" />}
-            {showObjsLoadingError && <p>Something went wrong. Please refresh the page.</p>}
-            {!objsLoading && !showObjsLoadingError && <Table columns={columns} dataSource={objs} />}
-            {showAddObjDialog && (
-                <AddEditObjDialog
-                    onDismiss={() => setShowAddObjDialog(false)}
-                    onObjSaved={(newObj) => {
-                        setObjs([...objs, newObj]);
-                        setShowAddObjDialog(false);
-                    }}
-                />
-            )}
-            {objToEdit && (
-                <AddEditObjDialog objToEdit={objToEdit} onDismiss={() => setObjToEdit(null)} onObjSaved={onObjSaved} />
-            )}
+          <a
+            className="text-secondary"
+            href="#"
+            onClick={() => setObjToEdit(record)}>
+            Edit
+          </a>
         </>
       ),
     },
@@ -178,14 +142,7 @@ const ObjsPageLoggedInView = () => {
         <AddEditObjDialog
           objToEdit={objToEdit}
           onDismiss={() => setObjToEdit(null)}
-          onObjSaved={(updatedObj) => {
-            setObjs(
-              objs.map((existingObj) =>
-                existingObj._id === updatedObj._id ? updatedObj : existingObj
-              )
-            );
-            setObjToEdit(null);
-          }}
+          onObjSaved={onObjSaved}
         />
       )}
     </>

@@ -36,7 +36,7 @@
 /* TODO: Web Scraping Application title same color as background when logged in */
 .navbar.bg-primary .container .navbar-brand {
   color: var(--lighter-color) !important;
-  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-family: Quicksand;
   font-size: 3rem;
 }
 

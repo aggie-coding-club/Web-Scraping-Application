@@ -4,6 +4,9 @@
 
 $primary: #164863;
 $secondary: #427d9d;
+$accent-color: #9bbec8;
+$light-color: #ddf2fd;
+$lighter-color: #f6f9fc;
 
 // merge with existing $theme-colors map
 $theme-colors: map-merge(
@@ -11,6 +14,9 @@ $theme-colors: map-merge(
   (
     "primary": $primary,
     "secondary": $secondary,
+    "accent": $accent,
+    "light": $lightr,
+    "lighter": $lighter,
   )
 );
 

@@ -18,7 +18,8 @@ body {
   /* border: 2px solid var(--primary-color); */
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-
+  margin-left: 50px;
+  max-width: 700px;
   /* border-color: var(--primary-color); */
 }
 
@@ -116,6 +117,10 @@ body {
 
 .hero-cta:hover {
   background-color: var(--secondary-color);
+}
+
+.hero-cta:focus {
+  background-color: #9bbec8;
 }
 
 @media (max-width: 768px) {
