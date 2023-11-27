@@ -77,6 +77,10 @@ const LoginModal = ({ onDismiss, onLoginSuccessful }: LoginModalProps) => {
               e.currentTarget.style.borderColor = "#9bbec8";
               e.currentTarget.style.borderWidth = "2px";
             }}
+            onMouseUp={(e) => {
+              e.currentTarget.style.backgroundColor = "#427d9d";
+              e.currentTarget.style.borderWidth = "1px";
+            }}
             onMouseEnter={(e) => {
               e.currentTarget.style.backgroundColor = "#427d9d";
             }}
