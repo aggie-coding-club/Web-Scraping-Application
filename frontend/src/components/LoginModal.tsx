@@ -65,7 +65,25 @@ const LoginModal = ({ onDismiss, onLoginSuccessful }: LoginModalProps) => {
           <Button
             type="submit"
             disabled={isSubmitting}
-            className={styleUtils.width100}>
+            className={styleUtils.width100}
+            style={{
+              backgroundColor: "#164863",
+              transition: "background-color 0.3s",
+              borderColor: "#427d9d",
+              borderWidth: "1px",
+            }}
+            onMouseDown={(e) => {
+              e.currentTarget.style.backgroundColor = "#9bbec8";
+              e.currentTarget.style.borderColor = "#9bbec8";
+              e.currentTarget.style.borderWidth = "2px";
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = "#427d9d";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = "#164863";
+              e.currentTarget.style.borderWidth = "1px";
+            }}>
             Log In
           </Button>
         </Form>

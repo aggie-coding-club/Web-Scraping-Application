@@ -1,8 +1,10 @@
+import { Button } from "react-bootstrap";
 import { MdCodeOff } from "react-icons/md";
 import { FaCheck, FaShieldAlt } from "react-icons/fa";
 import { BsLightningFill } from "react-icons/bs";
 import { MdOutlineDashboardCustomize } from "react-icons/md";
 import { TiCloudStorageOutline } from "react-icons/ti";
+import "../styles/Home.css";
 
 const Home = () => {
   return (
@@ -11,9 +13,7 @@ const Home = () => {
       <div className="pb-5">
         <div className="hstack gap-3">
           <h1 className="fw-light mb-4 text-lowercase">Collect data</h1>
-          <h1 className="text-primary font-bold mb-4 text-lowercase">
-            smartly
-          </h1>
+          <h1 className="text-info font-bold mb-4 text-lowercase">smartly</h1>
         </div>
 
         <p className="fs-4 mb-6">
@@ -95,9 +95,29 @@ const Home = () => {
 
       {/* Call to action */}
       <div className="d-flex justify-content-center pt-5">
-        <button className="btn btn-lg btn-primary p-3 fw-bold rounded-pill shadow">
+        <Button
+          href="/#"
+          className="btn btn-lg p-3 fw-bold shadow-lg text-white"
+          style={{
+            backgroundColor: "#427d9d",
+            transition: "background-color 0.3s",
+            borderColor: "#427d9d",
+            borderWidth: "1px",
+          }}
+          onMouseDown={(e) => {
+            e.currentTarget.style.backgroundColor = "#9bbec8";
+            e.currentTarget.style.borderColor = "#9bbec8";
+            e.currentTarget.style.borderWidth = "2px";
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = "#164863";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = "#427d9d";
+            e.currentTarget.style.borderWidth = "1px";
+          }}>
           Get Started
-        </button>
+        </Button>
       </div>
     </div>
   );

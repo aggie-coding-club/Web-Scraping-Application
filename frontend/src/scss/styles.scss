@@ -1,0 +1,18 @@
+@import "../node_modules/bootstrap/scss/bootstrap";
+@import "../node_modules/bootstrap/scss/functions";
+@import "../node_modules/bootstrap/scss/variables";
+
+$primary: #164863;
+$secondary: #427d9d;
+
+// merge with existing $theme-colors map
+$theme-colors: map-merge(
+  $theme-colors,
+  (
+    "primary": $primary,
+    "secondary": $secondary,
+  )
+);
+
+// set changes
+@import "../node_modules/bootstrap/scss/bootstrap.scss";
