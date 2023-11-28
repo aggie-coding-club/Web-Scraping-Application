@@ -54,8 +54,7 @@ const NavBar = ({
       variant="dark"
       expand="sm"
       sticky="top"
-      style={navbarStyle}
-    >
+      style={navbarStyle}>
       <Container>
         <Navbar.Brand as={Link} to="/">
           Web Scraping Application

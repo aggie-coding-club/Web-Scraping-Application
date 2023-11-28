@@ -7,7 +7,7 @@
 }
 
 .navbar.bg-primary.scrolled {
-  background-color: rgba(14, 38, 63) !important;
+  background-color: var(--primary-color) !important;
 }
 
 .navbar.bg-primary .navbar-brand,

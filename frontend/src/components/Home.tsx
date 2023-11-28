@@ -48,18 +48,18 @@ const Home = () => {
         options={{
           fullScreen: false,
           background: {
-            image: " linear-gradient(15deg, #f5fbfe 20%, #427d9d 80%)",
+            image: "linear-gradient(15deg, #f5fbfe 20%, #427d9d 80%)",
           },
           particles: {
             number: { value: 50, density: { enable: true, value_area: 600 } },
             color: { value: "#ffffff" },
             shape: {
               type: "polygon",
-              stroke: { width: 0, color: "#000000" },
+              stroke: { width: 0, color: "#ffffff" },
               polygon: { nb_sides: 6 },
             },
             opacity: {
-              value: 0.25,
+              value: { min: 0.1, max: 0.25 },
               random: true,
               anim: { enable: false, speed: 1, opacity_min: 0.1, sync: false },
             },

@@ -124,7 +124,9 @@ const ObjsPageLoggedInView = () => {
       </Button>
       {objsLoading && <Spinner animation="border" variant="primary" />}
       {showObjsLoadingError && (
-        <p>Something went wrong. Please refresh the page.</p>
+        <p className="text-danger">
+          Something went wrong. Please refresh the page.
+        </p>
       )}
       {!objsLoading && !showObjsLoadingError && (
         <Table columns={columns} dataSource={objs} />
