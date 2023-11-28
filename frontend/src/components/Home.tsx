@@ -85,6 +85,49 @@ const Home = () => {
               attract: { enable: false, rotateX: 0, rotateY: 0 },
             },
           },
+          interactivity: {
+            detect_on: "canvas",
+            events: {
+              onHover: {
+                enable: true,
+                mode: "bubble",
+                parallax: {
+                  enable: false,
+                  force: 60,
+                  smooth: 10,
+                },
+              },
+              onClick: {
+                enable: true,
+                mode: "push",
+              },
+              resize: true,
+            },
+            modes: {
+              grab: {
+                distance: 400,
+                lineLinked: {
+                  opacity: 1,
+                },
+              },
+              bubble: {
+                distance: 400,
+                size: 100,
+                duration: 2,
+                opacity: 0,
+                speed: 2,
+              },
+              repulse: {
+                distance: 200,
+              },
+              push: {
+                particles_nb: 1,
+              },
+              remove: {
+                particles_nb: 2,
+              },
+            },
+          },
         }}
       />
 
