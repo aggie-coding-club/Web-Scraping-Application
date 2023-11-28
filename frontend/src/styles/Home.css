@@ -260,7 +260,7 @@ body {
 
 .section-icon {
   font-size: 4em;
-  color: var(--accent-color);
+  color: var(--secondary-color);
   display: block;
   text-align: center;
   margin: auto;
