@@ -23,7 +23,7 @@ The Web Scraping Team focuses on the logic behind how to extract data from any w
 
 - ~~Implementing a user authentication system.~~
 - ~~Add scraping functionality and user-specific object~~
-- Implement a sophisticated table for the user's scraped sites dashboard
+- ~~Implement a sophisticated table for the user's scraped sites dashboard~~
 - Add more pages to enhance frontend UI/UX
 - Develop a notification system and interval scraping options
 - Deploy the application for public access.
