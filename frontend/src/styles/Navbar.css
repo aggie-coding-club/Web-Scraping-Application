@@ -3,15 +3,10 @@
   transition: background-color 0.5s ease !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .navbar.bg-primary.scrolled {
-  background-color: var(--primary-color) !important;
-}
-
-.navbar-brand.scrolled {
-  color: var(--primary-color) !important;
+  background-color: var(--light-color) !important;
 }
 
 .navbar.bg-primary .navbar-brand,
@@ -34,8 +29,7 @@
 .navbar.bg-primary .navbar-brand {
   font-size: 2.5rem;
   font-weight: 500;
-  color: var(--primary-color) !important;
-  transition: color 0.5s ease !important;
+  color: var(--secondary-color) !important;
 }
 
 /* random font, change later when we have name */

@@ -57,7 +57,7 @@ const NavBar = ({
       style={navbarStyle}>
       <Container>
         <Navbar.Brand as={Link} to="/">
-          Web Scraping Application
+          <p className="text-dark">Web Scraping Application</p>
         </Navbar.Brand>
         {/* TODO: Fix color of text changing slightly while transition from sidebar opening/closing is running */}
         <Navbar.Toggle aria-controls="main-navbar" />
