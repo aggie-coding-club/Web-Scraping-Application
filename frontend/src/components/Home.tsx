@@ -178,7 +178,8 @@ const Home = () => {
           retina_detect: true,
           fps_limit: 60,
           background: {
-            image: "url('https://m.media-amazon.com/images/I/71sgtpB-rxL.jpg')",
+            image:
+              "url('https://static.vecteezy.com/system/resources/thumbnails/008/167/404/small/simply-soft-gradation-technology-background-free-vector.jpg')",
           },
         }}
       />
