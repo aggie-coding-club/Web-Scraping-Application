@@ -11,144 +11,127 @@ import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 
 const ObjsPageLoggedInView = () => {
-  const [objs, setObjs] = useState<ObjsModel[]>([]);
-  const [objsLoading, setObjsLoading] = useState(true);
-  const [showObjsLoadingError, setShowObjsLoadingError] = useState(false);
+    const [objs, setObjs] = useState<ObjsModel[]>([]);
+    const [objsLoading, setObjsLoading] = useState(true);
+    const [showObjsLoadingError, setShowObjsLoadingError] = useState(false);
 
-  const [showAddObjDialog, setShowAddObjDialog] = useState(false);
-  const [objToEdit, setObjToEdit] = useState<ObjsModel | null>(null);
+    const [showAddObjDialog, setShowAddObjDialog] = useState(false);
+    const [objToEdit, setObjToEdit] = useState<ObjsModel | null>(null);
 
-  useEffect(() => {
-    console.log(objs);
-    async function loadObjs() {
-      try {
-        setShowObjsLoadingError(false);
-        setObjsLoading(true);
-        const objs = await ObjsApi.fetchObjs();
-        setObjs(objs);
-      } catch (error) {
-        console.error(error);
-        setShowObjsLoadingError(true);
-      } finally {
-        setObjsLoading(false);
-      }
+    useEffect(() => {
+        async function loadObjs() {
+            try {
+                setShowObjsLoadingError(false);
+                setObjsLoading(true);
+                const objs = await ObjsApi.fetchObjs();
+                setObjs(objs);
+            } catch (error) {
+                console.error(error);
+                setShowObjsLoadingError(true);
+            } finally {
+                setObjsLoading(false);
+            }
+        }
+        loadObjs();
+    }, []);
+
+    async function deleteObj(obj: ObjsModel) {
+        try {
+            await ObjsApi.deleteObj(obj._id);
+            setObjs(objs.filter((existingObj) => existingObj._id !== obj._id));
+        } catch (error) {
+            console.error(error);
+            alert(error);
+        }
     }
-    loadObjs();
-  }, []);
 
-  async function deleteObj(obj: ObjsModel) {
-    try {
-      await ObjsApi.deleteObj(obj._id);
-      setObjs(objs.filter((existingObj) => existingObj._id !== obj._id));
-    } catch (error) {
-      console.error(error);
-      alert(error);
+    async function onObjSaved(updatedObj: ObjsModel) {
+        const url = updatedObj.title;
+        const scrapedData = await scrapeWebsite(updatedObj.userId, url);
+
+        updatedObj.text = scrapedData.join("\n");
+
+        setObjs(objs.map((existingObj) => (existingObj._id === updatedObj._id ? updatedObj : existingObj)));
+        setObjToEdit(null);
     }
-  }
 
-  async function onObjSaved(updatedObj: ObjsModel) {
-    const url = updatedObj.title;
-    const scrapedData = await scrapeWebsite(updatedObj.userId, url);
+    const columns: ColumnsType<Obj> = [
+        {
+            title: "Website",
+            dataIndex: "title",
+            key: "title",
+        },
+        {
+            title: "Text",
+            dataIndex: "text",
+            key: "text",
+        },
+        {
+            title: "Action",
+            key: "action",
+            render: (_, record) => (
+                <>
+                    <a className="text-secondary" href="#" onClick={() => setObjToEdit(record)}>
+                        Edit
+                    </a>
+                </>
+            ),
+        },
+        {
+            title: "Action",
+            key: "action",
+            render: (_, record) => (
+                <a className="text-danger" href="#" onClick={() => deleteObj(record)}>
+                    Delete
+                </a>
+            ),
+        },
+    ];
 
-    updatedObj.text = scrapedData.join("\n");
-
-    setObjs(
-      objs.map((existingObj) =>
-        existingObj._id === updatedObj._id ? updatedObj : existingObj
-      )
-    );
-    setObjToEdit(null);
-  }
-
-  const columns: ColumnsType<Obj> = [
-    {
-      title: "Website",
-      dataIndex: "title",
-      key: "title",
-    },
-    {
-      title: "Text",
-      dataIndex: "text",
-      key: "text",
-    },
-    {
-      title: "Action",
-      key: "action",
-      render: (_, record) => (
+    return (
         <>
-          <a
-            className="text-secondary"
-            href="#"
-            onClick={() => setObjToEdit(record)}>
-            Edit
-          </a>
+            <Button
+                className={`m-4 ${styleUtils.blockCenter} ${styleUtils.flexCenter}`}
+                onClick={() => setShowAddObjDialog(true)}
+                style={{
+                    backgroundColor: "#164863",
+                    transition: "background-color 0.3s",
+                    borderColor: "#427d9d",
+                    borderWidth: "1px",
+                }}
+                onMouseDown={(e) => {
+                    e.currentTarget.style.backgroundColor = "#9bbec8";
+                    e.currentTarget.style.borderColor = "#9bbec8";
+                    e.currentTarget.style.borderWidth = "2px";
+                }}
+                onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = "#427d9d";
+                }}
+                onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = "#164863";
+                    e.currentTarget.style.borderWidth = "1px";
+                }}
+            >
+                <FaPlus />
+                Add New Object
+            </Button>
+            {objsLoading && <Spinner animation="border" variant="primary" />}
+            {showObjsLoadingError && <p className="text-danger">Something went wrong. Please refresh the page.</p>}
+            {!objsLoading && !showObjsLoadingError && <Table columns={columns} dataSource={objs} />}
+            {showAddObjDialog && (
+                <AddEditObjDialog
+                    onDismiss={() => setShowAddObjDialog(false)}
+                    onObjSaved={(newObj) => {
+                        setObjs([...objs, newObj]);
+                        setShowAddObjDialog(false);
+                    }}
+                />
+            )}
+            {objToEdit && (
+                <AddEditObjDialog objToEdit={objToEdit} onDismiss={() => setObjToEdit(null)} onObjSaved={onObjSaved} />
+            )}
         </>
-      ),
-    },
-    {
-      title: "Action",
-      key: "action",
-      render: (_, record) => (
-        <a className="text-danger" href="#" onClick={() => deleteObj(record)}>
-          Delete
-        </a>
-      ),
-    },
-  ];
-
-  return (
-    <>
-      <Button
-        className={`m-4 ${styleUtils.blockCenter} ${styleUtils.flexCenter}`}
-        onClick={() => setShowAddObjDialog(true)}
-        style={{
-          backgroundColor: "#164863",
-          transition: "background-color 0.3s",
-          borderColor: "#427d9d",
-          borderWidth: "1px",
-        }}
-        onMouseDown={(e) => {
-          e.currentTarget.style.backgroundColor = "#9bbec8";
-          e.currentTarget.style.borderColor = "#9bbec8";
-          e.currentTarget.style.borderWidth = "2px";
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = "#427d9d";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = "#164863";
-          e.currentTarget.style.borderWidth = "1px";
-        }}>
-        <FaPlus />
-        Add New Object
-      </Button>
-      {objsLoading && <Spinner animation="border" variant="primary" />}
-      {showObjsLoadingError && (
-        <p className="text-danger">
-          Something went wrong. Please refresh the page.
-        </p>
-      )}
-      {!objsLoading && !showObjsLoadingError && (
-        <Table columns={columns} dataSource={objs} />
-      )}
-      {showAddObjDialog && (
-        <AddEditObjDialog
-          onDismiss={() => setShowAddObjDialog(false)}
-          onObjSaved={(newObj) => {
-            setObjs([...objs, newObj]);
-            setShowAddObjDialog(false);
-          }}
-        />
-      )}
-      {objToEdit && (
-        <AddEditObjDialog
-          objToEdit={objToEdit}
-          onDismiss={() => setObjToEdit(null)}
-          onObjSaved={onObjSaved}
-        />
-      )}
-    </>
-  );
+    );
 };
 
 export default ObjsPageLoggedInView;
