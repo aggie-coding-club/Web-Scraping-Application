@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import LoginModal from "./components/LoginModal";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import SignUpModal from "./components/SignUpModal";
-import { User } from "./models/user";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Sidebar } from "./components/Sidebar";
+
 import ObjsPage from "./pages/ObjsPage";
 import ExamplePage from "./pages/ExamplePage";
 import SettingsPage from "./pages/SettingsPage";
@@ -12,9 +14,10 @@ import NotificationsPage from "./pages/NotificationsPage";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
 import NotFoundPage from "./pages/NotFoundPage";
-import styles from "./styles/App.module.css";
-import { Sidebar } from "./components/Sidebar";
+
+import { User } from "./models/user";
 import { UserProvider } from "./providers/UserProvider";
+import styles from "./styles/App.module.css";
 
 function App() {
     const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
