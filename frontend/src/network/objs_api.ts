@@ -2,6 +2,8 @@ import { ConflictError, UnauthorizedError } from "../errors/http_errors";
 import { Obj } from "../models/object";
 import { User } from "../models/user";
 import { scrapeWebsite } from "./scrape_api";
+import UserContext from "../providers/UserProvider";
+import { useContext } from "react";
 
 export async function fetchData(input: RequestInfo, init?: RequestInit) {
     const response = await fetch(input, init);
@@ -19,6 +21,10 @@ export async function fetchData(input: RequestInfo, init?: RequestInit) {
         }
     }
 }
+
+export const getLoggedInUserContext = async (): Promise<User | null> => {
+    return useContext(UserContext).loggedInUser;
+};
 
 export async function getLoggedInUser(): Promise<User> {
     const response = await fetchData("/api/users", { method: "GET" });
@@ -74,9 +80,7 @@ export interface ObjInput {
 
 export async function createObj(obj: ObjInput): Promise<Obj> {
     if (!obj.text) {
-        const url = obj.url;
-        const scrapedData = await scrapeWebsite(url);
-
+        const scrapedData = await scrapeWebsite(obj.url);
         obj.text = JSON.stringify(scrapedData);
     }
 

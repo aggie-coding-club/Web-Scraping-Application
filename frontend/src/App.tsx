@@ -19,7 +19,7 @@ import UserContext from "./providers/UserProvider";
 import styles from "./styles/App.module.css";
 
 function App() {
-    const { loggedInUser, setLoggedInUser } = useContext(UserContext);
+    const { setLoggedInUser } = useContext(UserContext);
     const [showSignUpModal, setShowSignUpModal] = useState(false);
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [sidebarExpanded, setSidebarExpanded] = useState(false);
@@ -40,7 +40,6 @@ function App() {
             <div className={styles.appContainer}>
                 <Sidebar onToggle={setSidebarExpanded} />
                 <NavBar
-                    loggedInUser={loggedInUser}
                     onLoginClicked={() => setShowLoginModal(true)}
                     onSignUpClicked={() => setShowSignUpModal(true)}
                     onLogoutSuccessful={() => setLoggedInUser(null)}
@@ -49,7 +48,7 @@ function App() {
                 <div className={styles.contentWrapper} style={stylesContentWrapper}>
                     <div className={styles.mainContent}>
                         <Routes>
-                            <Route path="/" element={<ObjsPage loggedInUser={loggedInUser} />} />
+                            <Route path="/" element={<ObjsPage />} />
                             <Route path="/example" element={<ExamplePage />} />
                             <Route path="/settings" element={<SettingsPage />} />
                             <Route path="/notifications" element={<NotificationsPage />} />
