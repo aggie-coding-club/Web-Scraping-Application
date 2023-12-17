@@ -53,7 +53,7 @@ const AddEditObjDialog = ({ objToEdit, onDismiss, onObjSaved }: AddEditObjDialog
                         placeholder="URL"
                         register={register}
                         registerOptions={{ required: "Required" }}
-                        error={errors.title}
+                        error={errors.url}
                     />
 
                     <TextInputField
