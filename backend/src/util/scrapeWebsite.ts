@@ -57,7 +57,9 @@ export const scrapeWebsite = async (url: string, parameters: string[]) => {
     return [];
   }
 
-  await page.waitForTimeout(2000); // Adjust as necessary
+  for (let i = 0; i < selectors.length; i++) {
+    await page.waitForSelector(selectors[i]);
+  }
 
   const scrapedData = await page.evaluate((selectors: string[]) => {
     const results: string[] = [];
