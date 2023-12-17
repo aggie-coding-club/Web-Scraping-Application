@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import LoginModal from "./components/LoginModal";
@@ -15,12 +15,11 @@ import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
 import NotFoundPage from "./pages/NotFoundPage";
 
-import { User } from "./models/user";
-import { UserProvider } from "./providers/UserProvider";
+import UserContext from "./providers/UserProvider";
 import styles from "./styles/App.module.css";
 
 function App() {
-    const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
+    const { loggedInUser, setLoggedInUser } = useContext(UserContext);
     const [showSignUpModal, setShowSignUpModal] = useState(false);
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [sidebarExpanded, setSidebarExpanded] = useState(false);
@@ -37,52 +36,50 @@ function App() {
     }, [sidebarExpanded]);
 
     return (
-        <UserProvider>
-            <BrowserRouter>
-                <div className={styles.appContainer}>
-                    <Sidebar onToggle={setSidebarExpanded} />
-                    <NavBar
-                        loggedInUser={loggedInUser}
-                        onLoginClicked={() => setShowLoginModal(true)}
-                        onSignUpClicked={() => setShowSignUpModal(true)}
-                        onLogoutSuccessful={() => setLoggedInUser(null)}
-                        sidebarExpanded={sidebarExpanded}
-                    />
-                    <div className={styles.contentWrapper} style={stylesContentWrapper}>
-                        <div className={styles.mainContent}>
-                            <Routes>
-                                <Route path="/" element={<ObjsPage loggedInUser={loggedInUser} />} />
-                                <Route path="/example" element={<ExamplePage />} />
-                                <Route path="/settings" element={<SettingsPage />} />
-                                <Route path="/notifications" element={<NotificationsPage />} />
-                                <Route path="/about" element={<AboutPage />} />
-                                <Route path="/contact" element={<ContactPage />} />
-                                <Route path="/*" element={<NotFoundPage />} />
-                            </Routes>
-                        </div>
+        <BrowserRouter>
+            <div className={styles.appContainer}>
+                <Sidebar onToggle={setSidebarExpanded} />
+                <NavBar
+                    loggedInUser={loggedInUser}
+                    onLoginClicked={() => setShowLoginModal(true)}
+                    onSignUpClicked={() => setShowSignUpModal(true)}
+                    onLogoutSuccessful={() => setLoggedInUser(null)}
+                    sidebarExpanded={sidebarExpanded}
+                />
+                <div className={styles.contentWrapper} style={stylesContentWrapper}>
+                    <div className={styles.mainContent}>
+                        <Routes>
+                            <Route path="/" element={<ObjsPage loggedInUser={loggedInUser} />} />
+                            <Route path="/example" element={<ExamplePage />} />
+                            <Route path="/settings" element={<SettingsPage />} />
+                            <Route path="/notifications" element={<NotificationsPage />} />
+                            <Route path="/about" element={<AboutPage />} />
+                            <Route path="/contact" element={<ContactPage />} />
+                            <Route path="/*" element={<NotFoundPage />} />
+                        </Routes>
                     </div>
-                    {showSignUpModal && (
-                        <SignUpModal
-                            onDismiss={() => setShowSignUpModal(false)}
-                            onSignUpSuccessful={(user) => {
-                                setLoggedInUser(user);
-                                setShowSignUpModal(false);
-                            }}
-                        />
-                    )}
-                    {showLoginModal && (
-                        <LoginModal
-                            onDismiss={() => setShowLoginModal(false)}
-                            onLoginSuccessful={(user) => {
-                                setLoggedInUser(user);
-                                setShowLoginModal(false);
-                            }}
-                        />
-                    )}
-                    <Footer />
                 </div>
-            </BrowserRouter>
-        </UserProvider>
+                {showSignUpModal && (
+                    <SignUpModal
+                        onDismiss={() => setShowSignUpModal(false)}
+                        onSignUpSuccessful={(user) => {
+                            setLoggedInUser(user);
+                            setShowSignUpModal(false);
+                        }}
+                    />
+                )}
+                {showLoginModal && (
+                    <LoginModal
+                        onDismiss={() => setShowLoginModal(false)}
+                        onLoginSuccessful={(user) => {
+                            setLoggedInUser(user);
+                            setShowLoginModal(false);
+                        }}
+                    />
+                )}
+                <Footer />
+            </div>
+        </BrowserRouter>
     );
 }
 

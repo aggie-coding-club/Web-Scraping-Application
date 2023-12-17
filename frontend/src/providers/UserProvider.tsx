@@ -1,13 +1,16 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
-import * as ObjsApi from "../network/objs_api";
 import { User } from "../models/user";
+import * as ObjsApi from "../network/objs_api";
 
 type UserContextType = {
     loggedInUser: User | null;
     setLoggedInUser: (user: User | null) => void;
 };
 
-export const UserContext = createContext<UserContextType | null>(null);
+const UserContext = createContext<UserContextType>({
+    loggedInUser: null,
+    setLoggedInUser: () => {},
+});
 
 type UserProviderProps = {
     children: ReactNode;
