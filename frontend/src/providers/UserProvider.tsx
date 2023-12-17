@@ -7,7 +7,7 @@ type UserContextType = {
     setLoggedInUser: (user: User | null) => void;
 };
 
-const UserContext = createContext<UserContextType | null>(null);
+export const UserContext = createContext<UserContextType | null>(null);
 
 type UserProviderProps = {
     children: ReactNode;
