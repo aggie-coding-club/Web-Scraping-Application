@@ -48,25 +48,25 @@ export const getNote: RequestHandler = async (req, res, next) => {
 };
 
 interface CreateNoteBody {
-    title?: string;
+    url?: string;
     text?: string;
 }
 
 // create
 export const createNote: RequestHandler<unknown, unknown, CreateNoteBody, unknown> = async (req, res, next) => {
-    const title = req.body.title;
+    const url = req.body.url;
     const text = req.body.text;
     const authenticatedUserId = req.session.userId;
 
     try {
         assertIsDefined(authenticatedUserId);
 
-        if (!title) {
+        if (!url) {
             throw createHttpError(400, "Must have an URL"); // Bad request
         }
         const newNote = await NoteModel.create({
             userId: authenticatedUserId,
-            title: title,
+            url: url,
             text: text,
         });
         res.status(201).json(newNote); // new resource created
@@ -79,13 +79,13 @@ interface UpdateNoteParams {
     noteId: string;
 }
 interface UpdateNoteBody {
-    title?: string;
+    url?: string;
     text?: string;
 }
 
 export const updateNote: RequestHandler<UpdateNoteParams, unknown, UpdateNoteBody, unknown> = async (req, res, next) => {
     const noteId = req.params.noteId;
-    const newTitle = req.body.title;
+    const newURL = req.body.url;
     const newText = req.body.text;
     const authenticatedUserId = req.session.userId;
 
@@ -96,8 +96,8 @@ export const updateNote: RequestHandler<UpdateNoteParams, unknown, UpdateNoteBod
             throw createHttpError(400, "Invalid object id");
         }
 
-        if (!newTitle) {
-            throw createHttpError(400, "Must have a title"); // Bad request
+        if (!newURL) {
+            throw createHttpError(400, "Must have an URL"); // Bad request
         }
 
         const note = await NoteModel.findById(noteId).exec();
@@ -110,7 +110,7 @@ export const updateNote: RequestHandler<UpdateNoteParams, unknown, UpdateNoteBod
             throw createHttpError(401, "You cannot access this obj");
         }
 
-        note.title = newTitle;
+        note.url = newURL;
         note.text = newText;
 
         const updatedNote = await note.save();

@@ -56,8 +56,8 @@ const ObjsPageLoggedInView = () => {
     const columns: ColumnsType<Obj> = [
         {
             title: "Website",
-            dataIndex: "title",
-            key: "title",
+            dataIndex: "url",
+            key: "url",
         },
         {
             title: "Text",

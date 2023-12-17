@@ -47,7 +47,7 @@ const AddEditObjDialog = ({ objToEdit, onDismiss, onObjSaved }: AddEditObjDialog
             <Modal.Body>
                 <Form id="addEditObjForm" onSubmit={handleSubmit(onSubmit)}>
                     <TextInputField
-                        name="title"
+                        name="url"
                         label="Website URL"
                         type="text"
                         placeholder="URL"
