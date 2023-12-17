@@ -46,13 +46,11 @@ const ObjsPageLoggedInView = () => {
     }
 
     async function onObjSaved(updatedObj: ObjsModel) {
-        const url = updatedObj.title;
-        const scrapedData = await scrapeWebsite(updatedObj.userId, url);
-
-        updatedObj.text = scrapedData.join("\n");
-
-        setObjs(objs.map((existingObj) => (existingObj._id === updatedObj._id ? updatedObj : existingObj)));
-        setObjToEdit(null);
+        // const url = updatedObj.url;
+        // const scrapedData = await scrapeWebsite(updatedObj.userId, url);
+        // updatedObj.text = scrapedData.join("\n");
+        // setObjs(objs.map((existingObj) => (existingObj._id === updatedObj._id ? updatedObj : existingObj)));
+        // setObjToEdit(null);
     }
 
     const columns: ColumnsType<Obj> = [

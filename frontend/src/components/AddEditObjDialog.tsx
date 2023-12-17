@@ -18,7 +18,7 @@ const AddEditObjDialog = ({ objToEdit, onDismiss, onObjSaved }: AddEditObjDialog
         formState: { errors, isSubmitting },
     } = useForm<ObjInput>({
         defaultValues: {
-            title: objToEdit?.title || "",
+            url: objToEdit?.url || "",
             text: objToEdit?.text || "",
         },
     });
@@ -50,7 +50,7 @@ const AddEditObjDialog = ({ objToEdit, onDismiss, onObjSaved }: AddEditObjDialog
                         name="title"
                         label="Website URL"
                         type="text"
-                        placeholder="Title"
+                        placeholder="URL"
                         register={register}
                         registerOptions={{ required: "Required" }}
                         error={errors.title}

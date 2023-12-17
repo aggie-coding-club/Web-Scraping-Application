@@ -68,13 +68,13 @@ export async function fetchObjs(): Promise<Obj[]> {
 }
 
 export interface ObjInput {
-    title: string;
+    url: string;
     text?: string;
 }
 
 export async function createObj(obj: ObjInput): Promise<Obj> {
     if (!obj.text) {
-        const url = obj.title;
+        const url = obj.url;
         const scrapedData = await scrapeWebsite(url);
 
         obj.text = JSON.stringify(scrapedData);
