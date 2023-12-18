@@ -45,36 +45,36 @@ const ObjsPageLoggedInView = () => {
     }
 
     const columns: ColumnsType<Obj> = [
-        // {
-        //     title: "Website",
-        //     dataIndex: "url",
-        //     key: "url",
-        // },
-        // {
-        //     title: "Text",
-        //     dataIndex: "text",
-        //     key: "text",
-        // },
-        // {
-        //     title: "Action",
-        //     key: "action",
-        //     render: (_, record) => (
-        //         <>
-        //             <a className="text-secondary" href="#" onClick={() => setObjToEdit(record)}>
-        //                 Edit
-        //             </a>
-        //         </>
-        //     ),
-        // },
-        // {
-        //     title: "Action",
-        //     key: "action",
-        //     render: (_, record) => (
-        //         <a className="text-danger" href="#" onClick={() => deleteObj(record)}>
-        //             Delete
-        //         </a>
-        //     ),
-        // },
+        {
+            title: "Website",
+            dataIndex: "url",
+            key: "url",
+        },
+        {
+            title: "Text",
+            dataIndex: "text",
+            key: "text",
+        },
+        {
+            title: "Action",
+            key: "action",
+            render: (_, record) => (
+                <>
+                    <a className="text-secondary" href="#" onClick={() => setObjToEdit(record)}>
+                        Edit
+                    </a>
+                </>
+            ),
+        },
+        {
+            title: "Action",
+            key: "action",
+            render: (_, record) => (
+                <a className="text-danger" href="#" onClick={() => deleteObj(record)}>
+                    Delete
+                </a>
+            ),
+        },
     ];
 
     return (
