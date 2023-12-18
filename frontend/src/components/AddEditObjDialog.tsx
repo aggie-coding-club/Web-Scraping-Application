@@ -1,6 +1,6 @@
 import { Modal, Form, Button } from "react-bootstrap";
-import { Obj } from "../models/object";
 import { useForm } from "react-hook-form";
+import { Obj } from "../models/object";
 import { ObjInput } from "../network/objs_api";
 import * as ObjApi from "../network/objs_api";
 import TextInputField from "./form/TextInputField";

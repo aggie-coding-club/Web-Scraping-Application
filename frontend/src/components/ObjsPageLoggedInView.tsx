@@ -5,11 +5,9 @@ import { Obj, Obj as ObjsModel } from "../models/object";
 import * as ObjsApi from "../network/objs_api";
 import styleUtils from "../styles/utils.module.css";
 import AddEditObjDialog from "./AddEditObjDialog";
-import { scrapeWebsite } from "../network/scrape_api";
 
 import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import { set } from "react-hook-form";
 
 const ObjsPageLoggedInView = () => {
     const [objs, setObjs] = useState<ObjsModel[]>([]);
@@ -45,14 +43,6 @@ const ObjsPageLoggedInView = () => {
             alert(error);
         }
     }
-
-    // async function onObjSaved(updatedObj: ObjsModel) {
-    //     const url = updatedObj.url;
-    //     const scrapedData = await scrapeWebsite(updatedObj.userId, url);
-    //     updatedObj.text = scrapedData.join("\n");
-    //     setObjs(objs.map((existingObj) => (existingObj._id === updatedObj._id ? updatedObj : existingObj)));
-    //     setObjToEdit(null);
-    // }
 
     const columns: ColumnsType<Obj> = [
         {
