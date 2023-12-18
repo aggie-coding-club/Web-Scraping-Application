@@ -79,10 +79,8 @@ export interface ObjInput {
 }
 
 export async function createObj(obj: ObjInput): Promise<Obj> {
-    if (!obj.text) {
-        const scrapedData = await scrapeWebsite(obj.url);
-        obj.text = JSON.stringify(scrapedData);
-    }
+    const scrapedData = await scrapeWebsite(obj.url);
+    obj.text = JSON.stringify(scrapedData);
 
     const response = await fetchData("/api/objs", {
         method: "POST",
@@ -96,6 +94,9 @@ export async function createObj(obj: ObjInput): Promise<Obj> {
 }
 
 export async function updateObj(objId: string, obj: ObjInput) {
+    const scrapedData = await scrapeWebsite(obj.url);
+    obj.text = JSON.stringify(scrapedData);
+
     const response = await fetchData("/api/objs/" + objId, {
         method: "PATCH",
         headers: {

@@ -9,6 +9,7 @@ import { scrapeWebsite } from "../network/scrape_api";
 
 import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
+import { set } from "react-hook-form";
 
 const ObjsPageLoggedInView = () => {
     const [objs, setObjs] = useState<ObjsModel[]>([]);
@@ -45,13 +46,13 @@ const ObjsPageLoggedInView = () => {
         }
     }
 
-    async function onObjSaved(updatedObj: ObjsModel) {
-        const url = updatedObj.url;
-        const scrapedData = await scrapeWebsite(updatedObj.userId, url);
-        updatedObj.text = scrapedData.join("\n");
-        setObjs(objs.map((existingObj) => (existingObj._id === updatedObj._id ? updatedObj : existingObj)));
-        setObjToEdit(null);
-    }
+    // async function onObjSaved(updatedObj: ObjsModel) {
+    //     const url = updatedObj.url;
+    //     const scrapedData = await scrapeWebsite(updatedObj.userId, url);
+    //     updatedObj.text = scrapedData.join("\n");
+    //     setObjs(objs.map((existingObj) => (existingObj._id === updatedObj._id ? updatedObj : existingObj)));
+    //     setObjToEdit(null);
+    // }
 
     const columns: ColumnsType<Obj> = [
         {
@@ -126,7 +127,15 @@ const ObjsPageLoggedInView = () => {
                 />
             )}
             {objToEdit && (
-                <AddEditObjDialog objToEdit={objToEdit} onDismiss={() => setObjToEdit(null)} onObjSaved={onObjSaved} />
+                <AddEditObjDialog
+                    objToEdit={objToEdit}
+                    onDismiss={() => setObjToEdit(null)}
+                    onObjSaved={(updatedObj) => {
+                        setObjs(objs.map((existingObj) => (existingObj._id === updatedObj._id ? updatedObj : existingObj)));
+                        setObjToEdit(null);
+                        setShowAddObjDialog(false);
+                    }}
+                />
             )}
         </>
     );
