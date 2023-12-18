@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 
-export const SidebarContainer = styled.div<{ expanded: boolean }>`
-  width: ${({ expanded }) => (expanded ? "300px" : "65px")};
+export const SidebarContainer = styled.div<{ $expanded: boolean }>`
+  width: ${({ $expanded }) => ($expanded ? "300px" : "65px")};
   height: 100vh;
   background-color: var(--primary-color);
   overflow-x: hidden;
@@ -29,7 +29,7 @@ export const IconWrapper = styled.span`
   align-items: center;
 `;
 
-export const Text = styled.span<{ expanded: boolean }>`
+export const Text = styled.span<{ $expanded: boolean }>`
   margin-left: 15px;
-  display: ${({ expanded }) => (expanded ? "inline" : "none")};
+  display: ${({ $expanded }) => ($expanded ? "inline" : "none")};
 `;
