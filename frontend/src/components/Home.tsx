@@ -20,7 +20,6 @@ import UberLogo from "../assets/uber-logo.png";
 import SpotifyLogo from "../assets/spotify-logo.png";
 
 import "../styles/Home.css";
-import type { Container } from "@tsparticles/engine";
 
 const Home = () => {
     useEffect(() => {
@@ -31,13 +30,13 @@ const Home = () => {
         });
     }, []);
 
-    // Not sure if Container is the right type someone double check
-    const particlesInit = useCallback(async (engine: Container) => {
+    // Change type any to something more specific
+    const particlesInit = useCallback(async (engine: any) => {
         await loadFull(engine);
     }, []);
 
-    // Not sure if Container is the right type someone double check
-    const particlesLoaded = useCallback(async (container: Container) => {
+    // Change type any to something more specific
+    const particlesLoaded = useCallback(async (container: any) => {
         await console.log(container);
     }, []);
 
