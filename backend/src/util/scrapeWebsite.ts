@@ -22,7 +22,7 @@ const selectorsMap: SelectorsMap = {
     "div.Details.clearfix > div.Right > div.Date",
     "#Condensed > div.filler > span.Episodes",
   ],
-  youtube: ["#text", "#owner-sub-count", "#videos-count", "#video-title"],
+  youtube: ["#text", "#owner-sub-count", "#video-title"],
   spotify: [
     "#main > div > div.ZQftYELq0aOsg6tPbVbV > div.jEMA2gVoLgPQqAFrPhFw > div.main-view-container > div.os-host.os-host-foreign.os-theme-spotify.os-host-resize-disabled.os-host-scrollbar-horizontal-hidden.main-view-container__scroll-node.os-host-transition.os-host-overflow.os-host-overflow-y > div.os-padding > div > div > div.main-view-container__scroll-node-child > main > div.GlueDropTarget > section > div.contentSpacing.NXiYChVp4Oydfxd7rT5r.XPjEhsPyuOvMZ9NsDrxT > div.RP2rRchy4i8TIp1CTmb7 > span.rEN7ncpaUeSGL9z0NGQR > h1",
     "#main > div > div.ZQftYELq0aOsg6tPbVbV > div.jEMA2gVoLgPQqAFrPhFw > div.main-view-container > div.os-host.os-host-foreign.os-theme-spotify.os-host-resize-disabled.os-host-scrollbar-horizontal-hidden.main-view-container__scroll-node.os-host-transition.os-host-overflow.os-host-overflow-y > div.os-padding > div > div > div.main-view-container__scroll-node-child > main > div.GlueDropTarget > section > div.contentSpacing.NXiYChVp4Oydfxd7rT5r.XPjEhsPyuOvMZ9NsDrxT > div.RP2rRchy4i8TIp1CTmb7 > div > div > span > a",
@@ -57,7 +57,13 @@ export const scrapeWebsite = async (url: string, parameters: string[]) => {
     return [];
   }
 
+  // await page.waitForTimeout(2000); // Adjust as necessary
+
   await Promise.all(selectors.map(selector => page.waitForSelector(selector)));
+
+  // for (let i = 0; i < selectors.length; i++) {
+  //   await page.waitForSelector(selectors[i]);
+  // }
 
   const scrapedData = await page.evaluate((selectors: string[]) => {
     const results: string[] = [];

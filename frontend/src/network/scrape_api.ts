@@ -19,9 +19,6 @@ export async function updateConfig(userId: string, url: string, parameters: stri
 export async function scrapeWebsite(url: string, parameters: string[] = ["owner-sub-count"]): Promise<any> {
     const user = await ObjsApi.getLoggedInUser();
     const userId = user._id;
-    console.log("Hey");
-    console.log(url);
-    console.log("Hey");
     const parsedUrl = new URL(url);
     const domain = parsedUrl.hostname;
 
