@@ -31,10 +31,12 @@ const Home = () => {
         });
     }, []);
 
+    // Not sure if Container is the right type someone double check
     const particlesInit = useCallback(async (engine: Container) => {
         await loadFull(engine);
     }, []);
 
+    // Not sure if Container is the right type someone double check
     const particlesLoaded = useCallback(async (container: Container) => {
         await console.log(container);
     }, []);
