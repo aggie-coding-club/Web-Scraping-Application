@@ -45,36 +45,36 @@ const ObjsPageLoggedInView = () => {
     }
 
     const columns: ColumnsType<Obj> = [
-        {
-            title: "Website",
-            dataIndex: "url",
-            key: "url",
-        },
-        {
-            title: "Text",
-            dataIndex: "text",
-            key: "text",
-        },
-        {
-            title: "Action",
-            key: "action",
-            render: (_, record) => (
-                <>
-                    <a className="text-secondary" href="#" onClick={() => setObjToEdit(record)}>
-                        Edit
-                    </a>
-                </>
-            ),
-        },
-        {
-            title: "Action",
-            key: "action",
-            render: (_, record) => (
-                <a className="text-danger" href="#" onClick={() => deleteObj(record)}>
-                    Delete
-                </a>
-            ),
-        },
+        // {
+        //     title: "Website",
+        //     dataIndex: "url",
+        //     key: "url",
+        // },
+        // {
+        //     title: "Text",
+        //     dataIndex: "text",
+        //     key: "text",
+        // },
+        // {
+        //     title: "Action",
+        //     key: "action",
+        //     render: (_, record) => (
+        //         <>
+        //             <a className="text-secondary" href="#" onClick={() => setObjToEdit(record)}>
+        //                 Edit
+        //             </a>
+        //         </>
+        //     ),
+        // },
+        // {
+        //     title: "Action",
+        //     key: "action",
+        //     render: (_, record) => (
+        //         <a className="text-danger" href="#" onClick={() => deleteObj(record)}>
+        //             Delete
+        //         </a>
+        //     ),
+        // },
     ];
 
     return (
@@ -106,7 +106,9 @@ const ObjsPageLoggedInView = () => {
             </Button>
             {objsLoading && <Spinner animation="border" variant="primary" />}
             {showObjsLoadingError && <p className="text-danger">Something went wrong. Please refresh the page.</p>}
-            {!objsLoading && !showObjsLoadingError && <Table columns={columns} dataSource={objs} />}
+            {!objsLoading && !showObjsLoadingError && (
+                <Table columns={columns} dataSource={objs} rowKey={(objs) => objs._id} />
+            )}
             {showAddObjDialog && (
                 <AddEditObjDialog
                     onDismiss={() => setShowAddObjDialog(false)}
