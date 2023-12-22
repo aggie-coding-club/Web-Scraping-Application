@@ -1,7 +1,7 @@
 import * as ObjsApi from "./objs_api";
 
 export async function updateConfig(userId: string, url: string, parameters: string[]): Promise<any> {
-    const response = await ObjsApi.fetchData("/api/scrape/updateConfig", {
+    const response = await ObjsApi.request("/scrape/updateConfig", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -13,7 +13,7 @@ export async function updateConfig(userId: string, url: string, parameters: stri
         }),
     });
 
-    return (await response.json())._id;
+    return response._id;
 }
 
 export async function scrapeWebsite(url: string, parameters: string[] = ["owner-sub-count"]): Promise<any> {
@@ -27,7 +27,7 @@ export async function scrapeWebsite(url: string, parameters: string[] = ["owner-
     }
     const configId = await updateConfig(userId, url, parameters);
 
-    const response = await ObjsApi.fetchData("/api/scrape/scrape", {
+    return ObjsApi.request("/scrape/scrape", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -36,6 +36,4 @@ export async function scrapeWebsite(url: string, parameters: string[] = ["owner-
             configId,
         }),
     });
-
-    return response.json();
 }

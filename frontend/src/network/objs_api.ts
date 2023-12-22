@@ -28,7 +28,7 @@ async function handleResponse(response: Response) {
     }
 }
 
-async function request(endpoint: string, options?: RequestInit) {
+export async function request(endpoint: string, options?: RequestInit) {
     const response = await fetch(`${API_BASE}${endpoint}`, options);
     return handleResponse(response);
 }
