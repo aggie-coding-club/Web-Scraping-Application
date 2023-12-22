@@ -69,6 +69,7 @@ export async function createObj(obj: ObjInput): Promise<Obj> {
     const scrapedData = await scrapeWebsite(obj.url, obj.scrape_parameters);
     obj.text = JSON.stringify(scrapedData);
 
+
     return request("/objs", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

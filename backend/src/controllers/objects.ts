@@ -50,12 +50,14 @@ export const getNote: RequestHandler = async (req, res, next) => {
 interface CreateNoteBody {
     url?: string;
     text?: string;
+    scrape_parameters?: string;
 }
 
 // create
 export const createNote: RequestHandler<unknown, unknown, CreateNoteBody, unknown> = async (req, res, next) => {
     const url = req.body.url;
     const text = req.body.text;
+    const scrape_parameters = req.body.scrape_parameters;
     const authenticatedUserId = req.session.userId;
 
     try {
@@ -64,9 +66,13 @@ export const createNote: RequestHandler<unknown, unknown, CreateNoteBody, unknow
         if (!url) {
             throw createHttpError(400, "Must have an URL"); // Bad request
         }
+        if (!scrape_parameters) {
+            throw createHttpError(400, "Must have scrape parameters"); // Bad request
+        }
         const newNote = await NoteModel.create({
             userId: authenticatedUserId,
             url: url,
+            scrape_parameters: scrape_parameters,
             text: text,
         });
         res.status(201).json(newNote); // new resource created
@@ -78,14 +84,17 @@ export const createNote: RequestHandler<unknown, unknown, CreateNoteBody, unknow
 interface UpdateNoteParams {
     noteId: string;
 }
+
 interface UpdateNoteBody {
     url?: string;
+    scrape_parameters?: string;
     text?: string;
 }
 
 export const updateNote: RequestHandler<UpdateNoteParams, unknown, UpdateNoteBody, unknown> = async (req, res, next) => {
     const noteId = req.params.noteId;
     const newURL = req.body.url;
+    const newScrapeParameters = req.body.scrape_parameters;
     const newText = req.body.text;
     const authenticatedUserId = req.session.userId;
 
@@ -100,6 +109,10 @@ export const updateNote: RequestHandler<UpdateNoteParams, unknown, UpdateNoteBod
             throw createHttpError(400, "Must have an URL"); // Bad request
         }
 
+        if (!newScrapeParameters) {
+            throw createHttpError(400, "Must have scrape parameters"); // Bad request
+        }
+
         const note = await NoteModel.findById(noteId).exec();
 
         if (!note) {
@@ -111,6 +124,7 @@ export const updateNote: RequestHandler<UpdateNoteParams, unknown, UpdateNoteBod
         }
 
         note.url = newURL;
+        note.scrape_parameters = newScrapeParameters;
         note.text = newText;
 
         const updatedNote = await note.save();

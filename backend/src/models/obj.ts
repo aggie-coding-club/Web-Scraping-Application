@@ -5,6 +5,7 @@ const noteSchema = new Schema(
   {
     userId: { type: Schema.Types.ObjectId, required: true },
     url: { type: String, required: true },
+    scrape_parameters: { type: String, required: true },
     text: { type: String },
   },
   { timestamps: true }

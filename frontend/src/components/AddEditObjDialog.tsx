@@ -58,7 +58,7 @@ const AddEditObjDialog = ({ objToEdit, onDismiss, onObjSaved }: AddEditObjDialog
                     />
 
                     <TextInputField
-                        name="scrape-parameters"
+                        name="scrape_parameters"
                         label="Scrape Parameters"
                         as="textarea"
                         rows={4}
