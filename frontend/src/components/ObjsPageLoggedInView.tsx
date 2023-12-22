@@ -46,9 +46,14 @@ const ObjsPageLoggedInView = () => {
 
     const columns: ColumnsType<Obj> = [
         {
-            title: "Website",
+            title: "Website URL",
             dataIndex: "url",
             key: "url",
+        },
+        {
+            title: "Scrape Parameters",
+            dataIndex: "scrape_parameters",
+            key: "scrape_parameters",
         },
         {
             title: "Text",
@@ -106,9 +111,7 @@ const ObjsPageLoggedInView = () => {
             </Button>
             {objsLoading && <Spinner animation="border" variant="primary" />}
             {showObjsLoadingError && <p className="text-danger">Something went wrong. Please refresh the page.</p>}
-            {!objsLoading && !showObjsLoadingError && (
-                <Table columns={columns} dataSource={objs} rowKey={(objs) => objs._id} />
-            )}
+            {!objsLoading && !showObjsLoadingError && <Table columns={columns} dataSource={objs} rowKey={(objs) => objs._id} />}
             {showAddObjDialog && (
                 <AddEditObjDialog
                     onDismiss={() => setShowAddObjDialog(false)}
