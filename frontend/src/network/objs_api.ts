@@ -94,8 +94,7 @@ export async function createObj(obj: ObjInput): Promise<Obj> {
 }
 
 export async function updateObj(objId: string, obj: ObjInput) {
-    const scrapedData = await scrapeWebsite(obj.url);
-    obj.text = JSON.stringify(scrapedData);
+    obj.text = JSON.stringify(await scrapeWebsite(obj.url));
 
     const response = await fetchData("/api/objs/" + objId, {
         method: "PATCH",
