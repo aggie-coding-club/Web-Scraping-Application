@@ -1,47 +1,52 @@
 import * as ObjsApi from "./objs_api";
 
-export async function createScrapingConfig(userId: string, url: string, obj: { [key: string]: string }): Promise<any> {
+type ScrapingConfigObject = { [key: string]: string };
+
+export async function createScrapingConfig(userId: string, url: string, obj: ScrapingConfigObject): Promise<string> {
     const response = await ObjsApi.request("/scrape/createScrapingConfig", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            userId,
-            url,
-            obj: obj,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, url, obj })
     });
+
+    if (!response._id) {
+        throw new Error('Failed to create scraping configuration');
+    }
 
     return response._id;
 }
 
-export async function scrapeWebsite(url: string, scrape_parameters: string): Promise<any> {    
-    const newLineRemoved = scrape_parameters.replace(/\n/g, "");
-    const endCommaRemoved = newLineRemoved.replace(/,$/, '');
-    const parameter_list = endCommaRemoved.split(",");
+function processScrapingParameters(parameters: string): ScrapingConfigObject {
+    return parameters
+        .replace(/\n/g, "") // trim newline characters
+        .replace(/,$/, '') // trim trailing comma
+        .split(",") // get each key value pair
+        .reduce((obj, param) => {
+            const [key, value] = param.split(':').map(s => s.trim().slice(1, -1));
+            if (!key || !value) {
+                throw new Error("Invalid parameter format");
+            }
+            obj[key] = value;
+            return obj;
+        }, {} as ScrapingConfigObject);
+}
 
-    const obj: { [key: string]: string } = {};
-    parameter_list.forEach((parameter) => {
-        const key_value_pair = parameter.split(':').map(s => s.trim().slice(1, -1));
-        if (key_value_pair.length !== 2) {
-            throw new Error("Invalid parameter format");
+export async function scrapeWebsite(url: string, scrape_parameters: string): Promise<any> {
+    try {
+        const parametersObj = processScrapingParameters(scrape_parameters);
+        const user = await ObjsApi.getLoggedInUser();
+        if (!user._id) {
+            throw new Error('User not authenticated');
         }
+        const configId = await createScrapingConfig(user._id, url, parametersObj);
 
-        const [key, value] = key_value_pair;
-        obj[key] = value;
-    });
-
-    const user = await ObjsApi.getLoggedInUser();
-    const configId = await createScrapingConfig(user._id, url, obj);
-
-    return ObjsApi.request("/scrape/scrape", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            configId,
-        }),
-    });
+        return ObjsApi.request("/scrape/scrape", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ configId })
+        });
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
 }
