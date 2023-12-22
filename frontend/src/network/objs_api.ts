@@ -12,7 +12,8 @@ const API_BASE = '/api';
 
 async function handleResponse(response: Response) {
     if (response.ok) {
-        return response.json();
+        const text = await response.text();
+        return text ? JSON.parse(text) : null;
     }
 
     const errorBody = await response.json();
