@@ -1,111 +1,92 @@
-import { ConflictError, UnauthorizedError } from "../errors/http_errors";
-import { Obj } from "../models/object";
-import { User } from "../models/user";
-import { scrapeWebsite } from "./scrape_api";
-import UserContext from "../providers/UserProvider";
-import { useContext } from "react";
+import { useContext } from 'react';
+import { ConflictError, UnauthorizedError } from '../errors/http_errors';
+import UserContext from '../providers/UserProvider';
+import { scrapeWebsite } from './scrape_api';
+import { Obj } from '../models/object';
+import { User } from '../models/user';
+import { SignUpCredentials } from '../models/signUpCredentials';
+import { LoginCredentials } from '../models/loginCredentials';
+import { ObjInput } from '../models/objInput';
 
-export async function fetchData(input: RequestInfo, init?: RequestInit) {
-    const response = await fetch(input, init);
+const API_BASE = '/api';
+
+async function handleResponse(response: Response) {
     if (response.ok) {
-        return response;
-    } else {
-        const errorBody = await response.json();
-        const errorMessage = errorBody.error;
-        if (response.status === 401) {
+        return response.json();
+    }
+
+    const errorBody = await response.json();
+    const errorMessage = errorBody.error || 'Unknown error';
+
+    switch (response.status) {
+        case 401:
             throw new UnauthorizedError(errorMessage);
-        } else if (response.status === 409) {
+        case 409:
             throw new ConflictError(errorMessage);
-        } else {
-            throw Error("Request failed with status: " + response.status + " message: " + errorMessage);
-        }
+        default:
+            throw new Error(`Request failed with status: ${response.status} message: ${errorMessage}`);
     }
 }
 
-export const getLoggedInUserContext = async (): Promise<User | null> => {
-    return useContext(UserContext).loggedInUser;
-};
-
-export async function getLoggedInUser(): Promise<User> {
-    const response = await fetchData("/api/users", { method: "GET" });
-    return response.json();
+async function request(endpoint: string, options?: RequestInit) {
+    const response = await fetch(`${API_BASE}${endpoint}`, options);
+    return handleResponse(response);
 }
 
-export interface SignUpCredentials {
-    username: string;
-    email: string;
-    password: string;
+export async function getLoggedInUserContext(): Promise<User | null> {
+    return useContext(UserContext).loggedInUser;
+}
+
+export async function getLoggedInUser(): Promise<User> {
+    return request("/users", { method: "GET" });
 }
 
 export async function signUp(credentials: SignUpCredentials): Promise<User> {
-    const response = await fetchData("/api/users/signup", {
+    return request("/users/signup", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(credentials),
     });
-    return response.json();
-}
-
-export interface LoginCredentials {
-    username: string;
-    password: string;
 }
 
 export async function login(credentials: LoginCredentials): Promise<User> {
-    const response = await fetchData("/api/users/login", {
+    return request("/users/login", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(credentials),
     });
-    return response.json();
 }
 
-export async function logout() {
-    await fetchData("/api/users/logout", { method: "POST" });
+export async function logout(): Promise<void> {
+    await request("/users/logout", { method: "POST" });
 }
 
 export async function fetchObjs(): Promise<Obj[]> {
-    const response = await fetchData("/api/objs", { method: "GET" });
-    return response.json();
-}
-
-export interface ObjInput {
-    url: string;
-    text?: string;
+    return request("/objs", { method: "GET" });
 }
 
 export async function createObj(obj: ObjInput): Promise<Obj> {
     const scrapedData = await scrapeWebsite(obj.url);
     obj.text = JSON.stringify(scrapedData);
 
-    const response = await fetchData("/api/objs", {
+    return request("/objs", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(obj),
     });
-
-    return response.json();
 }
 
-export async function updateObj(objId: string, obj: ObjInput) {
-    obj.text = JSON.stringify(await scrapeWebsite(obj.url));
+export async function updateObj(objId: string, obj: ObjInput): Promise<Obj> {
+    const scrapedData = await scrapeWebsite(obj.url);
+    obj.text = JSON.stringify(scrapedData);
 
-    const response = await fetchData("/api/objs/" + objId, {
+    return request(`/objs/${objId}`, {
         method: "PATCH",
-        headers: {
-            "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(obj),
     });
-    return response.json();
 }
 
-export async function deleteObj(objId: string) {
-    await fetchData("/api/objs/" + objId, { method: "DELETE" });
+export async function deleteObj(objId: string): Promise<void> {
+    await request(`/objs/${objId}`, { method: "DELETE" });
 }
