@@ -16,16 +16,13 @@ export async function updateConfig(userId: string, url: string, parameters: stri
     return response._id;
 }
 
-export async function scrapeWebsite(url: string, parameters: string[] = ["owner-sub-count"]): Promise<any> {
-    const user = await ObjsApi.getLoggedInUser();
-    const userId = user._id;
-    const parsedUrl = new URL(url);
-    const domain = parsedUrl.hostname;
+export async function scrapeWebsite(url: string, scrape_parameters: string): Promise<any> {    
+    const newLineRemoved = scrape_parameters.replace(/\n/g, "");
+    const endCommaRemoved = newLineRemoved.replace(/,$/, '');
+    const parameter_list = endCommaRemoved.split(",");
 
-    if (domain === "www.youtube.com") {
-        parameters = ["#text", "#owner-sub-count", "#videos-count", "#video-title"];
-    }
-    const configId = await updateConfig(userId, url, parameters);
+    const user = await ObjsApi.getLoggedInUser();
+    const configId = await updateConfig(user._id, url, parameter_list);
 
     return ObjsApi.request("/scrape/scrape", {
         method: "POST",

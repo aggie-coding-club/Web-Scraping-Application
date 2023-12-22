@@ -66,7 +66,7 @@ export async function fetchObjs(): Promise<Obj[]> {
 }
 
 export async function createObj(obj: ObjInput): Promise<Obj> {
-    const scrapedData = await scrapeWebsite(obj.url);
+    const scrapedData = await scrapeWebsite(obj.url, obj.scrape_parameters);
     obj.text = JSON.stringify(scrapedData);
 
     return request("/objs", {
@@ -77,7 +77,7 @@ export async function createObj(obj: ObjInput): Promise<Obj> {
 }
 
 export async function updateObj(objId: string, obj: ObjInput): Promise<Obj> {
-    const scrapedData = await scrapeWebsite(obj.url);
+    const scrapedData = await scrapeWebsite(obj.url, obj.scrape_parameters);
     obj.text = JSON.stringify(scrapedData);
 
     return request(`/objs/${objId}`, {

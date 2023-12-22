@@ -1,7 +1,7 @@
 import { Modal, Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { Obj } from "../models/object";
-import { ObjInput } from "../network/objs_api";
+import { ObjInput } from "../models/objInput";
 import * as ObjApi from "../network/objs_api";
 import TextInputField from "./form/TextInputField";
 
@@ -19,6 +19,7 @@ const AddEditObjDialog = ({ objToEdit, onDismiss, onObjSaved }: AddEditObjDialog
     } = useForm<ObjInput>({
         defaultValues: {
             url: objToEdit?.url || "",
+            scrape_parameters: objToEdit?.scrape_parameters || "",
             text: objToEdit?.text || "",
         },
     });
@@ -57,12 +58,24 @@ const AddEditObjDialog = ({ objToEdit, onDismiss, onObjSaved }: AddEditObjDialog
                     />
 
                     <TextInputField
+                        name="scrape-parameters"
+                        label="Scrape Parameters"
+                        as="textarea"
+                        rows={4}
+                        placeholder="Text"
+                        register={register}
+                        registerOptions={{ required: "Required" }}
+                        error={errors.scrape_parameters}
+                    />
+
+                    <TextInputField
                         name="text"
                         label="Text"
                         as="textarea"
-                        rows={5}
+                        rows={4}
                         placeholder="Text"
                         register={register}
+                        error={errors.text}
                         readOnly
                     />
                 </Form>
