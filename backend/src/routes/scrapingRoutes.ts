@@ -3,7 +3,7 @@ import * as scrapingController from "../controllers/scraping";
 
 const router = express.Router();
 
-router.post("/updateConfig", scrapingController.updateScrapingConfig);
+router.post("/createScrapingConfig", scrapingController.createScrapingConfig);
 router.post("/scrape", scrapingController.performScraping);
 
 export default router;

@@ -2,7 +2,7 @@ import ScrapeConfig from "../models/scrapeConfig";
 import { scrapeWebsite } from "../util/scrapeWebsite";
 import { Request, Response } from "express";
 
-export const updateScrapingConfig = async (req: Request, res: Response) => {
+export const createScrapingConfig = async (req: Request, res: Response) => {
   const { userId, url, parameters } = req.body;
   try {
     const config = new ScrapeConfig({ user: userId, url, parameters });
