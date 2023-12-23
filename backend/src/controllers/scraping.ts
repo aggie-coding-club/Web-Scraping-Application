@@ -3,9 +3,9 @@ import { scrapeWebsite } from "../util/scrapeWebsite";
 import { Request, Response } from "express";
 
 export const createScrapingConfig = async (req: Request, res: Response) => {
-  const { userId, url, parameters } = req.body;
+  const { url, parameters } = req.body;
   try {
-    const config = new ScrapeConfig({ user: userId, url, parameters });
+    const config = new ScrapeConfig({ user: req.session.userId, url, parameters });
     await config.save();
     res.status(200).send(config);
   } catch (error) {

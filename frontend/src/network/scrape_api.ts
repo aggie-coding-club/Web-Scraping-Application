@@ -2,11 +2,11 @@ import * as ObjsApi from "./objs_api";
 
 type ScrapingConfigObject = { [key: string]: string };
 
-export async function createScrapingConfig(userId: string, url: string, obj: ScrapingConfigObject): Promise<string> {
+export async function createScrapingConfig(url: string, obj: ScrapingConfigObject): Promise<string> {
     const response = await ObjsApi.request("/scrape/createScrapingConfig", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, url, parameters: obj })
+        body: JSON.stringify({ url, parameters: obj })
     });
 
     if (!response._id) {
@@ -36,13 +36,9 @@ function processScrapingParameters(parameters: string): ScrapingConfigObject {
 }
 
 export async function scrapeWebsite(url: string, scrape_parameters: string): Promise<any> {
-    try {
+    try {        
         const parametersObj = processScrapingParameters(scrape_parameters);
-        const user = await ObjsApi.getLoggedInUser();
-        if (!user._id) {
-            throw new Error('User not authenticated');
-        }
-        const configId = await createScrapingConfig(user._id, url, parametersObj);
+        const configId = await createScrapingConfig(url, parametersObj);
 
         return ObjsApi.request("/scrape/scrape", {
             method: "POST",
