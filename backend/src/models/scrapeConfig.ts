@@ -1,14 +1,15 @@
-import mongoose from "mongoose";
+import { Schema, model } from "mongoose";
 
-const scrapeConfigSchema = new mongoose.Schema({
-  user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-  url: { type:String, required: true },
-  parameters: { type:mongoose.Schema.Types.Mixed, required: true },
-  lastScraped: Date,
-  timeToScrape: { type:Date, required: true },
-  scrapeIntervalMinute: { type:Number, required: true },
-  scrapedData: mongoose.Schema.Types.Mixed,
-});
+const scrapeConfigSchema = new Schema(
+    {
+        user: { type: Schema.Types.ObjectId, ref: "User" },
+        url: { type: String, required: true },
+        parameters: { type: Schema.Types.Mixed, required: true },
+        timeToScrape: { type: Date, required: true },
+        scrapeIntervalMinute: { type: Number, required: true },
+    },
+    { timestamps: true }
+);
 
-const ScrapeConfig = mongoose.model("ScrapeConfig", scrapeConfigSchema);
+const ScrapeConfig = model("ScrapeConfig", scrapeConfigSchema);
 export default ScrapeConfig;
