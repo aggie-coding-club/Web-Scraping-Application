@@ -17,19 +17,22 @@ export async function createScrapingConfig(userId: string, url: string, obj: Scr
 }
 
 function processScrapingParameters(parameters: string): ScrapingConfigObject {
-// trim newline characters, trim trailing comma, get each key value pair, and create an object
-    return parameters
-        .replace(/\n/g, "")
-        .replace(/,$/, '')
-        .split(",")
-        .reduce((obj, param) => {
-            const [key, value] = param.split(':').map(s => s.trim().slice(1, -1));
-            if (!key || !value) {
-                throw new Error("Invalid parameter format");
-            }
-            obj[key] = value;
-            return obj;
-        }, {} as ScrapingConfigObject);
+    parameters = parameters.trim();
+    parameters = parameters.endsWith(",") ? parameters.slice(-1) : parameters;
+    
+    return parameters.split(",").reduce((obj, param) => {
+        const [rawKey, rawValue] = param.split(':').map(s => s.trim());
+
+        const key = rawKey.startsWith('"') && rawKey.endsWith('"') ? rawKey.slice(1, -1) : rawKey;
+        const value = rawValue.startsWith('"') && rawValue.endsWith('"') ? rawValue.slice(1, -1) : rawValue;
+
+        if (!key || !value) {
+            throw new Error("Invalid parameter format");
+        }
+        
+        obj[key] = value;
+        return obj;
+    }, {} as ScrapingConfigObject);
 }
 
 export async function scrapeWebsite(url: string, scrape_parameters: string): Promise<any> {
