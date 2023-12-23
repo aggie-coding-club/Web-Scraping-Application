@@ -68,7 +68,7 @@ export async function fetchObjs(): Promise<Obj[]> {
 
 export async function createObj(obj: ObjInput): Promise<Obj> {
     const scrapedData = await scrapeWebsite(obj.url, obj.scrape_parameters);
-    obj.text = JSON.stringify(scrapedData);
+    obj.text = JSON.stringify(scrapedData, null, 4);
 
     return request("/objs", {
         method: "POST",
