@@ -1,31 +1,27 @@
 import puppeteer from "puppeteer";
-import { selectorsMap } from "../constants/selectorsMap";
 
-export const scrapeWebsite = async (url: string, parameters: string[]) => {
+export const scrapeWebsite = async (url: string, parameter_obj: ScrapingConfigObject) => {
   const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
   await page.goto(url);
 
-  const websiteName = Object.keys(selectorsMap).find((key) =>
-    url.includes(key)
-  );
-  const selectors = websiteName ? selectorsMap[websiteName] : parameters;
+  const selectors = Object.values(parameter_obj);
+  const timeoutPromise = new Promise((resolve) => setTimeout(resolve, 10 * 1000));
+  
+  await Promise.race([
+    Promise.all(selectors.map(selector => page.waitForSelector(selector))),
+    timeoutPromise
+  ])
 
-  if (selectors.length === 0) {
-    await browser.close();
-    return [];
-  }
-
-  await Promise.all(selectors.map(selector => page.waitForSelector(selector)));
-
-  const scrapedData = await page.evaluate((selectors: string[]) => {
-    const results: string[] = [];
-    selectors.forEach((selector) => {
-      const content = document.querySelector(selector)?.textContent || "";
-      results.push(content.trim());
+  const scrapedData = await page.evaluate((params) => {
+    const results: ScrapingConfigObject = {};
+    Object.entries(params).forEach(([key, selector]) => {
+      const element = document.querySelector(selector);
+      const content = element ? element.textContent?.trim() || "" : "";
+      results[key] = content;
     });
     return results;
-  }, selectors);
+  }, parameter_obj);
 
   await browser.close();
   return scrapedData;

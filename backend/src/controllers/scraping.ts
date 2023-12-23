@@ -30,8 +30,9 @@ export const performScraping = async (req: Request, res: Response) => {
 
     const scrapedData = await scrapeWebsite(
       config.url,
-      config.parameters as string[]
+      config.parameters as ScrapingConfigObject
     );
+
     // Update the database with the scraped data here
     res.status(200).send(scrapedData);
   } catch (error) {

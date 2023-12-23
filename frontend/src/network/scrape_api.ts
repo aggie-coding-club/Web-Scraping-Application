@@ -6,7 +6,7 @@ export async function createScrapingConfig(userId: string, url: string, obj: Scr
     const response = await ObjsApi.request("/scrape/createScrapingConfig", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, url, obj })
+        body: JSON.stringify({ userId, url, parameters: obj })
     });
 
     if (!response._id) {
@@ -17,10 +17,11 @@ export async function createScrapingConfig(userId: string, url: string, obj: Scr
 }
 
 function processScrapingParameters(parameters: string): ScrapingConfigObject {
+// trim newline characters, trim trailing comma, get each key value pair, and create an object
     return parameters
-        .replace(/\n/g, "") // trim newline characters
-        .replace(/,$/, '') // trim trailing comma
-        .split(",") // get each key value pair
+        .replace(/\n/g, "")
+        .replace(/,$/, '')
+        .split(",")
         .reduce((obj, param) => {
             const [key, value] = param.split(':').map(s => s.trim().slice(1, -1));
             if (!key || !value) {
