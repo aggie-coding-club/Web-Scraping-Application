@@ -4,8 +4,9 @@ import { Request, Response } from "express";
 
 // Prob add .exec() to the end of all the queries
 export const createScrapingConfig = async (req: Request, res: Response) => {
-    const { url, parameters, scrapeIntervalMinute } = req.body;
     try {
+        console.log(req.body);
+        const { url, parameters, scrapeIntervalMinute } = req.body;
         const config = new ScrapeConfig({ userId: req.session.userId, url, parameters, scrapeIntervalMinute });
         await config.save();
         res.status(200).send(config);
