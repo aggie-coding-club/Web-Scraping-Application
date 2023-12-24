@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { ConflictError, UnauthorizedError } from "../errors/http_errors";
 import UserContext from "../providers/UserProvider";
-import { scrapeWebsite } from "./scrape_api";
+// import { scrapeWebsite } from "./scrape_api";
 import { Obj } from "../models/object";
 import { User } from "../models/user";
 import { SignUpCredentials } from "../models/signUpCredentials";
@@ -74,7 +74,7 @@ export async function createObj(obj: ObjInput): Promise<Obj> {
     // const scrapedData = await scrapeWebsite(obj.url, obj.scrape_parameters);
     // obj.text = JSON.stringify(scrapedData, null, 4);
 
-    console.log(obj);
+    // console.log(obj);
 
     return request("/scrape/createScrapingConfig", {
         method: "POST",
@@ -84,10 +84,10 @@ export async function createObj(obj: ObjInput): Promise<Obj> {
 }
 
 export async function updateObj(objId: string, obj: ObjInput): Promise<Obj> {
-    const scrapedData = await scrapeWebsite(obj.url, obj.scrape_parameters);
-    obj.text = JSON.stringify(scrapedData);
+    // const scrapedData = await scrapeWebsite(obj.url, obj.scrapeParameters);
+    // obj.text = JSON.stringify(scrapedData);
 
-    return request(`/objs/${objId}`, {
+    return request(`/scrape/updateScrapingConfig/${objId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(obj),
@@ -95,5 +95,5 @@ export async function updateObj(objId: string, obj: ObjInput): Promise<Obj> {
 }
 
 export async function deleteObj(objId: string): Promise<void> {
-    await request(`/objs/${objId}`, { method: "DELETE" });
+    await request(`/scrape/deleteScrapingConfig/${objId}`, { method: "DELETE" });
 }

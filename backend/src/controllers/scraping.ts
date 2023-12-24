@@ -87,7 +87,6 @@ export const deleteScrapingConfig = async (req: Request, res: Response) => {
 export const getScrapingConfigs = async (req: Request, res: Response) => {
     try {
         const configs = await ScrapeConfig.find({ userId: req.session.userId });
-        console.log(configs);
         res.status(200).send(configs);
     } catch (error) {
         res.status(500).send(error);

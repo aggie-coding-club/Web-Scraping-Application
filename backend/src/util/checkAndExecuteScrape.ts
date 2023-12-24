@@ -12,7 +12,11 @@ const checkAndExecuteScrape = async () => {
             console.log("Scraping for:", currentScrape.url);
 
             const scrapedData = await scrapeWebsite(currentScrape.url, currentScrape.scrapeParameters);
-            createNote(currentScrape._id, scrapedData);
+            if (scrapedData === undefined) {
+                console.log("Scrape failed.");
+            } else {
+                createNote(currentScrape._id, scrapedData);
+            }
 
             currentScrape.timeToScrape = new Date(Date.now() + currentScrape.scrapeIntervalMinute * 60000);
             await currentScrape.save();
