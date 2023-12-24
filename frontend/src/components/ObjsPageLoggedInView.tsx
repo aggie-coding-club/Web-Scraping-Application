@@ -44,6 +44,8 @@ const ObjsPageLoggedInView = () => {
         }
     }
 
+    console.log(objs);
+
     const columns: ColumnsType<Obj> = [
         {
             title: "Website URL",
@@ -52,8 +54,14 @@ const ObjsPageLoggedInView = () => {
         },
         {
             title: "Scrape Parameters",
-            dataIndex: "scrape_parameters",
-            key: "scrape_parameters",
+            dataIndex: "scrapeParameters",
+            render: (scrapeParameters) => <pre>{JSON.stringify(scrapeParameters, null, 2)}</pre>,
+        },
+        {
+            title: "Interval (min)",
+            dataIndex: "scrapeIntervalMinute",
+            key: "scrapeIntervalMinute",
+            align: "center",
         },
         // {
         //     title: "Text",

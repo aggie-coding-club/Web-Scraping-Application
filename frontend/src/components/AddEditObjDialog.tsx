@@ -19,7 +19,7 @@ const AddEditObjDialog = ({ objToEdit, onDismiss, onObjSaved }: AddEditObjDialog
     } = useForm<ObjInput>({
         defaultValues: {
             url: objToEdit?.url || "",
-            scrapeParameters: objToEdit?.scrapeParameters || "",
+            scrapeParameters: JSON.stringify(objToEdit?.scrapeParameters, null, 2) || "",
             scrapeIntervalMinute: objToEdit?.scrapeIntervalMinute || 1, // Add default value for scrapeIntervalMinutes
             // text: objToEdit?.text || "",
         },
