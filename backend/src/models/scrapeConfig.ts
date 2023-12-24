@@ -14,7 +14,7 @@ const scrapeConfigSchema = new Schema(
 const ScrapeConfig = model("ScrapeConfig", scrapeConfigSchema);
 export default ScrapeConfig;
 
-scrapeConfigSchema.pre("save", function (next) {
-    this.timeToScrape = new Date(Date.now() + this.scrapeIntervalMinute * 60000);
-    next();
-});
+// scrapeConfigSchema.pre("save", function (next) {
+//     this.timeToScrape = new Date(Date.now() + this.scrapeIntervalMinute * 60000);
+//     next();
+// });
