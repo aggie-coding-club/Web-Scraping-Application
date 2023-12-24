@@ -8,21 +8,18 @@ const checkAndExecuteScrape = async () => {
     try {
         const [currentScrape] = await scrapeConfig.find({}).sort({ timeToScrape: 1 }).limit(1).exec();
 
-        if (currentScrape) {
-            console.log("Scraping for:", currentScrape.url);
+        if (!currentScrape) {
+            console.log("No scheduled scrapes. Checking again in 10 second.");
+            setNextScrapeTimeout(10 * 1000);
+        } else if (currentScrape.timeToScrape.getTime() <= Date.now()) {
+            console.log("Scraping for:", currentScrape.url, "at time:", new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }));
 
             const scrapedData = await scrapeWebsite(currentScrape.url, currentScrape.scrapeParameters);
             if (scrapedData === undefined) {
                 console.log("Scrape failed.");
             } else {
-                NoteModel.findOneAndUpdate({ configId: currentScrape._id }, { $push: { scrapedData } });
-
-                // consider using this for handling when creating a Note failed
-                // NoteModel.findOneAndUpdate(
-                //     { configId: currentScrape._id, userId: currentScrape.userId },
-                //     { upsert: true },
-                //     { $push: { scrapedData } }
-                // );
+                await NoteModel.findOneAndUpdate({ configId: currentScrape._id }, { $push: { scrapedData } });
+                console.log("Scrape successful.");
             }
 
             currentScrape.timeToScrape = new Date(Date.now() + currentScrape.scrapeIntervalMinute * 60000);
@@ -31,12 +28,11 @@ const checkAndExecuteScrape = async () => {
             const [nextScrape] = await scrapeConfig.find({}).sort({ timeToScrape: 1 }).limit(1).exec();
             setNextScrapeTimeout(nextScrape.scrapeIntervalMinute * 60000);
         } else {
-            console.log("No scheduled scrapes. Checking again in 1 minute.");
-            setNextScrapeTimeout(60000);
+            setNextScrapeTimeout(currentScrape.timeToScrape.getTime() - Date.now());
         }
     } catch (error) {
         console.error("Error in checkAndExecuteScrape:", error);
-        setNextScrapeTimeout(60000);
+        setNextScrapeTimeout(1 * 1000);
     }
 };
 

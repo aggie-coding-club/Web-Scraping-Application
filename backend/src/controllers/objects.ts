@@ -15,10 +15,9 @@ export const getNote: RequestHandler = async (req, res, next) => {
 
         const note = await NoteModel.findOne({ configId }).exec();
         console.log(note);
-
         if (!note) {
             res.status(404).send("Not found");
-        } else if (note.userId !== userId) {
+        } else if (note.userId.toString() !== userId.toString()) {
             res.status(403).send("Forbidden");
         } else {
             res.status(200).json(note);
