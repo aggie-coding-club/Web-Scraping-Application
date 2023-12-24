@@ -1,5 +1,6 @@
 export interface ObjInput {
     url: string;
-    scrape_parameters: string;
+    scrapeParameters: string;
+    scrapeIntervalMinute: number;
     text?: string;
 }

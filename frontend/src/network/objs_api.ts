@@ -1,14 +1,14 @@
-import { useContext } from 'react';
-import { ConflictError, UnauthorizedError } from '../errors/http_errors';
-import UserContext from '../providers/UserProvider';
-import { scrapeWebsite } from './scrape_api';
-import { Obj } from '../models/object';
-import { User } from '../models/user';
-import { SignUpCredentials } from '../models/signUpCredentials';
-import { LoginCredentials } from '../models/loginCredentials';
-import { ObjInput } from '../models/objInput';
+import { useContext } from "react";
+import { ConflictError, UnauthorizedError } from "../errors/http_errors";
+import UserContext from "../providers/UserProvider";
+import { scrapeWebsite } from "./scrape_api";
+import { Obj } from "../models/object";
+import { User } from "../models/user";
+import { SignUpCredentials } from "../models/signUpCredentials";
+import { LoginCredentials } from "../models/loginCredentials";
+import { ObjInput } from "../models/objInput";
 
-const API_BASE = '/api';
+const API_BASE = "/api";
 
 async function handleResponse(response: Response) {
     if (response.ok) {
@@ -17,7 +17,7 @@ async function handleResponse(response: Response) {
     }
 
     const errorBody = await response.json();
-    const errorMessage = errorBody.error || 'Unknown error';
+    const errorMessage = errorBody.error || "Unknown error";
 
     switch (response.status) {
         case 401:
@@ -62,15 +62,21 @@ export async function logout(): Promise<void> {
     await request("/users/logout", { method: "POST" });
 }
 
+// export async function fetchObjs(): Promise<Obj[]> {
+//     return request("/objs", { method: "GET" });
+// }
+
 export async function fetchObjs(): Promise<Obj[]> {
-    return request("/objs", { method: "GET" });
+    return request("/scrape/getScrapingConfigs", { method: "GET" });
 }
 
 export async function createObj(obj: ObjInput): Promise<Obj> {
-    const scrapedData = await scrapeWebsite(obj.url, obj.scrape_parameters);
-    obj.text = JSON.stringify(scrapedData, null, 4);
+    // const scrapedData = await scrapeWebsite(obj.url, obj.scrape_parameters);
+    // obj.text = JSON.stringify(scrapedData, null, 4);
 
-    return request("/objs", {
+    console.log(obj);
+
+    return request("/scrape/createScrapingConfig", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(obj),

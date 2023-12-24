@@ -55,11 +55,11 @@ const ObjsPageLoggedInView = () => {
             dataIndex: "scrape_parameters",
             key: "scrape_parameters",
         },
-        {
-            title: "Text",
-            dataIndex: "text",
-            key: "text",
-        },
+        // {
+        //     title: "Text",
+        //     dataIndex: "text",
+        //     key: "text",
+        // },
         {
             title: "Action",
             key: "action",

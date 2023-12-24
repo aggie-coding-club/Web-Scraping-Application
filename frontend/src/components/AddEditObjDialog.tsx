@@ -19,8 +19,9 @@ const AddEditObjDialog = ({ objToEdit, onDismiss, onObjSaved }: AddEditObjDialog
     } = useForm<ObjInput>({
         defaultValues: {
             url: objToEdit?.url || "",
-            scrape_parameters: objToEdit?.scrape_parameters || "",
-            text: objToEdit?.text || "",
+            scrapeParameters: objToEdit?.scrapeParameters || "",
+            scrapeIntervalMinute: objToEdit?.scrapeIntervalMinute || 1, // Add default value for scrapeIntervalMinutes
+            // text: objToEdit?.text || "",
         },
     });
 
@@ -58,17 +59,27 @@ const AddEditObjDialog = ({ objToEdit, onDismiss, onObjSaved }: AddEditObjDialog
                     />
 
                     <TextInputField
-                        name="scrape_parameters"
+                        name="scrapeParameters"
                         label="Scrape Parameters"
                         as="textarea"
                         rows={4}
                         placeholder="Text"
                         register={register}
                         registerOptions={{ required: "Required" }}
-                        error={errors.scrape_parameters}
+                        error={errors.scrapeParameters}
                     />
 
                     <TextInputField
+                        name="scrapeIntervalMinute"
+                        label="Scrape Interval (Minutes)"
+                        type="number"
+                        placeholder="Enter interval in minutes"
+                        register={register}
+                        registerOptions={{ required: "Required" }}
+                        error={errors.scrapeIntervalMinute}
+                    />
+
+                    {/* <TextInputField
                         name="text"
                         label="Text"
                         as="textarea"
@@ -77,7 +88,7 @@ const AddEditObjDialog = ({ objToEdit, onDismiss, onObjSaved }: AddEditObjDialog
                         register={register}
                         error={errors.text}
                         readOnly
-                    />
+                    /> */}
                 </Form>
             </Modal.Body>
 

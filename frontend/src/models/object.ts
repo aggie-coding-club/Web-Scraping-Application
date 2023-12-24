@@ -2,8 +2,9 @@ export interface Obj {
     _id: string;
     userId: string;
     url: string;
-    scrape_parameters: string;
+    scrapeParameters: string;
+    scrapeIntervalMinute: number;
     text?: string;
-    createdAt: string;
-    updatedAt: string;
+    createdAt?: string;
+    updatedAt?: string;
 }
