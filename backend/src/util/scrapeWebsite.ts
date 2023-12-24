@@ -3,7 +3,7 @@ import puppeteer from "puppeteer";
 export const scrapeWebsite = async (url: string, parameter_obj: ScrapingConfigObject) => {
     let browser;
     try {
-        browser = await puppeteer.launch({ headless: true });
+        browser = await puppeteer.launch({ headless: "new" });
         const page = await browser.newPage();
         await page.goto(url);
 
