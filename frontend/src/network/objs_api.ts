@@ -62,20 +62,11 @@ export async function logout(): Promise<void> {
     await request("/users/logout", { method: "POST" });
 }
 
-// export async function fetchObjs(): Promise<Obj[]> {
-//     return request("/objs", { method: "GET" });
-// }
-
 export async function fetchObjs(): Promise<Obj[]> {
     return request("/scrape/getScrapingConfigs", { method: "GET" });
 }
 
 export async function createObj(obj: ObjInput): Promise<Obj> {
-    // const scrapedData = await scrapeWebsite(obj.url, obj.scrape_parameters);
-    // obj.text = JSON.stringify(scrapedData, null, 4);
-
-    // console.log(obj);
-
     return request("/scrape/createScrapingConfig", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -84,9 +75,6 @@ export async function createObj(obj: ObjInput): Promise<Obj> {
 }
 
 export async function updateObj(objId: string, obj: ObjInput): Promise<Obj> {
-    // const scrapedData = await scrapeWebsite(obj.url, obj.scrapeParameters);
-    // obj.text = JSON.stringify(scrapedData);
-
     return request(`/scrape/updateScrapingConfig/${objId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -96,4 +84,8 @@ export async function updateObj(objId: string, obj: ObjInput): Promise<Obj> {
 
 export async function deleteObj(objId: string): Promise<void> {
     await request(`/scrape/deleteScrapingConfig/${objId}`, { method: "DELETE" });
+}
+
+export async function getObjScrapedData(objId: string): Promise<Obj[]> {
+    return request(`/objs/${objId}`, { method: "GET" });
 }

@@ -2,6 +2,9 @@ import ScrapeConfig from "../models/scrapeConfig";
 import { scrapeWebsite } from "../util/scrapeWebsite";
 import { Request, Response } from "express";
 import { setNextScrapeTimeout } from "../util/checkAndExecuteScrape";
+import { createNote } from "./objects";
+import user from "../models/user";
+import { assertIsDefined } from "../util/assertIsDefined";
 
 type ScrapingConfigObject = { [key: string]: string };
 
@@ -28,16 +31,22 @@ function processScrapingParameters(parameters: string): ScrapingConfigObject {
 export const createScrapingConfig = async (req: Request, res: Response) => {
     try {
         const { url, scrapeParameters, scrapeIntervalMinute } = req.body;
+        const { userId } = req.session;
+
+        assertIsDefined(userId);
+
         const config = new ScrapeConfig({
-            userId: req.session.userId,
+            userId,
             url,
             scrapeParameters: processScrapingParameters(scrapeParameters),
             scrapeIntervalMinute,
             timeToScrape: new Date(Date.now()),
         });
+
+        createNote(userId, config._id);
         await config.save();
 
-        setNextScrapeTimeout(scrapeIntervalMinute * 60000);
+        setNextScrapeTimeout(0);
         res.status(200).send(config);
     } catch (error) {
         console.log(error);
@@ -60,6 +69,7 @@ export const updateScrapingConfig = async (req: Request, res: Response) => {
             return res.status(404).send("Scraping configuration not found");
         }
 
+        setNextScrapeTimeout(0);
         res.status(200).send(config);
     } catch (error) {
         res.status(500).send(error);
@@ -76,8 +86,8 @@ export const deleteScrapingConfig = async (req: Request, res: Response) => {
             return res.status(404).send("Scraping configuration not found");
         }
 
+        setNextScrapeTimeout(0);
         // delete notes with configid as well
-
         res.status(204).send();
     } catch (error) {
         res.status(500).send(error);
@@ -93,23 +103,23 @@ export const getScrapingConfigs = async (req: Request, res: Response) => {
     }
 };
 
-export const performScraping = async (req: Request, res: Response) => {
-    const { configId } = req.body;
-    try {
-        const config = await ScrapeConfig.findById(configId);
-        if (!config) {
-            return res.status(404).send("Config not found");
-        }
+// export const performScraping = async (req: Request, res: Response) => {
+//     const { configId } = req.body;
+//     try {
+//         const config = await ScrapeConfig.findById(configId);
+//         if (!config) {
+//             return res.status(404).send("Config not found");
+//         }
 
-        if (!config.url || !config.scrapeParameters) {
-            return res.status(400).send("URL or parameters missing in the configuration");
-        }
+//         if (!config.url || !config.scrapeParameters) {
+//             return res.status(400).send("URL or parameters missing in the configuration");
+//         }
 
-        const scrapedData = await scrapeWebsite(config.url, config.scrapeParameters as ScrapingConfigObject);
+//         const scrapedData = await scrapeWebsite(config.url, config.scrapeParameters as ScrapingConfigObject);
 
-        // Update the database with the scraped data here
-        res.status(200).send(scrapedData);
-    } catch (error) {
-        res.status(500).send(error);
-    }
-};
+//         // Update the database with the scraped data here
+//         res.status(200).send(scrapedData);
+//     } catch (error) {
+//         res.status(500).send(error);
+//     }
+// };

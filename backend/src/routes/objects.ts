@@ -3,6 +3,6 @@ import * as NotesController from "../controllers/objects";
 
 const router = express.Router();
 
-router.get("/:configId", NotesController.getNotes);
+router.get("/:configId", NotesController.getNote);
 
 export default router;

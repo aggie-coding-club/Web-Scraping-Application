@@ -3,29 +3,36 @@ import NoteModel from "../models/obj";
 import createHttpError from "http-errors";
 import mongoose from "mongoose";
 import { assertIsDefined } from "../util/assertIsDefined";
+import ScrapeConfig from "../models/scrapeConfig";
 
-export const getNotes: RequestHandler = async (req, res, next) => {
+export const getNote: RequestHandler = async (req, res, next) => {
+    const { userId } = req.session;
     const { configId } = req.params;
 
     try {
-        // throw createHttpError(401); // For testing error handling
+        assertIsDefined(userId);
         assertIsDefined(configId);
 
-        const notes = await NoteModel.find({ configId }).exec();
-        res.status(200).json(notes); // OK status
+        const note = await NoteModel.findOne({ configId }).exec();
+        console.log(note);
+
+        if (!note) {
+            res.status(404).send("Not found");
+        } else if (note.userId !== userId) {
+            res.status(403).send("Forbidden");
+        } else {
+            res.status(200).json(note);
+        }
     } catch (error) {
         next(error);
     }
 };
 
-export const createNote = async (configId: mongoose.Types.ObjectId, text: ScrapingConfigObject): Promise<void> => {
+export const createNote = async (userId: mongoose.Types.ObjectId, configId: mongoose.Types.ObjectId): Promise<void> => {
     try {
-        await NoteModel.create({
-            configId: configId,
-            // url: url,
-            text: text,
-        });
+        await NoteModel.create({ userId, configId, scrapedData: [] });
     } catch (error) {
+        console.log(error);
         throw error;
     }
 };

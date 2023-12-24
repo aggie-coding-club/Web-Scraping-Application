@@ -1,6 +1,6 @@
 import scrapeConfig from "../models/scrapeConfig";
 import { scrapeWebsite } from "./scrapeWebsite";
-import { createNote } from "../controllers/objects";
+import NoteModel from "../models/obj";
 
 let scrapeTimeout: any; // fix type to be more specific later
 
@@ -15,7 +15,14 @@ const checkAndExecuteScrape = async () => {
             if (scrapedData === undefined) {
                 console.log("Scrape failed.");
             } else {
-                createNote(currentScrape._id, scrapedData);
+                NoteModel.findOneAndUpdate({ configId: currentScrape._id }, { $push: { scrapedData } });
+
+                // consider using this for handling when creating a Note failed
+                // NoteModel.findOneAndUpdate(
+                //     { configId: currentScrape._id, userId: currentScrape.userId },
+                //     { upsert: true },
+                //     { $push: { scrapedData } }
+                // );
             }
 
             currentScrape.timeToScrape = new Date(Date.now() + currentScrape.scrapeIntervalMinute * 60000);

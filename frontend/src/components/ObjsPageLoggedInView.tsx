@@ -69,8 +69,19 @@ const ObjsPageLoggedInView = () => {
         //     key: "text",
         // },
         {
-            title: "Action",
-            key: "action",
+            title: "View",
+            key: "view",
+            render: (_, record) => (
+                <>
+                    <a className="text-secondary" href="#" onClick={() => ObjsApi.getObjScrapedData(record._id)}>
+                        View
+                    </a>
+                </>
+            ),
+        },
+        {
+            title: "Edit",
+            key: "edit",
             render: (_, record) => (
                 <>
                     <a className="text-secondary" href="#" onClick={() => setObjToEdit(record)}>
@@ -80,8 +91,8 @@ const ObjsPageLoggedInView = () => {
             ),
         },
         {
-            title: "Action",
-            key: "action",
+            title: "Delete",
+            key: "delete",
             render: (_, record) => (
                 <a className="text-danger" href="#" onClick={() => deleteObj(record)}>
                     Delete
