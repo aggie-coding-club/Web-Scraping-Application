@@ -1,1 +1,1 @@
-type ScrapingConfigObject = { [key: string]: string };
+type ScrapingConfigObject = { [key: string]: any };

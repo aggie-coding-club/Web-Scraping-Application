@@ -11,19 +11,25 @@ export const scrapeWebsite = async (url: string, parameter_obj: ScrapingConfigOb
         const timeoutPromise = new Promise((resolve) => setTimeout(resolve, 10 * 1000));
         await Promise.race([Promise.all(selectors.map((selector) => page.waitForSelector(selector))), timeoutPromise]);
 
-        const scrapedData = await page.evaluate((params) => {
-            const results: ScrapingConfigObject = {};
-            Object.entries(params).forEach(([key, selector]) => {
-                try {
-                    const element = document.querySelector(selector);
-                    const content = element ? element.textContent?.trim() || "" : "";
-                    results[key] = content;
-                } catch (error) {
-                    console.error("Error in scrapeWebsite:", error);
-                }
-            });
-            return results;
-        }, parameter_obj);
+        const scrapedData = await page.evaluate(
+            (parameter_obj, url) => {
+                const results: ScrapingConfigObject = {};
+                results["url"] = url;
+                results["timestamp"] = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
+                Object.entries(parameter_obj).forEach(([key, selector]) => {
+                    try {
+                        const element = document.querySelector(selector);
+                        const content = element ? element.textContent?.trim() || "" : "";
+                        results[key] = { selector, content };
+                    } catch (error) {
+                        console.error("Error in scrapeWebsite:", error);
+                    }
+                });
+                return results;
+            },
+            parameter_obj,
+            url
+        );
         return scrapedData;
     } catch (error) {
         console.error("Error in scrapeWebsite:", error);
