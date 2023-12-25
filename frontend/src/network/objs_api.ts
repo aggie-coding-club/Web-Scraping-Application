@@ -86,6 +86,6 @@ export async function deleteObj(objId: string): Promise<void> {
     await request(`/scrape/deleteScrapingConfig/${objId}`, { method: "DELETE" });
 }
 
-export async function getObjScrapedData(objId: string): Promise<Obj[]> {
+export async function getObjScrapedData(objId: string): Promise<string> {
     return request(`/objs/${objId}`, { method: "GET" });
 }

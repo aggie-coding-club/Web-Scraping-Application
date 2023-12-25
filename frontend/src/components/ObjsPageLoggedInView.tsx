@@ -5,7 +5,7 @@ import { Obj, Obj as ObjsModel } from "../models/object";
 import * as ObjsApi from "../network/objs_api";
 import styleUtils from "../styles/utils.module.css";
 import AddEditObjDialog from "./AddEditObjDialog";
-
+import ViewStringDiaglog from "./ViewStringDialog";
 import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 
@@ -16,6 +16,7 @@ const ObjsPageLoggedInView = () => {
 
     const [showAddObjDialog, setShowAddObjDialog] = useState(false);
     const [objToEdit, setObjToEdit] = useState<ObjsModel | null>(null);
+    const [stringToView, setStringToView] = useState<string | null>(null);
 
     useEffect(() => {
         async function loadObjs() {
@@ -73,7 +74,7 @@ const ObjsPageLoggedInView = () => {
             key: "view",
             render: (_, record) => (
                 <>
-                    <a className="text-secondary" href="#" onClick={() => ObjsApi.getObjScrapedData(record._id)}>
+                    <a className="text-secondary" href="#" onClick={async () => setStringToView(await ObjsApi.getObjScrapedData(record._id))}>
                         View
                     </a>
                 </>
@@ -151,6 +152,7 @@ const ObjsPageLoggedInView = () => {
                     }}
                 />
             )}
+            {stringToView && <ViewStringDiaglog stringToView={stringToView} onDismiss={() => setStringToView(null)} />}
         </>
     );
 };
