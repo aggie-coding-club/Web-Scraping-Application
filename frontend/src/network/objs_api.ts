@@ -1,7 +1,6 @@
 import { useContext } from "react";
 import { ConflictError, UnauthorizedError } from "../errors/http_errors";
 import UserContext from "../providers/UserProvider";
-// import { scrapeWebsite } from "./scrape_api";
 import { Obj } from "../models/object";
 import { User } from "../models/user";
 import { SignUpCredentials } from "../models/signUpCredentials";

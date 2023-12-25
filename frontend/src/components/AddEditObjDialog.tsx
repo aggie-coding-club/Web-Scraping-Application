@@ -20,19 +20,13 @@ const AddEditObjDialog = ({ objToEdit, onDismiss, onObjSaved }: AddEditObjDialog
         defaultValues: {
             url: objToEdit?.url || "",
             scrapeParameters: JSON.stringify(objToEdit?.scrapeParameters, null, 2) || "",
-            scrapeIntervalMinute: objToEdit?.scrapeIntervalMinute || 1, // Add default value for scrapeIntervalMinutes
-            // text: objToEdit?.text || "",
+            scrapeIntervalMinute: objToEdit?.scrapeIntervalMinute || 1,
         },
     });
 
     async function onSubmit(input: ObjInput) {
         try {
-            let objResponse: Obj;
-            if (objToEdit) {
-                objResponse = await ObjApi.updateObj(objToEdit._id, input);
-            } else {
-                objResponse = await ObjApi.createObj(input);
-            }
+            const objResponse = objToEdit ? await ObjApi.updateObj(objToEdit._id, input) : await ObjApi.createObj(input);
             onObjSaved(objResponse);
         } catch (error) {
             console.error(error);
@@ -78,17 +72,6 @@ const AddEditObjDialog = ({ objToEdit, onDismiss, onObjSaved }: AddEditObjDialog
                         registerOptions={{ required: "Required" }}
                         error={errors.scrapeIntervalMinute}
                     />
-
-                    {/* <TextInputField
-                        name="text"
-                        label="Text"
-                        as="textarea"
-                        rows={4}
-                        placeholder="Text"
-                        register={register}
-                        error={errors.text}
-                        readOnly
-                    /> */}
                 </Form>
             </Modal.Body>
 

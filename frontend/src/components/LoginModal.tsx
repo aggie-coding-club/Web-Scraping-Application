@@ -1,11 +1,11 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { Alert, Button, Form, Modal } from "react-bootstrap";
 import { User } from "../models/user";
 import { LoginCredentials } from "../models/loginCredentials";
 import * as ObjsApi from "../network/objs_api";
-import { Alert, Button, Form, Modal } from "react-bootstrap";
 import TextInputField from "./form/TextInputField";
 import styleUtils from "../styles/utils.module.css";
-import { useState } from "react";
 import { UnauthorizedError } from "../errors/http_errors";
 
 interface LoginModalProps {
@@ -15,7 +15,6 @@ interface LoginModalProps {
 
 const LoginModal = ({ onDismiss, onLoginSuccessful }: LoginModalProps) => {
     const [errorText, setErrorText] = useState<string | null>(null);
-
     const {
         register,
         handleSubmit,
