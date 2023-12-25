@@ -2,7 +2,7 @@ import scrapeConfig from "../models/scrapeConfig";
 import { scrapeWebsite } from "./scrapeWebsite";
 import NoteModel from "../models/obj";
 
-let scrapeTimeout: any; // fix type to be more specific later
+let scrapeTimeout: NodeJS.Timeout;
 
 const checkAndExecuteScrape = async () => {
     try {
@@ -37,6 +37,10 @@ const checkAndExecuteScrape = async () => {
 };
 
 export const setNextScrapeTimeout = (interval: number) => {
-    clearTimeout(scrapeTimeout);
-    scrapeTimeout = setTimeout(checkAndExecuteScrape, interval);
+    try {
+        clearTimeout(scrapeTimeout);
+        scrapeTimeout = setTimeout(checkAndExecuteScrape, interval);
+    } catch {
+        setNextScrapeTimeout(1 * 1000);
+    }
 };

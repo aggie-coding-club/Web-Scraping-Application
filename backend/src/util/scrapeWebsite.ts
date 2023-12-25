@@ -16,13 +16,17 @@ export const scrapeWebsite = async (url: string, parameter_obj: ScrapingConfigOb
                 const results: ScrapingConfigObject = {};
                 results["url"] = url;
                 results["timestamp"] = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
+
                 Object.entries(parameter_obj).forEach(([key, selector]) => {
                     try {
                         const element = document.querySelector(selector);
                         const content = element ? element.textContent?.trim() || "" : "";
                         results[key] = { selector, content };
                     } catch (error) {
+                        const errorMessage = error instanceof Error ? error.message : "Unknown error";
                         console.error("Error in scrapeWebsite:", error);
+                        console.error(`Error scraping ${key}:`, errorMessage);
+                        results[key] = { selector, error: errorMessage };
                     }
                 });
                 return results;

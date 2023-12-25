@@ -1,6 +1,14 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Document } from "mongoose";
 
-const scrapeConfigSchema = new Schema(
+interface IScrapeConfig extends Document {
+    userId: Schema.Types.ObjectId;
+    url: string;
+    scrapeParameters: any;
+    timeToScrape: Date;
+    scrapeIntervalMinute: number;
+}
+
+const scrapeConfigSchema = new Schema<IScrapeConfig>(
     {
         userId: { type: Schema.Types.ObjectId, ref: "User" },
         url: { type: String, required: true },
@@ -11,10 +19,5 @@ const scrapeConfigSchema = new Schema(
     { timestamps: true }
 );
 
-const ScrapeConfig = model("ScrapeConfig", scrapeConfigSchema);
+const ScrapeConfig = model<IScrapeConfig>("ScrapeConfig", scrapeConfigSchema);
 export default ScrapeConfig;
-
-// scrapeConfigSchema.pre("save", function (next) {
-//     this.timeToScrape = new Date(Date.now() + this.scrapeIntervalMinute * 60000);
-//     next();
-// });
