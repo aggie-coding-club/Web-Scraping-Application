@@ -1,9 +1,8 @@
-import ScrapeConfig from "../models/scrapeConfig";
-import { scrapeWebsite } from "../util/scrapeWebsite";
 import { Request, Response } from "express";
+import ScrapeConfig from "../models/scrapeConfig";
+import NoteModel from "../models/obj";
 import { setNextScrapeTimeout } from "../util/checkAndExecuteScrape";
 import { createNote } from "./objects";
-import user from "../models/user";
 import { assertIsDefined } from "../util/assertIsDefined";
 
 type ScrapingConfigObject = { [key: string]: string };
@@ -27,43 +26,41 @@ function processScrapingParameters(parameters: string): ScrapingConfigObject {
     }, {} as ScrapingConfigObject);
 }
 
-// Prob add .exec() to the end of all the queries
 export const createScrapingConfig = async (req: Request, res: Response) => {
     try {
-        const { url, scrapeParameters, scrapeIntervalMinute } = req.body;
         const { userId } = req.session;
+        assertIsDefined(userId, "User ID must be defined");
 
-        assertIsDefined(userId);
-
+        const { url, scrapeParameters, scrapeIntervalMinute } = req.body;
         const config = new ScrapeConfig({
             userId,
             url,
             scrapeParameters: processScrapingParameters(scrapeParameters),
             scrapeIntervalMinute,
-            timeToScrape: new Date(Date.now()),
+            timeToScrape: new Date(),
         });
 
-        createNote(userId, config._id);
+        await createNote(userId, config._id);
         await config.save();
 
         setNextScrapeTimeout(0);
         res.status(200).send(config);
     } catch (error) {
-        console.log(error);
-        res.status(500).send(error);
+        console.error("Error in createScrapingConfig:", error);
+        res.status(500).send("Internal server error");
     }
 };
 
 export const updateScrapingConfig = async (req: Request, res: Response) => {
-    const { url, parameters, scrapeIntervalMinute } = req.body;
-    const { configId } = req.params;
-
     try {
+        const { url, parameters, scrapeIntervalMinute } = req.body;
+        const { configId } = req.params;
+
         const config = await ScrapeConfig.findByIdAndUpdate(
             configId,
             { userId: req.session.userId, url, parameters, scrapeIntervalMinute },
             { new: true }
-        );
+        ).exec();
 
         if (!config) {
             return res.status(404).send("Scraping configuration not found");
@@ -77,20 +74,21 @@ export const updateScrapingConfig = async (req: Request, res: Response) => {
 };
 
 export const deleteScrapingConfig = async (req: Request, res: Response) => {
-    const { configId } = req.params;
-
     try {
-        const config = await ScrapeConfig.findByIdAndDelete(configId);
+        const { configId } = req.params;
+        const config = await ScrapeConfig.findByIdAndDelete(configId).exec();
 
         if (!config) {
             return res.status(404).send("Scraping configuration not found");
         }
 
+        await NoteModel.deleteMany({ configId }).exec();
         setNextScrapeTimeout(0);
-        // delete notes with configid as well
+
         res.status(204).send();
     } catch (error) {
-        res.status(500).send(error);
+        console.error("Error in deleteScrapingConfig:", error);
+        res.status(500).send("Internal server error");
     }
 };
 
@@ -99,27 +97,7 @@ export const getScrapingConfigs = async (req: Request, res: Response) => {
         const configs = await ScrapeConfig.find({ userId: req.session.userId });
         res.status(200).send(configs);
     } catch (error) {
-        res.status(500).send(error);
+        console.error("Error in getScrapingConfigs:", error);
+        res.status(500).send("Internal server error");
     }
 };
-
-// export const performScraping = async (req: Request, res: Response) => {
-//     const { configId } = req.body;
-//     try {
-//         const config = await ScrapeConfig.findById(configId);
-//         if (!config) {
-//             return res.status(404).send("Config not found");
-//         }
-
-//         if (!config.url || !config.scrapeParameters) {
-//             return res.status(400).send("URL or parameters missing in the configuration");
-//         }
-
-//         const scrapedData = await scrapeWebsite(config.url, config.scrapeParameters as ScrapingConfigObject);
-
-//         // Update the database with the scraped data here
-//         res.status(200).send(scrapedData);
-//     } catch (error) {
-//         res.status(500).send(error);
-//     }
-// };
