@@ -9,22 +9,41 @@ import { ObjInput } from "../models/objInput";
 
 const API_BASE = "/api";
 
-async function handleResponse(response: Response) {
+async function handleResponse(response) {
+    const contentType = response.headers.get("content-type");
+
     if (response.ok) {
-        const text = await response.text();
-        return text ? JSON.parse(text) : null;
-    }
-
-    const errorBody = await response.json();
-    const errorMessage = errorBody.error || "Unknown error";
-
-    switch (response.status) {
-        case 401:
-            throw new UnauthorizedError(errorMessage);
-        case 409:
-            throw new ConflictError(errorMessage);
-        default:
-            throw new Error(`Request failed with status: ${response.status} message: ${errorMessage}`);
+        if (contentType && contentType.includes("application/json")) {
+            // Process JSON response
+            const json = await response.json();
+            return json;
+        } else if (contentType && contentType.includes("text/html")) {
+            // Process HTML response
+            return response.text();
+        } else if (!contentType || response.status === 204) {
+            // No content
+            return null;
+        } else {
+            // Other content types
+            return response.text();
+        }
+    } else {
+        // Error handling
+        let errorMessage;
+        if (contentType && contentType.includes("application/json")) {
+            const errorBody = await response.json();
+            errorMessage = errorBody.error || "Unknown error";
+        } else {
+            errorMessage = `Request failed with status: ${response.status}`;
+        }
+        switch (response.status) {
+            case 401:
+                throw new UnauthorizedError(errorMessage);
+            case 409:
+                throw new ConflictError(errorMessage);
+            default:
+                throw new Error(errorMessage);
+        }
     }
 }
 
@@ -87,4 +106,12 @@ export async function deleteObj(objId: string): Promise<void> {
 
 export async function getObjScrapedData(objId: string): Promise<string> {
     return request(`/objs/${objId}`, { method: "GET" });
+}
+
+export async function fetchHtmlContent(url: string): Promise<string> {
+    return request("/scrape/fetchHtml", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url }),
+    });
 }
