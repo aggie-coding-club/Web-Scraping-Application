@@ -7,14 +7,11 @@ interface ViewStringDiaglogProps {
 
 const ViewStringDialog = ({ stringToView, onDismiss }: ViewStringDiaglogProps) => {
     return (
-        <Modal show onHide={onDismiss}>
-            <Modal.Header closeButton>
-                <Modal.Title>View Object</Modal.Title>
-            </Modal.Header>
+        <Modal show onHide={onDismiss} fullscreen={true}>
             <Modal.Body>
                 <Form.Group className="mb-3">
-                    <Form.Label>Object JSON</Form.Label>
-                    <Form.Control as="textarea" rows={10} readOnly defaultValue={stringToView} />
+                    <Form.Label style={{ marginBottom: "2%" }}>Scraped JSON</Form.Label>
+                    <Form.Control as="textarea" style={{ height: "75vh" }} readOnly defaultValue={stringToView} />
                 </Form.Group>
             </Modal.Body>
             <Modal.Footer>
