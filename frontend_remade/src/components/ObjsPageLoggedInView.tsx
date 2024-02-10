@@ -127,7 +127,7 @@ const ObjsPageLoggedInView = () => {
                 }}
             >
                 <FaPlus />
-                Add New Object
+                Create Crawler Configuration
             </Button>
             {objsLoading && <Spinner animation="border" variant="primary" />}
             {showObjsLoadingError && <p className="text-danger">Something went wrong. Please refresh the page.</p>}
