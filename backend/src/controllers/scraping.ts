@@ -5,27 +5,6 @@ import { setNextScrapeTimeout } from "../util/checkAndExecuteScrape";
 import { createNote } from "./objects";
 import { assertIsDefined } from "../util/assertIsDefined";
 
-type ScrapingConfigObject = { [key: string]: string };
-
-function processScrapingParameters(parameters: string): ScrapingConfigObject {
-    parameters = parameters.trim();
-    parameters = parameters.endsWith(",") ? parameters.slice(-1) : parameters;
-
-    return parameters.split(",").reduce((obj, param) => {
-        const [rawKey, rawValue] = param.split(":").map((s) => s.trim());
-
-        const key = rawKey.startsWith('"') && rawKey.endsWith('"') ? rawKey.slice(1, -1) : rawKey;
-        const value = rawValue.startsWith('"') && rawValue.endsWith('"') ? rawValue.slice(1, -1) : rawValue;
-
-        if (!key || !value) {
-            throw new Error("Invalid parameter format");
-        }
-
-        obj[key] = value;
-        return obj;
-    }, {} as ScrapingConfigObject);
-}
-
 export const createScrapingConfig = async (req: Request, res: Response) => {
     try {
         const { userId } = req.session;
@@ -35,7 +14,7 @@ export const createScrapingConfig = async (req: Request, res: Response) => {
         const config = new ScrapeConfig({
             userId,
             url,
-            scrapeParameters: processScrapingParameters(scrapeParameters),
+            scrapeParameters,
             scrapeIntervalMinute,
             timeToScrape: new Date(),
         });
