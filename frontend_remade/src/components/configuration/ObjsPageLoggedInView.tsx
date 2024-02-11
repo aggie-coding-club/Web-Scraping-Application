@@ -50,6 +50,7 @@ const ObjsPageLoggedInView = () => {
             title: "Website URL",
             dataIndex: "url",
             key: "url",
+            render: (text) => <a>{text}</a>,
         },
         {
             title: "Scrape Parameters",
