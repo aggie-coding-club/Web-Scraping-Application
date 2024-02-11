@@ -7,13 +7,13 @@ let scrapeTimeout: NodeJS.Timeout;
 type ScrapingConfigObject = { [key: string]: string };
 
 function processScrapingParameters(parameters: any[]): ScrapingConfigObject {
-
     return parameters.reduce((obj, param) => {
         const key = param.name;
         const value = param.tag;
 
         if (!key || !value) {
-            throw new Error("Invalid parameter format");
+            console.error("Invalid parameter format");
+            return obj;
         }
 
         obj[key] = value;
