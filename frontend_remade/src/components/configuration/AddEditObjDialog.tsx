@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { ObjInput } from "../models/objInput";
-import { Obj } from "../models/object";
-import * as ObjApi from "../network/objs_api";
-import { fetchHtmlContent } from "../network/objs_api";
-import TextInputField from "./form/TextInputField";
+import { ObjInput } from "../../models/objInput";
+import { Obj } from "../../models/object";
+import * as ObjApi from "../../network/objs_api";
+import { fetchHtmlContent } from "../../network/objs_api";
+import TextInputField from "../form/TextInputField";
+import Table, { ColumnsType } from "antd/es/table";
+import { Input } from "antd";
 
 interface AddEditObjDialogProps {
     objToEdit?: Obj;
@@ -15,7 +17,8 @@ interface AddEditObjDialogProps {
 
 const AddEditObjDialog = ({ objToEdit, onDismiss, onObjSaved }: AddEditObjDialogProps) => {
     const [iframeSrc, setIframeSrc] = useState("");
-    const [selectors, setSelectors] = useState<any[]>([]);
+    const [selector, setSelector] = useState<any>("");
+    const [scrapeParametersArray, setScrapeParametersArray] = useState<any[]>([{ key: 0, name: "", tag: "", description: "" }]);
     const {
         register,
         handleSubmit,
@@ -28,6 +31,84 @@ const AddEditObjDialog = ({ objToEdit, onDismiss, onObjSaved }: AddEditObjDialog
             scrapeIntervalMinute: objToEdit?.scrapeIntervalMinute || 1,
         },
     });
+
+    const columns: ColumnsType<any> = [
+        {
+            title: "Parameter Name",
+            dataIndex: "name",
+            key: "name",
+            render: (text, _, index) => (
+                <Input
+                    defaultValue={text}
+                    onChange={(event) => {
+                        setScrapeParametersArray(
+                            scrapeParametersArray.map((item, idx) => (idx === index ? { ...item, name: event.target.value } : item))
+                        );
+                    }}
+                />
+            ),
+        },
+        {
+            title: "Tag",
+            dataIndex: "tag",
+            render: (text, _, index) => (
+                <Input
+                    defaultValue={text}
+                    onChange={(event) => {
+                        setScrapeParametersArray(
+                            scrapeParametersArray.map((item, idx) => (idx === index ? { ...item, tag: event.target.value } : item))
+                        );
+                    }}
+                />
+            ),
+        },
+        {
+            title: "Description",
+            dataIndex: "description",
+            render: (text, _, index) => (
+                <Input
+                    defaultValue={text}
+                    onChange={(event) => {
+                        setScrapeParametersArray(
+                            scrapeParametersArray.map((item, idx) => (idx === index ? { ...item, description: event.target.value } : item))
+                        );
+                    }}
+                />
+            ),
+        },
+        {
+            title: "Operation",
+            key: "operation",
+            render: (_, __, index) => {
+                return index === scrapeParametersArray.length - 1 ? (
+                    <a
+                        className="text-success"
+                        href="#"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            const lastElement = scrapeParametersArray[scrapeParametersArray.length - 1];
+                            if (!lastElement.tag) {
+                                return;
+                            }
+                            setScrapeParametersArray([...scrapeParametersArray, { key: index + 1, name: "", tag: "", description: "" }]);
+                        }}
+                    >
+                        Add
+                    </a>
+                ) : (
+                    <a
+                        className="text-danger"
+                        href="#"
+                        onClick={() => {
+                            setScrapeParametersArray((prevArray) => [...prevArray.slice(0, index), ...prevArray.slice(index + 1)]);
+                        }}
+                    >
+                        Delete
+                    </a>
+                );
+            },
+        },
+    ];
 
     const url = watch("url");
 
@@ -47,7 +128,7 @@ const AddEditObjDialog = ({ objToEdit, onDismiss, onObjSaved }: AddEditObjDialog
                 return;
             }
             if (event.data.selector) {
-                setSelectors((prevSelectors) => [...prevSelectors, event.data.selector]);
+                setSelector(event.data.selector);
             }
         };
 
@@ -56,8 +137,11 @@ const AddEditObjDialog = ({ objToEdit, onDismiss, onObjSaved }: AddEditObjDialog
     }, []);
 
     async function onSubmit(input: ObjInput) {
+        const inputWithScrapeParameters = { ...input, scrapeParameters: scrapeParametersArray };
         try {
-            const objResponse = objToEdit ? await ObjApi.updateObj(objToEdit._id, input) : await ObjApi.createObj(input);
+            const objResponse = objToEdit
+                ? await ObjApi.updateObj(objToEdit._id, inputWithScrapeParameters)
+                : await ObjApi.createObj(inputWithScrapeParameters);
             onObjSaved(objResponse);
         } catch (error) {
             console.error(error);
@@ -68,7 +152,7 @@ const AddEditObjDialog = ({ objToEdit, onDismiss, onObjSaved }: AddEditObjDialog
     return (
         <Modal show onHide={onDismiss} fullscreen={true}>
             <Modal.Header closeButton>
-                <Modal.Title>{objToEdit ? "Edit Object" : "Create Configuration"}</Modal.Title>
+                <Modal.Title>{objToEdit ? "Edit Configuration" : "Create Configuration"}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <div style={{ display: "flex", flexDirection: "row", height: "80vh" }}>
@@ -86,16 +170,10 @@ const AddEditObjDialog = ({ objToEdit, onDismiss, onObjSaved }: AddEditObjDialog
                                 registerOptions={{ required: "Required" }}
                                 error={errors.url}
                             />
-                            <TextInputField
-                                name="scrapeParameters"
-                                label="Scrape Parameters"
-                                as="textarea"
-                                rows={4}
-                                placeholder="Text"
-                                register={register}
-                                registerOptions={{ required: "Required" }}
-                                error={errors.scrapeParameters}
-                            />
+                            <Form.Group className="mb-3">
+                                <Form.Label>Captured Selector</Form.Label>
+                                <Form.Control placeholder=".example" value={selector} readOnly={true} />
+                            </Form.Group>
                             <TextInputField
                                 name="scrapeIntervalMinute"
                                 label="Scrape Interval (Minutes)"
@@ -105,16 +183,7 @@ const AddEditObjDialog = ({ objToEdit, onDismiss, onObjSaved }: AddEditObjDialog
                                 registerOptions={{ required: "Required" }}
                                 error={errors.scrapeIntervalMinute}
                             />
-
-                            <div>
-                                <h3>Captured Selectors</h3>
-                                <ul>
-                                    {selectors.map((selector, index) => (
-                                        <li key={index}>{selector}</li>
-                                    ))}
-                                </ul>
-                            </div>
-
+                            <Table dataSource={scrapeParametersArray} columns={columns} />
                             <Button
                                 type="submit"
                                 form="addEditObjForm"
@@ -124,6 +193,7 @@ const AddEditObjDialog = ({ objToEdit, onDismiss, onObjSaved }: AddEditObjDialog
                                     transition: "background-color 0.3s",
                                     borderColor: "#427d9d",
                                     borderWidth: "1px",
+                                    marginBottom: "20px",
                                 }}
                                 onMouseDown={(e) => {
                                     e.currentTarget.style.backgroundColor = "#9bbec8";

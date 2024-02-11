@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import LoginModal from "./components/LoginModal";
-import NavBar from "./components/NavBar";
+import NavBar from "./components/NavBar/NavBar";
 import SignUpModal from "./components/SignUpModal";
 import { Sidebar } from "./components/Sidebar";
 

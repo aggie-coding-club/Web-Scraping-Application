@@ -1,8 +1,8 @@
 import styles from "../styles/Obj.module.css";
 import styleUtils from "../styles/utils.module.css";
 import { Card } from "react-bootstrap";
-import { Obj as ObjModel } from "../models/object";
-import { formatDate } from "../utils/formatDate";
+import { Obj as ObjModel } from "../../models/object";
+import { formatDate } from "../../utils/formatDate";
 import { MdDelete } from "react-icons/md";
 
 interface ObjProps {

@@ -1,7 +1,7 @@
-import Home from "./Home";
+import Home from "../Home";
 
 const ObjsPageLoggedOutView = () => {
-  return <Home />;
+    return <Home />;
 };
 
 export default ObjsPageLoggedOutView;

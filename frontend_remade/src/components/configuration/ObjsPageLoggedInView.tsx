@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Button, Spinner } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa";
-import { Obj, Obj as ObjsModel } from "../models/object";
-import * as ObjsApi from "../network/objs_api";
-import styleUtils from "../styles/utils.module.css";
+import { Obj, Obj as ObjsModel } from "../../models/object";
+import * as ObjsApi from "../../network/objs_api";
+import styleUtils from "../../styles/utils.module.css";
 import AddEditObjDialog from "./AddEditObjDialog";
-import ViewStringDiaglog from "./ViewStringDialog";
+import ViewStringDiaglog from "../ViewStringDialog";
 import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 
@@ -44,8 +44,6 @@ const ObjsPageLoggedInView = () => {
             alert(error);
         }
     }
-
-    console.log(objs);
 
     const columns: ColumnsType<Obj> = [
         {

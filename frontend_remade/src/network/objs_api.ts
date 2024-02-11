@@ -5,11 +5,11 @@ import { Obj } from "../models/object";
 import { User } from "../models/user";
 import { SignUpCredentials } from "../models/signUpCredentials";
 import { LoginCredentials } from "../models/loginCredentials";
-import { ObjInput } from "../models/objInput";
+// import { ObjInput } from "../models/objInput";
 
 const API_BASE = "/api";
 
-async function handleResponse(response) {
+async function handleResponse(response: any) {
   const contentType = response.headers.get("content-type");
 
   if (response.ok) {
@@ -84,7 +84,7 @@ export async function fetchObjs(): Promise<Obj[]> {
   return request("/scrape/getScrapingConfigs", { method: "GET" });
 }
 
-export async function createObj(obj: ObjInput): Promise<Obj> {
+export async function createObj(obj: any): Promise<Obj> {
   return request("/scrape/createScrapingConfig", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -92,7 +92,7 @@ export async function createObj(obj: ObjInput): Promise<Obj> {
   });
 }
 
-export async function updateObj(objId: string, obj: ObjInput): Promise<Obj> {
+export async function updateObj(objId: string, obj: any): Promise<Obj> {
   return request(`/scrape/updateScrapingConfig/${objId}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
