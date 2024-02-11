@@ -27,7 +27,7 @@ const AddEditObjDialog = ({ objToEdit, onDismiss, onObjSaved }: AddEditObjDialog
     } = useForm<ObjInput>({
         defaultValues: {
             url: objToEdit?.url || "",
-            scrapeParameters: JSON.stringify(objToEdit?.scrapeParameters, null, 2) || "",
+            scrapeParameters: scrapeParametersArray.slice(0, -1),
             scrapeIntervalMinute: objToEdit?.scrapeIntervalMinute || 1,
         },
     });
@@ -87,7 +87,7 @@ const AddEditObjDialog = ({ objToEdit, onDismiss, onObjSaved }: AddEditObjDialog
                         onClick={(e) => {
                             e.preventDefault();
                             const lastElement = scrapeParametersArray[scrapeParametersArray.length - 1];
-                            if (!lastElement.tag) {
+                            if (!lastElement.name || !lastElement.tag) {
                                 return;
                             }
                             setScrapeParametersArray([...scrapeParametersArray, { key: index + 1, name: "", tag: "", description: "" }]);
@@ -137,7 +137,7 @@ const AddEditObjDialog = ({ objToEdit, onDismiss, onObjSaved }: AddEditObjDialog
     }, []);
 
     async function onSubmit(input: ObjInput) {
-        const inputWithScrapeParameters = { ...input, scrapeParameters: scrapeParametersArray };
+        const inputWithScrapeParameters = { ...input, scrapeParameters: scrapeParametersArray.slice(0, -1) };
         try {
             const objResponse = objToEdit
                 ? await ObjApi.updateObj(objToEdit._id, inputWithScrapeParameters)
