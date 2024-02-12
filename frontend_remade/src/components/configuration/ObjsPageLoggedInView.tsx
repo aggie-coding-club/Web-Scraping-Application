@@ -63,11 +63,6 @@ const ObjsPageLoggedInView = () => {
             key: "scrapeIntervalMinute",
             align: "center",
         },
-        // {
-        //     title: "Text",
-        //     dataIndex: "text",
-        //     key: "text",
-        // },
         {
             title: "View",
             key: "view",
