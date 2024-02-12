@@ -5,7 +5,7 @@ import { Obj, Obj as ObjsModel } from "../../models/object";
 import * as ObjsApi from "../../network/objs_api";
 import styleUtils from "../../styles/utils.module.css";
 import AddEditObjDialog from "./AddEditObjDialog";
-import ViewStringDialog from "./ViewStringDialog";
+import ViewStringDialog from "./ViewData/ViewStringDialog";
 import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 
