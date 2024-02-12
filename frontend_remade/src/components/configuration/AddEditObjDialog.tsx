@@ -18,7 +18,12 @@ interface AddEditObjDialogProps {
 const AddEditObjDialog = ({ objToEdit, onDismiss, onObjSaved }: AddEditObjDialogProps) => {
     const [iframeSrc, setIframeSrc] = useState("");
     const [selector, setSelector] = useState<any>("");
-    const [scrapeParametersArray, setScrapeParametersArray] = useState<any[]>([{ key: 0, name: "", tag: "", description: "" }]);
+    const [scrapeParametersArray, setScrapeParametersArray] = useState<any[]>(
+        objToEdit?.scrapeParameters
+            ? [...objToEdit.scrapeParameters, { key: 0, name: "", tag: "", description: "" }]
+            : [{ key: 0, name: "", tag: "", description: "" }]
+    );
+
     const {
         register,
         handleSubmit,
@@ -26,6 +31,8 @@ const AddEditObjDialog = ({ objToEdit, onDismiss, onObjSaved }: AddEditObjDialog
         formState: { errors, isSubmitting },
     } = useForm<ObjInput>({
         defaultValues: {
+            name: objToEdit?.name || "",
+            description: objToEdit?.description || "",
             url: objToEdit?.url || "",
             scrapeParameters: scrapeParametersArray.slice(0, -1),
             scrapeIntervalMinute: objToEdit?.scrapeIntervalMinute || 1,
@@ -137,7 +144,7 @@ const AddEditObjDialog = ({ objToEdit, onDismiss, onObjSaved }: AddEditObjDialog
     }, []);
 
     async function onSubmit(input: ObjInput) {
-        const inputWithScrapeParameters = { ...input, scrapeParameters: scrapeParametersArray.slice(0, -1) };
+        const inputWithScrapeParameters = { ...input, aas: scrapeParametersArray.slice(0, -1) };
         try {
             const objResponse = objToEdit
                 ? await ObjApi.updateObj(objToEdit._id, inputWithScrapeParameters)
@@ -161,6 +168,24 @@ const AddEditObjDialog = ({ objToEdit, onDismiss, onObjSaved }: AddEditObjDialog
                     </div>
                     <div style={{ flex: 1 }}>
                         <Form id="addEditObjForm" onSubmit={handleSubmit(onSubmit)}>
+                            <TextInputField
+                                name="name"
+                                label="Configuration Name"
+                                type="text"
+                                placeholder="Name"
+                                register={register}
+                                registerOptions={{ required: "Required" }}
+                                // error={errors.name}
+                            />
+                            <TextInputField
+                                name="description"
+                                label="Description"
+                                type="text"
+                                placeholder="Description"
+                                register={register}
+                                registerOptions={{ required: "Required" }}
+                                // error={errors.description}
+                            />
                             <TextInputField
                                 name="url"
                                 label="Website URL"
