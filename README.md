@@ -1,3 +1,4 @@
+# NOTE: frontend folder is deprecated. frontend_remade is now the current folder
 
 # ACC Project: Web Scraping Application
 

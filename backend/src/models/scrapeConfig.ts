@@ -2,6 +2,8 @@ import { Schema, model, Document } from "mongoose";
 
 interface IScrapeConfig extends Document {
     userId: Schema.Types.ObjectId;
+    name: string;
+    description: string;
     url: string;
     scrapeParameters: any;
     timeToScrape: Date;
@@ -11,6 +13,8 @@ interface IScrapeConfig extends Document {
 const scrapeConfigSchema = new Schema<IScrapeConfig>(
     {
         userId: { type: Schema.Types.ObjectId, ref: "User" },
+        name: { type: String, required: true },
+        description: { type: String },
         url: { type: String, required: true },
         scrapeParameters: { type: Schema.Types.Mixed, required: true },
         timeToScrape: { type: Date, required: true },

@@ -22,7 +22,8 @@ export const getNote: RequestHandler = async (req, res, next) => {
             throw createHttpError(403, "Forbidden");
         }
 
-        res.status(200).json(note.scrapedData.map((data) => JSON.stringify(data, null, 2)).join(",\n"));
+        res.status(200).send(note);
+        // res.status(200).json(note.scrapedData.map((data) => JSON.stringify(data, null, 2)).join(",\n"));
     } catch (error) {
         next(error);
     }

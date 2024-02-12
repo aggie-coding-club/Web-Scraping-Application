@@ -24,39 +24,39 @@ function processScrapingParameters(parameters: any[]): ScrapingConfigObject {
 }
 
 const checkAndExecuteScrape = async () => {
-    // try {
-    //     const [currentScrape] = await scrapeConfig.find({}).sort({ timeToScrape: 1 }).limit(1).exec();
+    try {
+        const [currentScrape] = await scrapeConfig.find({}).sort({ timeToScrape: 1 }).limit(1).exec();
 
-    //     if (!currentScrape) {
-    //         console.log("No scheduled scrapes. Checking again in 10 second.");
-    //         setNextScrapeTimeout(10 * 1000);
-    //     } else if (currentScrape.timeToScrape.getTime() <= Date.now()) {
-    //         console.log("Scraping for:", currentScrape.url, "at time:", new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }));
+        if (!currentScrape) {
+            console.log("No scheduled scrapes. Checking again in 10 second.");
+            setNextScrapeTimeout(10 * 1000);
+        } else if (currentScrape.timeToScrape.getTime() <= Date.now()) {
+            console.log("Scraping for:", currentScrape.url, "at time:", new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }));
 
-    //         const scrapedData = await scrapeWebsite(currentScrape.url, processScrapingParameters(currentScrape.scrapeParameters));
+            const scrapedData = await scrapeWebsite(currentScrape.url, processScrapingParameters(currentScrape.scrapeParameters));
 
-    //         if (scrapedData === undefined) {
-    //             console.log("Scrape failed.");
-    //         } else {
-    //             await NoteModel.updateOne({ configId: currentScrape._id }, { $push: { scrapedData } });
-    //             // const userId = currentScrape.userId;
-    //             // const email = (await UserModel.findById(userId).select('+email'))?.email;
-    //             // sendEmail(email!, "Test Config", scrapedData);
-    //             console.log("Scrape successful.");
-    //         }
+            if (scrapedData === undefined) {
+                console.log("Scrape failed.");
+            } else {
+                await NoteModel.updateOne({ configId: currentScrape._id }, { $push: { scrapedData } });
+                // const userId = currentScrape.userId;
+                // const email = (await UserModel.findById(userId).select('+email'))?.email;
+                // sendEmail(email!, "Test Config", scrapedData);
+                console.log("Scrape successful.");
+            }
 
-    //         currentScrape.timeToScrape = new Date(Date.now() + currentScrape.scrapeIntervalMinute * 60000);
-    //         await currentScrape.save();
+            currentScrape.timeToScrape = new Date(Date.now() + currentScrape.scrapeIntervalMinute * 60000);
+            await currentScrape.save();
 
-    //         const [nextScrape] = await scrapeConfig.find({}).sort({ timeToScrape: 1 }).limit(1).exec();
-    //         setNextScrapeTimeout(nextScrape.scrapeIntervalMinute * 60000);
-    //     } else {
-    //         setNextScrapeTimeout(currentScrape.timeToScrape.getTime() - Date.now());
-    //     }
-    // } catch (error) {
-    //     console.error("Error in checkAndExecuteScrape:", error);
-    //     setNextScrapeTimeout(1 * 1000);
-    // }
+            const [nextScrape] = await scrapeConfig.find({}).sort({ timeToScrape: 1 }).limit(1).exec();
+            setNextScrapeTimeout(nextScrape.scrapeIntervalMinute * 60000);
+        } else {
+            setNextScrapeTimeout(currentScrape.timeToScrape.getTime() - Date.now());
+        }
+    } catch (error) {
+        console.error("Error in checkAndExecuteScrape:", error);
+        setNextScrapeTimeout(1 * 1000);
+    }
 };
 
 export const setNextScrapeTimeout = (interval: number) => {

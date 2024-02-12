@@ -5,7 +5,7 @@ import { Obj, Obj as ObjsModel } from "../../models/object";
 import * as ObjsApi from "../../network/objs_api";
 import styleUtils from "../../styles/utils.module.css";
 import AddEditObjDialog from "./AddEditObjDialog";
-import ViewStringDiaglog from "../ViewStringDialog";
+import ViewStringDialog from "./ViewStringDialog";
 import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 
@@ -13,10 +13,12 @@ const ObjsPageLoggedInView = () => {
     const [objs, setObjs] = useState<ObjsModel[]>([]);
     const [objsLoading, setObjsLoading] = useState(true);
     const [showObjsLoadingError, setShowObjsLoadingError] = useState(false);
+    const [scrapeParametersArray, setScrapeParametersArray] = useState<any[]>([]);
 
     const [showAddObjDialog, setShowAddObjDialog] = useState(false);
     const [objToEdit, setObjToEdit] = useState<ObjsModel | null>(null);
     const [stringToView, setStringToView] = useState<string | null>(null);
+    const [dataToView, setDataToView] = useState<any>(null);
 
     useEffect(() => {
         async function loadObjs() {
@@ -47,16 +49,30 @@ const ObjsPageLoggedInView = () => {
 
     const columns: ColumnsType<Obj> = [
         {
+            title: "Name",
+            dataIndex: "name",
+            key: "name",
+        },
+        {
+            title: "Description",
+            dataIndex: "description",
+            key: "description",
+        },
+        {
             title: "Website URL",
             dataIndex: "url",
             key: "url",
-            render: (text) => <a>{text}</a>,
+            render: (text) => (
+                <a href={text} style={{ color: "#315c9d" }}>
+                    {text}
+                </a>
+            ),
         },
-        {
-            title: "Scrape Parameters",
-            dataIndex: "scrapeParameters",
-            render: (scrapeParameters) => <pre>{JSON.stringify(scrapeParameters, null, 2)}</pre>,
-        },
+        // {
+        //     title: "Scrape Parameters",
+        //     dataIndex: "scrapeParameters",
+        //     render: (scrapeParameters) => <pre>{JSON.stringify(scrapeParameters, null, 2)}</pre>,
+        // },
         {
             title: "Interval (min)",
             dataIndex: "scrapeIntervalMinute",
@@ -64,12 +80,24 @@ const ObjsPageLoggedInView = () => {
             align: "center",
         },
         {
-            title: "View",
-            key: "view",
-            render: (_, record) => (
+            title: "Parameters And Data",
+            key: "select",
+            render: (_, record, index) => (
                 <>
-                    <a className="text-secondary" href="#" onClick={async () => setStringToView(await ObjsApi.getObjScrapedData(record._id))}>
-                        View
+                    <a
+                        className="text-secondary"
+                        href="#"
+                        onClick={async () => {
+                            const note = await ObjsApi.getObj(record._id);
+                            setStringToView(
+                                note.scrapedData.map((data: any) => JSON.stringify(data, null, 2)).join(",\n") ||
+                                    "Nothing Yet. Please Check Back Later."
+                            );
+                            setDataToView(note.scrapedData);
+                            setScrapeParametersArray(objs[index].scrapeParameters);
+                        }}
+                    >
+                        Select
                     </a>
                 </>
             ),
@@ -146,7 +174,14 @@ const ObjsPageLoggedInView = () => {
                     }}
                 />
             )}
-            {stringToView && <ViewStringDiaglog stringToView={stringToView} onDismiss={() => setStringToView(null)} />}
+            {stringToView && (
+                <ViewStringDialog
+                    dataToView={dataToView}
+                    stringToView={stringToView}
+                    onDismiss={() => setStringToView(null)}
+                    scrapeParametersArray={scrapeParametersArray}
+                />
+            )}
         </>
     );
 };
