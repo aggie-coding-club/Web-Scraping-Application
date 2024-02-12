@@ -1,3 +1,6 @@
+https://github.com/aggie-coding-club/Web-Scraping-Application/assets/59489624/11872519-5edc-404e-8249-6afe603d06ad
+
+
 # NOTE: frontend folder is deprecated. frontend_remade is now the current folder
 
 # ACC Project: Web Scraping Application
