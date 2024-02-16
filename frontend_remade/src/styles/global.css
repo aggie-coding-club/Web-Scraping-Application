@@ -22,8 +22,9 @@ body {
     margin: 0;
     background: var(--lighter-color);
     color: var(--primary-color);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-        sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+        "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+        "Helvetica Neue", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -74,4 +75,36 @@ button:focus-visible {
         background-color: var(--primary-color);
         color: var(--light-color);
     }
+}
+
+.my-btn-primary {
+    /*DELETE ME */
+    margin: 10px;
+
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    margin-left: 15px;
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    color: var(--light-color);
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.my-btn-primary:hover {
+    background-color: #427d9d;
+}
+
+.my-btn-primary:active {
+    background-color: #9bbec8;
+    border-color: #9bbec8;
+    border-width: 2px;
+}
+
+.my-btn-primary:disabled {
+    background-color: #ccc; /* Change to desired disabled color */
+    border-color: #ccc; /* Change to desired disabled color */
+    cursor: not-allowed;
 }
