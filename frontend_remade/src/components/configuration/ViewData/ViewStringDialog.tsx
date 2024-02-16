@@ -13,12 +13,12 @@ interface ViewStringDiaglogProps {
 const ViewStringDialog = ({ dataToView, stringToView, onDismiss, scrapeParametersArray }: ViewStringDiaglogProps) => {
     const parameterColumns: ColumnsType<any> = [
         {
-            title: "Parameter Name",
+            title: "Name",
             dataIndex: "name",
             key: "name",
         },
         {
-            title: "Tag",
+            title: "Selector",
             dataIndex: "tag",
         },
         {
@@ -76,13 +76,13 @@ const ViewStringDialog = ({ dataToView, stringToView, onDismiss, scrapeParameter
             <Modal.Body style={{ display: "flex", flexDirection: "column", padding: "20px" }}>
                 <Tabs id="controlled-tab-example" className="mb-3" onSelect={handleSelect}>
                     <Tab eventKey="table" title="Table Format">
-                        <Form.Label style={{ marginBottom: "20px" }}>Parameters Table</Form.Label>
+                        <Form.Label style={{ marginBottom: "20px" }}>Selectors Table</Form.Label>
                         <Table dataSource={scrapeParametersArray} columns={parameterColumns} />
                         <Form.Label style={{ marginBottom: "20px" }}>Data Table</Form.Label>
                         <Table dataSource={dataToView} columns={dataColumns} />
                     </Tab>
                     <Tab eventKey="json" title="JSON Format">
-                        <Form.Label style={{ marginBottom: "20px" }}>Parameters JSON</Form.Label>
+                        <Form.Label style={{ marginBottom: "20px" }}>Selectors JSON</Form.Label>
                         <Form.Control
                             as="textarea"
                             ref={textareaScrapeParamsRef}

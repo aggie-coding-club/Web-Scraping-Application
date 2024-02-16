@@ -9,7 +9,7 @@ interface EditableTableProps {
 const EditableTable = ({ scrapeParametersArray, setScrapeParametersArray }: EditableTableProps) => {
     const columns: ColumnsType<any> = [
         {
-            title: "Parameter Name",
+            title: "Name",
             dataIndex: "name",
             key: "name",
             render: (text, _, index) => (
@@ -24,7 +24,7 @@ const EditableTable = ({ scrapeParametersArray, setScrapeParametersArray }: Edit
             ),
         },
         {
-            title: "Tag",
+            title: "Selector",
             dataIndex: "tag",
             render: (text, _, index) => (
                 <Input

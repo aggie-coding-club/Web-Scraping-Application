@@ -68,11 +68,6 @@ const ObjsPageLoggedInView = () => {
                 </a>
             ),
         },
-        // {
-        //     title: "Scrape Parameters",
-        //     dataIndex: "scrapeParameters",
-        //     render: (scrapeParameters) => <pre>{JSON.stringify(scrapeParameters, null, 2)}</pre>,
-        // },
         {
             title: "Interval (min)",
             dataIndex: "scrapeIntervalMinute",
@@ -80,7 +75,7 @@ const ObjsPageLoggedInView = () => {
             align: "center",
         },
         {
-            title: "Parameters And Data",
+            title: "Data",
             key: "select",
             render: (_, record, index) => (
                 <>
@@ -149,7 +144,7 @@ const ObjsPageLoggedInView = () => {
                 }}
             >
                 <FaPlus />
-                Create Crawler Configuration
+                Create Scraping Configuration
             </Button>
             {objsLoading && <Spinner animation="border" variant="primary" />}
             {showObjsLoadingError && <p className="text-danger">Something went wrong. Please refresh the page.</p>}
