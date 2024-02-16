@@ -129,6 +129,15 @@ const AddEditObjDialog = ({ objToEdit, onDismiss, onObjSaved }: AddEditObjDialog
                                 registerOptions={{ required: "Required" }}
                                 error={errors.scrapeIntervalMinute}
                             />
+                            <Form.Group className="mb-3">
+                                <Form.Label>Email Notifcation</Form.Label>
+                                <Form.Select aria-label="Email Notification Select">
+                                    <option value="none">None</option>
+                                    <option value="update_on_changes">Notify only on changes</option>
+                                    <option value="update_on_scrape">Notify upon successful scrape</option>
+                                </Form.Select>
+                            </Form.Group>
+
                             <EditableTable scrapeParametersArray={scrapeParametersArray} setScrapeParametersArray={setScrapeParametersArray} />
                             <Button
                                 type="submit"
