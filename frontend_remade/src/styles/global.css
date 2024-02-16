@@ -74,37 +74,21 @@ button:focus-visible {
     button {
         background-color: var(--primary-color);
         color: var(--light-color);
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
     }
-}
-
-.my-btn-primary {
-    /*DELETE ME */
-    margin: 10px;
-
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    margin-left: 15px;
-    padding: 10px 20px;
-    background-color: var(--primary-color);
-    color: var(--light-color);
-    border: none;
-    border-radius: 5px;
-    font-size: 1.2em;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.my-btn-primary:hover {
-    background-color: #427d9d;
-}
-
-.my-btn-primary:active {
-    background-color: #9bbec8;
-    border-color: #9bbec8;
-    border-width: 2px;
-}
-
-.my-btn-primary:disabled {
-    background-color: #ccc; /* Change to desired disabled color */
-    border-color: #ccc; /* Change to desired disabled color */
-    cursor: not-allowed;
+    button:hover {
+        background-color: var(--secondary-color);
+    }
+    button:active {
+        background-color: var(--accent-color);
+        border-color: var(--accent-color);
+        border-width: 2px;
+    }
+    button:disabled {
+        background-color: grey;
+        cursor: not-allowed;
+    }
 }
