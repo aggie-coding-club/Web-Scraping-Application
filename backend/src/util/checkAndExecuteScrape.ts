@@ -11,7 +11,7 @@ type ScrapingConfigObject = { [key: string]: string };
 function processScrapingParameters(parameters: any[]): ScrapingConfigObject {
     return parameters.reduce((obj, param) => {
         const key = param.name;
-        const value = param.tag;
+        const value = param.value;
 
         if (!key || !value) {
             console.error("Invalid parameter format");
@@ -37,6 +37,7 @@ const checkAndExecuteScrape = async () => {
 
             if (scrapedData === undefined) {
                 console.log("Scrape failed.");
+                throw Error("Scrape failed.")
             } else {
                 await NoteModel.updateOne({ configId: currentScrape._id }, { $push: { scrapedData } });
                 // const userId = currentScrape.userId;
@@ -60,10 +61,10 @@ const checkAndExecuteScrape = async () => {
 };
 
 export const setNextScrapeTimeout = (interval: number) => {
-    try {
-        clearTimeout(scrapeTimeout);
-        scrapeTimeout = setTimeout(checkAndExecuteScrape, interval);
-    } catch {
-        setNextScrapeTimeout(1 * 1000);
-    }
+    // try {
+    //     clearTimeout(scrapeTimeout);
+    //     scrapeTimeout = setTimeout(checkAndExecuteScrape, interval);
+    // } catch {
+    //     setNextScrapeTimeout(1 * 1000);
+    // }
 };

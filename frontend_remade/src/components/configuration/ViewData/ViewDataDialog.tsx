@@ -3,14 +3,14 @@ import { useRef, useState } from "react";
 import { Button, Form, Modal, Tab, Tabs } from "react-bootstrap";
 import DiffViewer from "./DiffViewer";
 
-interface ViewStringDiaglogProps {
+interface ViewDataDialogProps {
     dataToView?: any;
     stringToView?: string;
     onDismiss: () => void;
     scrapeParametersArray: any[];
 }
 
-const ViewStringDialog = ({ dataToView, stringToView, onDismiss, scrapeParametersArray }: ViewStringDiaglogProps) => {
+const ViewStringDialog = ({ dataToView, stringToView, onDismiss, scrapeParametersArray }: ViewDataDialogProps) => {
     const parameterColumns: ColumnsType<any> = [
         {
             title: "Name",

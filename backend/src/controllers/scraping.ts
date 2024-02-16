@@ -10,7 +10,7 @@ export const createScrapingConfig = async (req: Request, res: Response) => {
         const { userId } = req.session;
         assertIsDefined(userId, "User ID must be defined");
 
-        const { name, description, url, scrapeParameters, scrapeIntervalMinute } = req.body;
+        const { name, description, url, scrapeParameters, scrapeIntervalMinute, emailNotification } = req.body;
         const config = new ScrapeConfig({
             name,
             description,
@@ -19,6 +19,7 @@ export const createScrapingConfig = async (req: Request, res: Response) => {
             scrapeParameters,
             scrapeIntervalMinute,
             timeToScrape: new Date(),
+            emailNotification,
         });
 
         await createNote(userId, config._id);
@@ -34,12 +35,12 @@ export const createScrapingConfig = async (req: Request, res: Response) => {
 
 export const updateScrapingConfig = async (req: Request, res: Response) => {
     try {
-        const { url, scrapeParameters, scrapeIntervalMinute } = req.body;
+        const { url, scrapeParameters, scrapeIntervalMinute, emailNotification } = req.body;
         const { configId } = req.params;
 
         const config = await ScrapeConfig.findByIdAndUpdate(
             configId,
-            { userId: req.session.userId, url, scrapeParameters, scrapeIntervalMinute },
+            { userId: req.session.userId, url, scrapeParameters, scrapeIntervalMinute, emailNotification },
             { new: true }
         ).exec();
 

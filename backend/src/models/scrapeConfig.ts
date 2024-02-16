@@ -8,6 +8,7 @@ interface IScrapeConfig extends Document {
     scrapeParameters: any;
     timeToScrape: Date;
     scrapeIntervalMinute: number;
+    emailNotification: string;
 }
 
 const scrapeConfigSchema = new Schema<IScrapeConfig>(
@@ -19,6 +20,7 @@ const scrapeConfigSchema = new Schema<IScrapeConfig>(
         scrapeParameters: { type: Schema.Types.Mixed, required: true },
         timeToScrape: { type: Date, required: true },
         scrapeIntervalMinute: { type: Number, required: true },
+        emailNotification: { type: String, required: true },
     },
     { timestamps: true }
 );
