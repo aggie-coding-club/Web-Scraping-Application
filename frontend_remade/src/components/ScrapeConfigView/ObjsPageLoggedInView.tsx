@@ -148,7 +148,9 @@ const ObjsPageLoggedInView = () => {
             </Button>
             {objsLoading && <Spinner animation="border" variant="primary" />}
             {showObjsLoadingError && <p className="text-danger">Something went wrong. Please refresh the page.</p>}
-            {!objsLoading && !showObjsLoadingError && <Table columns={columns} dataSource={objs} rowKey={(objs) => objs._id} />}
+            {!objsLoading && !showObjsLoadingError && (
+                <Table style={{ border: "1px solid #e6e6e6" }} columns={columns} dataSource={objs} rowKey={(objs) => objs._id} />
+            )}
             {showAddObjDialog && (
                 <AddEditObjDialog
                     onDismiss={() => setShowAddObjDialog(false)}
