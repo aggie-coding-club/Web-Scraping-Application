@@ -61,10 +61,10 @@ const checkAndExecuteScrape = async () => {
 };
 
 export const setNextScrapeTimeout = (interval: number) => {
-    // try {
-    //     clearTimeout(scrapeTimeout);
-    //     scrapeTimeout = setTimeout(checkAndExecuteScrape, interval);
-    // } catch {
-    //     setNextScrapeTimeout(1 * 1000);
-    // }
+    try {
+        clearTimeout(scrapeTimeout);
+        scrapeTimeout = setTimeout(checkAndExecuteScrape, interval);
+    } catch {
+        setNextScrapeTimeout(1 * 1000);
+    }
 };

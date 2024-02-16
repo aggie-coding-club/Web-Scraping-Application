@@ -4,7 +4,7 @@ import { FaPlus } from "react-icons/fa";
 import { Obj, Obj as ObjsModel } from "../../models/object";
 import * as ObjsApi from "../../network/objs_api";
 import styleUtils from "../../styles/utils.module.css";
-import AddEditObjDialog from "./AddEditScrapeConfigDialog";
+import AddEditObjDialog from "./AddEditScrapeConfigDialog/AddEditScrapeConfigDialog";
 import ViewStringDialog from "./ViewData/ViewDataDialog";
 import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";

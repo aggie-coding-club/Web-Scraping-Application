@@ -1,12 +1,12 @@
 import { Input } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
 
-interface EditableTableProps {
+interface SelectorEditableTableProps {
     scrapeParametersArray: any[];
     setScrapeParametersArray: React.Dispatch<React.SetStateAction<any[]>>;
 }
 
-const EditableTable = ({ scrapeParametersArray, setScrapeParametersArray }: EditableTableProps) => {
+const SelectorEditableTable = ({ scrapeParametersArray, setScrapeParametersArray }: SelectorEditableTableProps) => {
     const columns: ColumnsType<any> = [
         {
             title: "Name",
@@ -88,4 +88,4 @@ const EditableTable = ({ scrapeParametersArray, setScrapeParametersArray }: Edit
     return <Table dataSource={scrapeParametersArray} columns={columns} />;
 };
 
-export default EditableTable;
+export { SelectorEditableTable };

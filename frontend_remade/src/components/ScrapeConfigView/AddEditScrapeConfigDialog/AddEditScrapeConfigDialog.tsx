@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { ScrapeConfig } from "../../models/scrapeConfig";
-import { Obj } from "../../models/object";
-import * as ObjApi from "../../network/objs_api";
-import { fetchHtmlContent } from "../../network/objs_api";
-import EditableTable from "./EditableTable";
-import TextInputField from "../form/TextInputField";
+import { ScrapeConfig } from "../../../models/scrapeConfig";
+import { Obj } from "../../../models/object";
+import * as ObjApi from "../../../network/objs_api";
+import { fetchHtmlContent } from "../../../network/objs_api";
+import { SelectorEditableTable } from "./SelectorEditableTable";
+import TextInputField from "../../form/TextInputField";
 
 interface AddEditScrapeConfigProps {
     scrapeConfig?: Obj;
@@ -138,7 +138,10 @@ const AddEditObjDialog = ({ scrapeConfig, onDismiss, onScrapeConfigSaved }: AddE
                                     <option value="update_on_scrape">Notify upon successful scrape</option>
                                 </Form.Select>
                             </Form.Group>
-                            <EditableTable scrapeParametersArray={scrapeParametersArray} setScrapeParametersArray={setScrapeParametersArray} />
+                            <SelectorEditableTable
+                                scrapeParametersArray={scrapeParametersArray}
+                                setScrapeParametersArray={setScrapeParametersArray}
+                            />
                             <Button
                                 type="submit"
                                 form="addEditObjForm"
