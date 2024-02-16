@@ -88,7 +88,7 @@ button:focus-visible {
         border-width: 2px;
     }
     button:disabled {
-        background-color: grey;
+        background-color: var(--accent-color);
         cursor: not-allowed;
     }
 }

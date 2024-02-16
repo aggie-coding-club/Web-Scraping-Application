@@ -8,6 +8,7 @@ interface MyButtonProps {
     children: ReactNode;
     href?: string;
     onClick?: () => void;
+    disabled?: boolean;
 }
 
 const PRIMARY_BTN_CLASS = ""; // default
@@ -19,6 +20,7 @@ const MyButton = ({
     href,
     className,
     onClick,
+    disabled,
 }: MyButtonProps) => {
     let myClass: string = PRIMARY_BTN_CLASS;
 
@@ -39,7 +41,11 @@ const MyButton = ({
     };
 
     return (
-        <button className={`${myClass} ${className}`} onClick={handleClick}>
+        <button
+            className={`${myClass} ${className}`}
+            onClick={handleClick}
+            disabled={disabled}
+        >
             {children}
         </button>
     );
