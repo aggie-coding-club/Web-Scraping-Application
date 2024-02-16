@@ -25,13 +25,13 @@ const EditableTable = ({ scrapeParametersArray, setScrapeParametersArray }: Edit
         },
         {
             title: "Selector",
-            dataIndex: "tag",
+            dataIndex: "value",
             render: (text, _, index) => (
                 <Input
                     defaultValue={text}
                     onChange={(event) => {
                         setScrapeParametersArray(
-                            scrapeParametersArray.map((item, idx) => (idx === index ? { ...item, tag: event.target.value } : item))
+                            scrapeParametersArray.map((item, idx) => (idx === index ? { ...item, value: event.target.value } : item))
                         );
                     }}
                 />
@@ -62,10 +62,10 @@ const EditableTable = ({ scrapeParametersArray, setScrapeParametersArray }: Edit
                         onClick={(e) => {
                             e.preventDefault();
                             const lastElement = scrapeParametersArray[scrapeParametersArray.length - 1];
-                            if (!lastElement.name || !lastElement.tag) {
+                            if (!lastElement.name || !lastElement.value) {
                                 return;
                             }
-                            setScrapeParametersArray([...scrapeParametersArray, { key: index + 1, name: "", tag: "", description: "" }]);
+                            setScrapeParametersArray([...scrapeParametersArray, { key: index + 1, name: "", value: "", description: "" }]);
                         }}
                     >
                         Add

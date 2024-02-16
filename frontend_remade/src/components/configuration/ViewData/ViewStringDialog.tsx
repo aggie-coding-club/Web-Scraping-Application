@@ -19,7 +19,7 @@ const ViewStringDialog = ({ dataToView, stringToView, onDismiss, scrapeParameter
         },
         {
             title: "Selector",
-            dataIndex: "tag",
+            dataIndex: "value",
         },
         {
             title: "Description",

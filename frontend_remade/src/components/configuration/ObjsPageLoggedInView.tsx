@@ -4,7 +4,7 @@ import { FaPlus } from "react-icons/fa";
 import { Obj, Obj as ObjsModel } from "../../models/object";
 import * as ObjsApi from "../../network/objs_api";
 import styleUtils from "../../styles/utils.module.css";
-import AddEditObjDialog from "./AddEditObjDialog";
+import AddEditObjDialog from "./AddEditScrapeConfigDialog";
 import ViewStringDialog from "./ViewData/ViewStringDialog";
 import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
@@ -152,7 +152,7 @@ const ObjsPageLoggedInView = () => {
             {showAddObjDialog && (
                 <AddEditObjDialog
                     onDismiss={() => setShowAddObjDialog(false)}
-                    onObjSaved={(newObj) => {
+                    onScrapeConfigSaved={(newObj) => {
                         setObjs([...objs, newObj]);
                         setShowAddObjDialog(false);
                     }}
@@ -160,9 +160,9 @@ const ObjsPageLoggedInView = () => {
             )}
             {objToEdit && (
                 <AddEditObjDialog
-                    objToEdit={objToEdit}
+                    scrapeConfig={objToEdit}
                     onDismiss={() => setObjToEdit(null)}
-                    onObjSaved={(updatedObj) => {
+                    onScrapeConfigSaved={(updatedObj) => {
                         setObjs(objs.map((existingObj) => (existingObj._id === updatedObj._id ? updatedObj : existingObj)));
                         setObjToEdit(null);
                         setShowAddObjDialog(false);
