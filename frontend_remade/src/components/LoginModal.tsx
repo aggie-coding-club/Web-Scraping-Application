@@ -4,7 +4,7 @@ import { Alert, Button, Form, Modal } from "react-bootstrap";
 import { User } from "../models/user";
 import { LoginCredentials } from "../models/loginCredentials";
 import * as ObjsApi from "../network/objs_api";
-import TextInputField from "./form/TextInputField";
+import TextInputField from "./ScrapeConfigView/AddEditScrapeConfigDialog/TextInputField";
 import styleUtils from "../styles/utils.module.css";
 import { UnauthorizedError } from "../errors/http_errors";
 

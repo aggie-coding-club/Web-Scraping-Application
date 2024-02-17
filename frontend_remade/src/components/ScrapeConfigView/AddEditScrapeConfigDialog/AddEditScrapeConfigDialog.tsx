@@ -6,7 +6,7 @@ import { Obj } from "../../../models/object";
 import * as ObjApi from "../../../network/objs_api";
 import { fetchHtmlContent } from "../../../network/objs_api";
 import { SelectorEditableTable } from "./SelectorEditableTable";
-import TextInputField from "../../form/TextInputField";
+import TextInputField from "./TextInputField";
 
 interface AddEditScrapeConfigProps {
     scrapeConfig?: Obj;
