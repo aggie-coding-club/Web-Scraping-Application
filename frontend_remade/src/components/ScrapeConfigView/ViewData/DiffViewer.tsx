@@ -2,7 +2,7 @@ import { createPatch } from "diff";
 import * as Diff2Html from "diff2html";
 import "diff2html/bundles/css/diff2html.min.css";
 import { useState } from "react";
-
+import "./diffviewer.css";
 interface DiffViewerProps {
     oldText: string;
     newText: string;
@@ -34,7 +34,6 @@ const DiffViewer = ({ oldText, newText }: DiffViewerProps) => {
                 </option>
                 <option value="side-by-side">Side-by-side</option>
             </select>
-
             <div dangerouslySetInnerHTML={{ __html: html }} />
         </>
     );
