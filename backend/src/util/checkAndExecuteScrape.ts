@@ -11,7 +11,7 @@ type ScrapingConfigObject = { [key: string]: string };
 function processScrapingParameters(parameters: any[]): ScrapingConfigObject {
     return parameters.reduce((obj, param) => {
         const key = param.name;
-        const value = param.tag;
+        const value = param.value;
 
         if (!key || !value) {
             console.error("Invalid parameter format");
@@ -31,17 +31,23 @@ const checkAndExecuteScrape = async () => {
             console.log("No scheduled scrapes. Checking again in 10 second.");
             setNextScrapeTimeout(10 * 1000);
         } else if (currentScrape.timeToScrape.getTime() <= Date.now()) {
-            console.log("Scraping for:", currentScrape.url, "at time:", new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }));
+            console.log("Scraping for:", currentScrape.url, "at time:", new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }), "America/Chicago");
 
-            const scrapedData = await scrapeWebsite(currentScrape.url, processScrapingParameters(currentScrape.scrapeParameters));
+            const scrapedData = await scrapeWebsite(currentScrape.url, currentScrape.scrapeParameters);
 
             if (scrapedData === undefined) {
-                console.log("Scrape failed.");
+                throw Error("Scrape failed.")
             } else {
                 await NoteModel.updateOne({ configId: currentScrape._id }, { $push: { scrapedData } });
-                // const userId = currentScrape.userId;
-                // const email = (await UserModel.findById(userId).select('+email'))?.email;
-                // sendEmail(email!, "Test Config", scrapedData);
+                const userId = currentScrape.userId;
+                const user = (await UserModel.findById(userId).select('+email'));
+                if (user) {
+                    const { email } = user;
+                    const { emailNotification } = currentScrape;
+                    if (emailNotification === "update_on_scrape") {
+                        sendEmail(email!, "Test Config", scrapedData);
+                    }
+                }
                 console.log("Scrape successful.");
             }
 

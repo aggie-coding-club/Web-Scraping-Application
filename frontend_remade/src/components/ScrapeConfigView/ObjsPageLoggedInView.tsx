@@ -5,8 +5,8 @@ import { FaPlus } from "react-icons/fa";
 import { Obj, Obj as ObjsModel } from "../../models/object";
 import * as ObjsApi from "../../network/objs_api";
 import styleUtils from "../../styles/utils.module.css";
-import AddEditObjDialog from "./AddEditObjDialog";
-import ViewStringDialog from "./ViewData/ViewStringDialog";
+import AddEditObjDialog from "./AddEditScrapeConfigDialog/AddEditScrapeConfigDialog";
+import ViewStringDialog from "./ViewData/ViewDataDialog";
 import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 
@@ -71,11 +71,6 @@ const ObjsPageLoggedInView = () => {
                 </a>
             ),
         },
-        // {
-        //     title: "Scrape Parameters",
-        //     dataIndex: "scrapeParameters",
-        //     render: (scrapeParameters) => <pre>{JSON.stringify(scrapeParameters, null, 2)}</pre>,
-        // },
         {
             title: "Interval (min)",
             dataIndex: "scrapeIntervalMinute",
@@ -83,7 +78,7 @@ const ObjsPageLoggedInView = () => {
             align: "center",
         },
         {
-            title: "Parameters And Data",
+            title: "Data",
             key: "select",
             render: (_, record, index) => (
                 <>
@@ -148,7 +143,7 @@ const ObjsPageLoggedInView = () => {
                 onClick={() => setShowAddObjDialog(true)}
             >
                 <FaPlus />
-                Create Crawler Configuration
+                Create Scraping Configuration
             </MyButton>
             {objsLoading && <Spinner animation="border" variant="primary" />}
             {showObjsLoadingError && (
@@ -158,6 +153,7 @@ const ObjsPageLoggedInView = () => {
             )}
             {!objsLoading && !showObjsLoadingError && (
                 <Table
+                    style={{ border: "1px solid #e6e6e6" }}
                     columns={columns}
                     dataSource={objs}
                     rowKey={(objs) => objs._id}
@@ -166,7 +162,7 @@ const ObjsPageLoggedInView = () => {
             {showAddObjDialog && (
                 <AddEditObjDialog
                     onDismiss={() => setShowAddObjDialog(false)}
-                    onObjSaved={(newObj) => {
+                    onScrapeConfigSaved={(newObj) => {
                         setObjs([...objs, newObj]);
                         setShowAddObjDialog(false);
                     }}
@@ -174,9 +170,9 @@ const ObjsPageLoggedInView = () => {
             )}
             {objToEdit && (
                 <AddEditObjDialog
-                    objToEdit={objToEdit}
+                    scrapeConfig={objToEdit}
                     onDismiss={() => setObjToEdit(null)}
-                    onObjSaved={(updatedObj) => {
+                    onScrapeConfigSaved={(updatedObj) => {
                         setObjs(
                             objs.map((existingObj) =>
                                 existingObj._id === updatedObj._id

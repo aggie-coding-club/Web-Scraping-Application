@@ -1,26 +1,26 @@
 import { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { ObjInput } from "../../models/objInput";
-import { Obj } from "../../models/object";
-import * as ObjApi from "../../network/objs_api";
-import { fetchHtmlContent } from "../../network/objs_api";
-import EditableTable from "./EditableTable";
-import TextInputField from "../form/TextInputField";
+import { ScrapeConfig } from "../../../models/scrapeConfig";
+import { Obj } from "../../../models/object";
+import * as ObjApi from "../../../network/objs_api";
+import { fetchHtmlContent } from "../../../network/objs_api";
+import { SelectorEditableTable } from "./SelectorEditableTable";
+import TextInputField from "./TextInputField";
 
-interface AddEditObjDialogProps {
-    objToEdit?: Obj;
+interface AddEditScrapeConfigProps {
+    scrapeConfig?: Obj;
     onDismiss: () => void;
-    onObjSaved: (obj: Obj) => void;
+    onScrapeConfigSaved: (scrapeConfig: Obj) => void;
 }
 
-const AddEditObjDialog = ({ objToEdit, onDismiss, onObjSaved }: AddEditObjDialogProps) => {
+const AddEditObjDialog = ({ scrapeConfig, onDismiss, onScrapeConfigSaved }: AddEditScrapeConfigProps) => {
     const [iframeSrc, setIframeSrc] = useState("");
     const [selector, setSelector] = useState<any>("");
     const [scrapeParametersArray, setScrapeParametersArray] = useState<any[]>(
-        objToEdit?.scrapeParameters
-            ? [...objToEdit.scrapeParameters, { key: 0, name: "", tag: "", description: "" }]
-            : [{ key: 0, name: "", tag: "", description: "" }]
+        scrapeConfig?.scrapeParameters
+            ? [...scrapeConfig.scrapeParameters, { key: 0, name: "", value: "", description: "" }]
+            : [{ key: 0, name: "", value: "", description: "" }]
     );
 
     const {
@@ -28,13 +28,14 @@ const AddEditObjDialog = ({ objToEdit, onDismiss, onObjSaved }: AddEditObjDialog
         handleSubmit,
         watch,
         formState: { errors, isSubmitting },
-    } = useForm<ObjInput>({
+    } = useForm<ScrapeConfig>({
         defaultValues: {
-            name: objToEdit?.name || "",
-            description: objToEdit?.description || "",
-            url: objToEdit?.url || "",
+            name: scrapeConfig?.name || "",
+            description: scrapeConfig?.description || "",
+            url: scrapeConfig?.url || "",
             scrapeParameters: scrapeParametersArray.slice(0, -1),
-            scrapeIntervalMinute: objToEdit?.scrapeIntervalMinute || 1,
+            scrapeIntervalMinute: scrapeConfig?.scrapeIntervalMinute || 60,
+            emailNotification: "none",
         },
     });
 
@@ -64,13 +65,13 @@ const AddEditObjDialog = ({ objToEdit, onDismiss, onObjSaved }: AddEditObjDialog
         return () => window.removeEventListener("message", receiveMessage);
     }, []);
 
-    async function onSubmit(input: ObjInput) {
+    async function onSubmit(input: ScrapeConfig) {
         const inputWithScrapeParameters = { ...input, scrapeParameters: scrapeParametersArray.slice(0, -1) };
         try {
-            const objResponse = objToEdit
-                ? await ObjApi.updateObj(objToEdit._id, inputWithScrapeParameters)
+            const scrapeConfigResponse = scrapeConfig
+                ? await ObjApi.updateObj(scrapeConfig._id, inputWithScrapeParameters)
                 : await ObjApi.createObj(inputWithScrapeParameters);
-            onObjSaved(objResponse);
+            onScrapeConfigSaved(scrapeConfigResponse);
         } catch (error) {
             console.error(error);
             alert(error);
@@ -80,7 +81,7 @@ const AddEditObjDialog = ({ objToEdit, onDismiss, onObjSaved }: AddEditObjDialog
     return (
         <Modal show onHide={onDismiss} fullscreen={true}>
             <Modal.Header closeButton>
-                <Modal.Title>{objToEdit ? "Edit Configuration" : "Create Configuration"}</Modal.Title>
+                <Modal.Title>{scrapeConfig ? "Edit Configuration" : "Create Configuration"}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <div style={{ display: "flex", flexDirection: "row", height: "80vh" }}>
@@ -96,7 +97,7 @@ const AddEditObjDialog = ({ objToEdit, onDismiss, onObjSaved }: AddEditObjDialog
                                 placeholder="Name"
                                 register={register}
                                 registerOptions={{ required: "Required" }}
-                                // error={errors.name}
+                                error={errors.name}
                             />
                             <TextInputField
                                 name="description"
@@ -105,7 +106,7 @@ const AddEditObjDialog = ({ objToEdit, onDismiss, onObjSaved }: AddEditObjDialog
                                 placeholder="Description"
                                 register={register}
                                 registerOptions={{ required: "Required" }}
-                                // error={errors.description}
+                                error={errors.description}
                             />
                             <TextInputField
                                 name="url"
@@ -129,7 +130,18 @@ const AddEditObjDialog = ({ objToEdit, onDismiss, onObjSaved }: AddEditObjDialog
                                 registerOptions={{ required: "Required" }}
                                 error={errors.scrapeIntervalMinute}
                             />
-                            <EditableTable scrapeParametersArray={scrapeParametersArray} setScrapeParametersArray={setScrapeParametersArray} />
+                            <Form.Group className="mb-3">
+                                <Form.Label>Email Notifcation</Form.Label>
+                                <Form.Select {...register("emailNotification")} aria-label="Email Notification Select">
+                                    <option value="none">None</option>
+                                    <option value="update_on_changes">Notify only on changes</option>
+                                    <option value="update_on_scrape">Notify upon successful scrape</option>
+                                </Form.Select>
+                            </Form.Group>
+                            <SelectorEditableTable
+                                scrapeParametersArray={scrapeParametersArray}
+                                setScrapeParametersArray={setScrapeParametersArray}
+                            />
                             <Button
                                 type="submit"
                                 form="addEditObjForm"

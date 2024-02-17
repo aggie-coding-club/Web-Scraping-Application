@@ -1,45 +1,47 @@
 import puppeteer from "puppeteer";
 
-export const scrapeWebsite = async (url: string, parameter_obj: ScrapingConfigObject) => {
-    // let browser;
-    // try {
-    //     browser = await puppeteer.launch({ headless: "new" });
-    //     const page = await browser.newPage();
-    //     await page.goto(url);
+function getScrapedData(selectorArray: SelectorArray, url: string): ScrapedData {
+    const scrapedSelectorArray = selectorArray.map((selector: Selector) => {
+        try {
+            const element = document.querySelector(selector.value);
+            const content = element ? element.textContent?.trim() || "" : "";
+            return { ...selector, content }
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : "Unknown error";
+            console.error("Error in scrapeWebsite:", error);
+            console.error(`Error scraping ${selector.name} (${selector.value}):`, errorMessage);
+            return { ...selector, error: errorMessage }
+        }
+    })
+    
+    const scrapedData: ScrapedData = {
+        url,
+        timestamp: Date.now(),
+        selectors: scrapedSelectorArray,
+    };
 
-    //     const selectors = Object.values(parameter_obj);
-    //     const timeoutPromise = new Promise((resolve) => setTimeout(resolve, 10 * 1000));
-    //     await Promise.race([Promise.all(selectors.map((selector) => page.waitForSelector(selector))), timeoutPromise]);
+    return scrapedData;
+}
 
-    //     const scrapedData = await page.evaluate(
-    //         (parameter_obj, url) => {
-    //             const results: ScrapingConfigObject = {};
-    //             results["url"] = url;
-    //             results["timestamp"] = new Date().toLocaleString("en-US", { timeZone: "America/Chicago" });
+export const scrapeWebsite = async (url: string, selectorArray: SelectorArray) => {
+    let browser;
+    try {
+        browser = await puppeteer.launch({ headless: "new" });
+        const page = await browser.newPage();
+        await page.goto(url);
 
-    //             Object.entries(parameter_obj).forEach(([key, selector]) => {
-    //                 try {
-    //                     const element = document.querySelector(selector);
-    //                     const content = element ? element.textContent?.trim() || "" : "";
-    //                     results[key] = { selector, content };
-    //                 } catch (error) {
-    //                     const errorMessage = error instanceof Error ? error.message : "Unknown error";
-    //                     console.error("Error in scrapeWebsite:", error);
-    //                     console.error(`Error scraping ${key}:`, errorMessage);
-    //                     results[key] = { selector, error: errorMessage };
-    //                 }
-    //             });
-    //             return results;
-    //         },
-    //         parameter_obj,
-    //         url
-    //     );
-    //     return scrapedData;
-    // } catch (error) {
-    //     console.error("Error in scrapeWebsite:", error);
-    // } finally {
-    //     if (browser) {
-    //         await browser.close();
-    //     }
-    // }
+        const selectors = selectorArray.map(selector => selector.value);
+        const timeoutPromise = new Promise((resolve) => setTimeout(resolve, 10 * 1000));
+        await Promise.race([Promise.all(selectors.map((selector) => page.waitForSelector(selector))), timeoutPromise]);
+        
+        const scrapedData = await page.evaluate(getScrapedData, selectorArray, url);
+        return scrapedData;
+    } catch (error: any) {
+        console.error("Error in scrapeWebsite:", error);
+        throw Error(error.message);
+    } finally {
+        if (browser) {
+            await browser.close();
+        }
+    }
 };

@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form";
 import { User } from "../models/user";
-import { SignUpCredentials } from "../network/objs_api";
+import { SignUpCredentials } from "../models/signUpCredentials";
 import * as ObjsApi from "../network/objs_api";
 import { Alert, Form, Modal } from "react-bootstrap";
-import TextInputField from "./form/TextInputField";
+import TextInputField from "./ScrapeConfigView/AddEditScrapeConfigDialog/TextInputField";
 import styleUtils from "../styles/utils.module.css";
 import { useState } from "react";
 import { ConflictError } from "../errors/http_errors";

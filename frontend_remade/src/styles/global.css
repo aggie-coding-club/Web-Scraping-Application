@@ -20,7 +20,7 @@
 
 body {
     margin: 0;
-    background: var(--lighter-color);
+    background-color: white;
     color: var(--primary-color);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
         "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",

@@ -1,15 +1,15 @@
 import { Input } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
 
-interface EditableTableProps {
+interface SelectorEditableTableProps {
     scrapeParametersArray: any[];
     setScrapeParametersArray: React.Dispatch<React.SetStateAction<any[]>>;
 }
 
-const EditableTable = ({ scrapeParametersArray, setScrapeParametersArray }: EditableTableProps) => {
+const SelectorEditableTable = ({ scrapeParametersArray, setScrapeParametersArray }: SelectorEditableTableProps) => {
     const columns: ColumnsType<any> = [
         {
-            title: "Parameter Name",
+            title: "Name",
             dataIndex: "name",
             key: "name",
             render: (text, _, index) => (
@@ -24,14 +24,14 @@ const EditableTable = ({ scrapeParametersArray, setScrapeParametersArray }: Edit
             ),
         },
         {
-            title: "Tag",
-            dataIndex: "tag",
+            title: "Selector",
+            dataIndex: "value",
             render: (text, _, index) => (
                 <Input
                     defaultValue={text}
                     onChange={(event) => {
                         setScrapeParametersArray(
-                            scrapeParametersArray.map((item, idx) => (idx === index ? { ...item, tag: event.target.value } : item))
+                            scrapeParametersArray.map((item, idx) => (idx === index ? { ...item, value: event.target.value } : item))
                         );
                     }}
                 />
@@ -62,10 +62,10 @@ const EditableTable = ({ scrapeParametersArray, setScrapeParametersArray }: Edit
                         onClick={(e) => {
                             e.preventDefault();
                             const lastElement = scrapeParametersArray[scrapeParametersArray.length - 1];
-                            if (!lastElement.name || !lastElement.tag) {
+                            if (!lastElement.name || !lastElement.value) {
                                 return;
                             }
-                            setScrapeParametersArray([...scrapeParametersArray, { key: index + 1, name: "", tag: "", description: "" }]);
+                            setScrapeParametersArray([...scrapeParametersArray, { key: index + 1, name: "", value: "", description: "" }]);
                         }}
                     >
                         Add
@@ -88,4 +88,4 @@ const EditableTable = ({ scrapeParametersArray, setScrapeParametersArray }: Edit
     return <Table dataSource={scrapeParametersArray} columns={columns} />;
 };
 
-export default EditableTable;
+export { SelectorEditableTable };
