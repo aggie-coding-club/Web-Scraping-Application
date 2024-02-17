@@ -1,5 +1,6 @@
 import { Input } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
+import { v4 as uuidv4 } from "uuid";
 
 interface SelectorEditableTableProps {
     scrapeParametersArray: any[];
@@ -65,7 +66,7 @@ const SelectorEditableTable = ({ scrapeParametersArray, setScrapeParametersArray
                             if (!lastElement.name || !lastElement.value) {
                                 return;
                             }
-                            setScrapeParametersArray([...scrapeParametersArray, { key: index + 1, name: "", value: "", description: "" }]);
+                            setScrapeParametersArray([...scrapeParametersArray, { id: uuidv4(), name: "", value: "", description: "" }]);
                         }}
                     >
                         Add

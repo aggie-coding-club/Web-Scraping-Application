@@ -19,8 +19,8 @@ const AddEditObjDialog = ({ scrapeConfig, onDismiss, onScrapeConfigSaved }: AddE
     const [selector, setSelector] = useState<any>("");
     const [scrapeParametersArray, setScrapeParametersArray] = useState<any[]>(
         scrapeConfig?.scrapeParameters
-            ? [...scrapeConfig.scrapeParameters, { key: 0, name: "", value: "", description: "" }]
-            : [{ key: 0, name: "", value: "", description: "" }]
+            ? [...scrapeConfig.scrapeParameters, { id: 0, name: "", value: "", description: "" }]
+            : [{ id: 0, name: "", value: "", description: "" }]
     );
 
     const {
