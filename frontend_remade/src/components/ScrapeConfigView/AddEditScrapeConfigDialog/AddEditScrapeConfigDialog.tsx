@@ -105,7 +105,7 @@ const AddEditObjDialog = ({ scrapeConfig, onDismiss, onScrapeConfigSaved }: AddE
                                 type="text"
                                 placeholder="Description"
                                 register={register}
-                                registerOptions={{ required: "Required" }}
+                                registerOptions={{}}
                                 error={errors.description}
                             />
                             <TextInputField
