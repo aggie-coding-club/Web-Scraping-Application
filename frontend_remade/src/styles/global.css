@@ -91,4 +91,20 @@ button:focus-visible {
         background-color: var(--accent-color);
         cursor: not-allowed;
     }
+
+
+}
+
+
+.my-btn-secondary {
+    background-color: white;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+}
+
+.my-btn-secondary:hover {
+    background-color: var(--light-color); /* Set the opacity to 1% */
+
+    border-width: 1.3px;
+
 }
