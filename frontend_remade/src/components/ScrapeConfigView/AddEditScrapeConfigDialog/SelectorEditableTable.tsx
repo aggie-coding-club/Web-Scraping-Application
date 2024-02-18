@@ -48,6 +48,32 @@ const SelectorEditableTable = ({
       )
     );
   };
+
+  // onAction
+  const onAdd = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    console.log("adding, or so you thought");
+    e.preventDefault();
+    const lastElement = scrapeParametersArray[scrapeParametersArray.length - 1];
+    if (!lastElement.name || !lastElement.value) {
+      return;
+    }
+    setScrapeParametersArray([
+      ...scrapeParametersArray,
+      {
+        id: uuidv4(),
+        name: "",
+        value: "",
+        description: "",
+      },
+    ]);
+  };
+
+  const onDelete = (index: number) => {
+    setScrapeParametersArray((prevArray) => [
+      ...prevArray.slice(0, index),
+      ...prevArray.slice(index + 1),
+    ]);
+  };
   const columns: ColumnsType<any> = [
     {
       title: "Selector",
@@ -89,40 +115,11 @@ const SelectorEditableTable = ({
       key: "operation",
       render: (_, __, index) => {
         return index === scrapeParametersArray.length - 1 ? (
-          <a
-            className="text-success"
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              const lastElement =
-                scrapeParametersArray[scrapeParametersArray.length - 1];
-              if (!lastElement.name || !lastElement.value) {
-                return;
-              }
-              setScrapeParametersArray([
-                ...scrapeParametersArray,
-                {
-                  id: uuidv4(),
-                  name: "",
-                  value: "",
-                  description: "",
-                },
-              ]);
-            }}
-          >
+          <a className="text-success" href="#" onClick={(e) => onAdd(e)}>
             Add
           </a>
         ) : (
-          <a
-            className="text-danger"
-            href="#"
-            onClick={() => {
-              setScrapeParametersArray((prevArray) => [
-                ...prevArray.slice(0, index),
-                ...prevArray.slice(index + 1),
-              ]);
-            }}
-          >
+          <a className="text-danger" href="#" onClick={() => onDelete(index)}>
             Delete
           </a>
         );
