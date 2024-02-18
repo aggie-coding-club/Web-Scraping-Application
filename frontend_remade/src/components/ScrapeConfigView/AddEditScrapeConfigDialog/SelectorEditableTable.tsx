@@ -13,28 +13,13 @@ const SelectorEditableTable = ({
 }: SelectorEditableTableProps) => {
   const columns: ColumnsType<any> = [
     {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
-      render: (text, _, index) => (
-        <Input
-          defaultValue={text}
-          onChange={(event) => {
-            setScrapeParametersArray(
-              scrapeParametersArray.map((item, idx) =>
-                idx === index ? { ...item, name: event.target.value } : item
-              )
-            );
-          }}
-        />
-      ),
-    },
-    {
       title: "Selector",
       dataIndex: "value",
+
       render: (text, _, index) => (
         <Input
           defaultValue={text}
+          placeholder="span#video-title"
           onChange={(event) => {
             setScrapeParametersArray(
               scrapeParametersArray.map((item, idx) =>
@@ -46,10 +31,29 @@ const SelectorEditableTable = ({
       ),
     },
     {
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
+      render: (text, _, index) => (
+        <Input
+          defaultValue={text}
+          placeholder="Title of Video"
+          onChange={(event) => {
+            setScrapeParametersArray(
+              scrapeParametersArray.map((item, idx) =>
+                idx === index ? { ...item, name: event.target.value } : item
+              )
+            );
+          }}
+        />
+      ),
+    },
+    {
       title: "Description",
       dataIndex: "description",
       render: (text, _, index) => (
         <Input
+          placeholder="(optional)"
           defaultValue={text}
           onChange={(event) => {
             setScrapeParametersArray(
