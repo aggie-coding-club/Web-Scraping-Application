@@ -7,10 +7,47 @@ interface SelectorEditableTableProps {
   setScrapeParametersArray: React.Dispatch<React.SetStateAction<any[]>>;
 }
 
+interface onChangeProps {
+  event: React.ChangeEvent<HTMLInputElement>;
+  index: number;
+}
+
 const SelectorEditableTable = ({
   scrapeParametersArray,
   setScrapeParametersArray,
 }: SelectorEditableTableProps) => {
+  // input change functions
+  const onSelectorInputChange = ({ event, index }: onChangeProps) => {
+    console.log("selector input change", scrapeParametersArray);
+    setScrapeParametersArray(
+      scrapeParametersArray.map((item, idx) =>
+        idx === index ? { ...item, value: event.target.value } : item
+      )
+    );
+  };
+
+  const onNameInputChange = ({ event, index }: onChangeProps) => {
+    console.log("name input change");
+    setScrapeParametersArray(
+      scrapeParametersArray.map((item, idx) =>
+        idx === index ? { ...item, name: event.target.value } : item
+      )
+    );
+  };
+
+  const onDescriptionChange = ({ event, index }: onChangeProps) => {
+    console.log("description input change");
+    setScrapeParametersArray(
+      scrapeParametersArray.map((item, idx) =>
+        idx === index
+          ? {
+              ...item,
+              description: event.target.value,
+            }
+          : item
+      )
+    );
+  };
   const columns: ColumnsType<any> = [
     {
       title: "Selector",
@@ -20,13 +57,7 @@ const SelectorEditableTable = ({
         <Input
           defaultValue={text}
           placeholder="span#video-title"
-          onChange={(event) => {
-            setScrapeParametersArray(
-              scrapeParametersArray.map((item, idx) =>
-                idx === index ? { ...item, value: event.target.value } : item
-              )
-            );
-          }}
+          onChange={(event) => onSelectorInputChange({ event, index })}
         />
       ),
     },
@@ -38,13 +69,7 @@ const SelectorEditableTable = ({
         <Input
           defaultValue={text}
           placeholder="Title of Video"
-          onChange={(event) => {
-            setScrapeParametersArray(
-              scrapeParametersArray.map((item, idx) =>
-                idx === index ? { ...item, name: event.target.value } : item
-              )
-            );
-          }}
+          onChange={(event) => onNameInputChange({ event, index })}
         />
       ),
     },
@@ -55,18 +80,7 @@ const SelectorEditableTable = ({
         <Input
           placeholder="(optional)"
           defaultValue={text}
-          onChange={(event) => {
-            setScrapeParametersArray(
-              scrapeParametersArray.map((item, idx) =>
-                idx === index
-                  ? {
-                      ...item,
-                      description: event.target.value,
-                    }
-                  : item
-              )
-            );
-          }}
+          onChange={(event) => onDescriptionChange({ event, index })}
         />
       ),
     },
