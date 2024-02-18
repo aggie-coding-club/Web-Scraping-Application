@@ -49,7 +49,7 @@ const MyButton = ({
     <div>
       <button
         className={`${myClass} ${className}`}
-        onClick={onClick}
+        onClick={handleClick}
         disabled={disabled}
         style={style}
       >

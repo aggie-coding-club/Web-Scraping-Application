@@ -1,66 +1,66 @@
 .navbar.bg-primary {
-    background-color: transparent !important;
-    transition: background-color 0.5s ease !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 5px;
+  background-color: transparent !important;
+  transition: background-color 0.5s ease !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
 }
 
 .navbar.bg-primary.scrolled {
-    background-color: var(--light-color) !important;
+  background-color: var(--light-color) !important;
 }
 
 .navbar.bg-primary .navbar-brand,
 .navbar.bg-primary .nav-link {
-    color: var(--primary-color) !important;
-    font-family: "Montserrat", sans-serif;
-    font-weight: 400;
+  color: var(--primary-color) !important;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
 }
 
 .navbar.bg-primary .navbar-text {
-    color: var(--primary-color) !important;
-    font-family: "Montserrat", sans-serif;
-    font-weight: 400;
-    padding-right: 15px;
-    font-size: 1.5rem;
-    display: flex;
-    align-items: center;
+  color: var(--primary-color) !important;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  padding-right: 15px;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
 }
 
 .navbar.bg-primary .navbar-brand {
-    font-size: 2.5rem;
-    font-weight: 500;
-    color: var(--secondary-color) !important;
+  font-size: 2.5rem;
+  font-weight: 500;
+  color: var(--secondary-color) !important;
 }
 
 /* random font, change later when we have name */
 /* TODO: Web Scraping Application title same color as background when logged in */
 .navbar.bg-primary .container .navbar-brand {
-    color: var(--lighter-color) !important;
-    font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
-    font-size: 3rem;
+  color: var(--lighter-color) !important;
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-size: 3rem;
 }
 
 .navbar.bg-primary .nav-link:hover {
-    color: var(--accent-color) !important;
+  color: var(--accent-color) !important;
 }
 
 .navbar.bg-primary .btn {
-    box-shadow: 0 0px 4px rgba(0, 0, 0, 0.6);
-    margin-left: 15px;
-    font-family: "Montserrat", sans-serif;
-    background-color: var(--lighter-color) !important;
-    color: var(--primary-color) !important;
-    border: none;
-    border-color: var(--primary-color);
-    height: 50px;
+  box-shadow: 0 0px 4px rgba(0, 0, 0, 0.6);
+  margin-left: 15px;
+  font-family: "Montserrat", sans-serif;
+  background-color: var(--lighter-color) !important;
+  color: var(--primary-color) !important;
+  border: none;
+  border-color: var(--primary-color);
+  height: 50px;
 }
 
 .navbar.bg-primary .btn:hover {
-    background-color: var(--accent-color) !important;
-    color: var(--lighter-color) !important;
+  background-color: var(--accent-color) !important;
+  color: var(--lighter-color) !important;
 }
 
 .navbar.bg-primary .btn:focus {
-    background-color: var(--light-color) !important;
-    color: var(--accent-color) !important;
+  background-color: var(--light-color) !important;
+  color: var(--accent-color) !important;
 }

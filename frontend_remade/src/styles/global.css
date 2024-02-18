@@ -76,7 +76,6 @@ button:disabled {
   }
 }
 
-
 .my-btn-secondary {
   background-color: var(--lighter-color);
   color: var(--primary-color);

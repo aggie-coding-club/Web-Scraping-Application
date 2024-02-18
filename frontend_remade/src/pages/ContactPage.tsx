@@ -19,7 +19,8 @@ const ContactPage = () => {
         </label>
         <textarea
           className="form-control"
-          id="exampleFormControlTextarea1"></textarea>
+          id="exampleFormControlTextarea1"
+        ></textarea>
       </div>
       <button
         type="button"
@@ -45,7 +46,8 @@ const ContactPage = () => {
         onMouseLeave={(e) => {
           e.currentTarget.style.backgroundColor = "#164863";
           e.currentTarget.style.borderWidth = "1px";
-        }}>
+        }}
+      >
         Submit
       </button>
     </div>

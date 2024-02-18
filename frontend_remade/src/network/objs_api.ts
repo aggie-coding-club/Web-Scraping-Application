@@ -101,7 +101,9 @@ export async function updateObj(objId: string, obj: any): Promise<Obj> {
 }
 
 export async function deleteObj(objId: string): Promise<void> {
-  await request(`/scrape/deleteScrapingConfig/${objId}`, { method: "DELETE" });
+  await request(`/scrape/deleteScrapingConfig/${objId}`, {
+    method: "DELETE",
+  });
 }
 
 export async function getObj(objId: string): Promise<any> {

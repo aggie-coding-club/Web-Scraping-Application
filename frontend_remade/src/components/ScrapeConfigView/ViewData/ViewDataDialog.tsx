@@ -80,7 +80,11 @@ const ViewStringDialog = ({
   return (
     <Modal show onHide={onDismiss} fullscreen={true}>
       <Modal.Body
-        style={{ display: "flex", flexDirection: "column", padding: "20px" }}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          padding: "20px",
+        }}
       >
         <Tabs
           id="controlled-tab-example"

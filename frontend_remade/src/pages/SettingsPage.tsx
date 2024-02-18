@@ -27,7 +27,8 @@ const SettingsPage = () => {
         onMouseLeave={(e) => {
           e.currentTarget.style.backgroundColor = "#164863";
           e.currentTarget.style.borderWidth = "1px";
-        }}>
+        }}
+      >
         Dark Mode
       </button>
     </div>
