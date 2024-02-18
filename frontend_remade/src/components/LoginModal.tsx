@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Alert, Button, Form, Modal } from "react-bootstrap";
+import { Alert, Form, Modal } from "react-bootstrap";
 import { User } from "../models/user";
 import { LoginCredentials } from "../models/loginCredentials";
 import * as ObjsApi from "../network/objs_api";
 import TextInputField from "./ScrapeConfigView/AddEditScrapeConfigDialog/TextInputField";
 import styleUtils from "../styles/utils.module.css";
 import { UnauthorizedError } from "../errors/http_errors";
+import MyButton from "./ui/MyButton";
 
 interface LoginModalProps {
     onDismiss: () => void;
@@ -61,35 +62,12 @@ const LoginModal = ({ onDismiss, onLoginSuccessful }: LoginModalProps) => {
                         registerOptions={{ required: "Required" }}
                         error={errors.password}
                     />
-                    <Button
-                        type="submit"
-                        disabled={isSubmitting}
+                    <MyButton
                         className={styleUtils.width100}
-                        style={{
-                            backgroundColor: "#164863",
-                            transition: "background-color 0.3s",
-                            borderColor: "#427d9d",
-                            borderWidth: "1px",
-                        }}
-                        onMouseDown={(e) => {
-                            e.currentTarget.style.backgroundColor = "#9bbec8";
-                            e.currentTarget.style.borderColor = "#9bbec8";
-                            e.currentTarget.style.borderWidth = "2px";
-                        }}
-                        onMouseUp={(e) => {
-                            e.currentTarget.style.backgroundColor = "#427d9d";
-                            e.currentTarget.style.borderWidth = "1px";
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = "#427d9d";
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = "#164863";
-                            e.currentTarget.style.borderWidth = "1px";
-                        }}
+                        disabled={isSubmitting}
                     >
                         Log In
-                    </Button>
+                    </MyButton>
                 </Form>
             </Modal.Body>
         </Modal>

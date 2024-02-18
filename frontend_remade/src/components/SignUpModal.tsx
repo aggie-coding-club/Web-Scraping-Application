@@ -2,11 +2,12 @@ import { useForm } from "react-hook-form";
 import { User } from "../models/user";
 import { SignUpCredentials } from "../models/signUpCredentials";
 import * as ObjsApi from "../network/objs_api";
-import { Alert, Button, Form, Modal } from "react-bootstrap";
+import { Alert, Form, Modal } from "react-bootstrap";
 import TextInputField from "./ScrapeConfigView/AddEditScrapeConfigDialog/TextInputField";
 import styleUtils from "../styles/utils.module.css";
 import { useState } from "react";
 import { ConflictError } from "../errors/http_errors";
+import MyButton from "./ui/MyButton";
 
 interface SignUpModalProps {
     onDismiss: () => void;
@@ -72,35 +73,12 @@ const SignUpModal = ({ onDismiss, onSignUpSuccessful }: SignUpModalProps) => {
                         registerOptions={{ required: "Required" }}
                         error={errors.password}
                     />
-                    <Button
-                        type="submit"
+                    <MyButton
                         disabled={isSubmitting}
                         className={styleUtils.width100}
-                        style={{
-                            backgroundColor: "#164863",
-                            transition: "background-color 0.3s",
-                            borderColor: "#427d9d",
-                            borderWidth: "1px",
-                        }}
-                        onMouseDown={(e) => {
-                            e.currentTarget.style.backgroundColor = "#9bbec8";
-                            e.currentTarget.style.borderColor = "#9bbec8";
-                            e.currentTarget.style.borderWidth = "2px";
-                        }}
-                        onMouseUp={(e) => {
-                            e.currentTarget.style.backgroundColor = "#427d9d";
-                            e.currentTarget.style.borderWidth = "1px";
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = "#427d9d";
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = "#164863";
-                            e.currentTarget.style.borderWidth = "1px";
-                        }}
                     >
                         Sign Up
-                    </Button>
+                    </MyButton>
                 </Form>
             </Modal.Body>
         </Modal>

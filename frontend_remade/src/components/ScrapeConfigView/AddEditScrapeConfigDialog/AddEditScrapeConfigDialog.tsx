@@ -7,6 +7,7 @@ import * as ObjApi from "../../../network/objs_api";
 import { fetchHtmlContent } from "../../../network/objs_api";
 import { SelectorEditableTable } from "./SelectorEditableTable";
 import TextInputField from "./TextInputField";
+import MyButton from "../../ui/MyButton";
 
 interface AddEditScrapeConfigProps {
     scrapeConfig?: Obj;
@@ -14,12 +15,19 @@ interface AddEditScrapeConfigProps {
     onScrapeConfigSaved: (scrapeConfig: Obj) => void;
 }
 
-const AddEditObjDialog = ({ scrapeConfig, onDismiss, onScrapeConfigSaved }: AddEditScrapeConfigProps) => {
+const AddEditObjDialog = ({
+    scrapeConfig,
+    onDismiss,
+    onScrapeConfigSaved,
+}: AddEditScrapeConfigProps) => {
     const [iframeSrc, setIframeSrc] = useState("");
     const [selector, setSelector] = useState<any>("");
     const [scrapeParametersArray, setScrapeParametersArray] = useState<any[]>(
         scrapeConfig?.scrapeParameters
-            ? [...scrapeConfig.scrapeParameters, { id: 0, name: "", value: "", description: "" }]
+            ? [
+                  ...scrapeConfig.scrapeParameters,
+                  { id: 0, name: "", value: "", description: "" },
+              ]
             : [{ id: 0, name: "", value: "", description: "" }]
     );
 
@@ -66,10 +74,16 @@ const AddEditObjDialog = ({ scrapeConfig, onDismiss, onScrapeConfigSaved }: AddE
     }, []);
 
     async function onSubmit(input: ScrapeConfig) {
-        const inputWithScrapeParameters = { ...input, scrapeParameters: scrapeParametersArray.slice(0, -1) };
+        const inputWithScrapeParameters = {
+            ...input,
+            scrapeParameters: scrapeParametersArray.slice(0, -1),
+        };
         try {
             const scrapeConfigResponse = scrapeConfig
-                ? await ObjApi.updateObj(scrapeConfig._id, inputWithScrapeParameters)
+                ? await ObjApi.updateObj(
+                      scrapeConfig._id,
+                      inputWithScrapeParameters
+                  )
                 : await ObjApi.createObj(inputWithScrapeParameters);
             onScrapeConfigSaved(scrapeConfigResponse);
         } catch (error) {
@@ -81,15 +95,31 @@ const AddEditObjDialog = ({ scrapeConfig, onDismiss, onScrapeConfigSaved }: AddE
     return (
         <Modal show onHide={onDismiss} fullscreen={true}>
             <Modal.Header closeButton>
-                <Modal.Title>{scrapeConfig ? "Edit Configuration" : "Create Configuration"}</Modal.Title>
+                <Modal.Title>
+                    {scrapeConfig
+                        ? "Edit Configuration"
+                        : "Create Configuration"}
+                </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <div style={{ display: "flex", flexDirection: "row", height: "80vh" }}>
+                <div
+                    style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        height: "80vh",
+                    }}
+                >
                     <div style={{ flex: 1, paddingRight: "20px" }}>
-                        <iframe srcDoc={iframeSrc} style={{ width: "100%", height: "100%" }} />
+                        <iframe
+                            srcDoc={iframeSrc}
+                            style={{ width: "100%", height: "100%" }}
+                        />
                     </div>
                     <div style={{ flex: 1 }}>
-                        <Form id="addEditObjForm" onSubmit={handleSubmit(onSubmit)}>
+                        <Form
+                            id="addEditObjForm"
+                            onSubmit={handleSubmit(onSubmit)}
+                        >
                             <TextInputField
                                 name="name"
                                 label="Configuration Name"
@@ -119,7 +149,11 @@ const AddEditObjDialog = ({ scrapeConfig, onDismiss, onScrapeConfigSaved }: AddE
                             />
                             <Form.Group className="mb-3">
                                 <Form.Label>Captured Selector</Form.Label>
-                                <Form.Control placeholder=".example" value={selector} readOnly={true} />
+                                <Form.Control
+                                    placeholder=".example"
+                                    value={selector}
+                                    readOnly={true}
+                                />
                             </Form.Group>
                             <TextInputField
                                 name="scrapeIntervalMinute"
@@ -132,46 +166,26 @@ const AddEditObjDialog = ({ scrapeConfig, onDismiss, onScrapeConfigSaved }: AddE
                             />
                             <Form.Group className="mb-3">
                                 <Form.Label>Email Notifcation</Form.Label>
-                                <Form.Select {...register("emailNotification")} aria-label="Email Notification Select">
+                                <Form.Select
+                                    {...register("emailNotification")}
+                                    aria-label="Email Notification Select"
+                                >
                                     <option value="none">None</option>
-                                    <option value="update_on_changes">Notify only on changes</option>
-                                    <option value="update_on_scrape">Notify upon successful scrape</option>
+                                    <option value="update_on_changes">
+                                        Notify only on changes
+                                    </option>
+                                    <option value="update_on_scrape">
+                                        Notify upon successful scrape
+                                    </option>
                                 </Form.Select>
                             </Form.Group>
                             <SelectorEditableTable
                                 scrapeParametersArray={scrapeParametersArray}
-                                setScrapeParametersArray={setScrapeParametersArray}
+                                setScrapeParametersArray={
+                                    setScrapeParametersArray
+                                }
                             />
-                            <Button
-                                type="submit"
-                                form="addEditObjForm"
-                                disabled={isSubmitting}
-                                style={{
-                                    backgroundColor: "#164863",
-                                    transition: "background-color 0.3s",
-                                    borderColor: "#427d9d",
-                                    borderWidth: "1px",
-                                    marginBottom: "20px",
-                                }}
-                                onMouseDown={(e) => {
-                                    e.currentTarget.style.backgroundColor = "#9bbec8";
-                                    e.currentTarget.style.borderColor = "#9bbec8";
-                                    e.currentTarget.style.borderWidth = "2px";
-                                }}
-                                onMouseUp={(e) => {
-                                    e.currentTarget.style.backgroundColor = "#427d9d";
-                                    e.currentTarget.style.borderWidth = "1px";
-                                }}
-                                onMouseEnter={(e) => {
-                                    e.currentTarget.style.backgroundColor = "#427d9d";
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.currentTarget.style.backgroundColor = "#164863";
-                                    e.currentTarget.style.borderWidth = "1px";
-                                }}
-                            >
-                                Save
-                            </Button>
+                            <MyButton disabled={isSubmitting}>Save</MyButton>
                         </Form>
                     </div>
                 </div>

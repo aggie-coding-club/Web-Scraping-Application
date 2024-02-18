@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Button, Spinner } from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
+import MyButton from "../ui/MyButton";
 import { FaPlus } from "react-icons/fa";
 import { Obj, Obj as ObjsModel } from "../../models/object";
 import * as ObjsApi from "../../network/objs_api";
@@ -13,7 +14,9 @@ const ObjsPageLoggedInView = () => {
     const [objs, setObjs] = useState<ObjsModel[]>([]);
     const [objsLoading, setObjsLoading] = useState(true);
     const [showObjsLoadingError, setShowObjsLoadingError] = useState(false);
-    const [scrapeParametersArray, setScrapeParametersArray] = useState<any[]>([]);
+    const [scrapeParametersArray, setScrapeParametersArray] = useState<any[]>(
+        []
+    );
 
     const [showAddObjDialog, setShowAddObjDialog] = useState(false);
     const [objToEdit, setObjToEdit] = useState<ObjsModel | null>(null);
@@ -85,11 +88,17 @@ const ObjsPageLoggedInView = () => {
                         onClick={async () => {
                             const note = await ObjsApi.getObj(record._id);
                             setStringToView(
-                                note.scrapedData.map((data: any) => JSON.stringify(data, null, 2)).join(",\n") ||
+                                note.scrapedData
+                                    .map((data: any) =>
+                                        JSON.stringify(data, null, 2)
+                                    )
+                                    .join(",\n") ||
                                     "Nothing Yet. Please Check Back Later."
                             );
                             setDataToView(note.scrapedData);
-                            setScrapeParametersArray(objs[index].scrapeParameters);
+                            setScrapeParametersArray(
+                                objs[index].scrapeParameters
+                            );
                         }}
                     >
                         Select
@@ -102,7 +111,11 @@ const ObjsPageLoggedInView = () => {
             key: "edit",
             render: (_, record) => (
                 <>
-                    <a className="text-secondary" href="#" onClick={() => setObjToEdit(record)}>
+                    <a
+                        className="text-secondary"
+                        href="#"
+                        onClick={() => setObjToEdit(record)}
+                    >
                         Edit
                     </a>
                 </>
@@ -112,7 +125,11 @@ const ObjsPageLoggedInView = () => {
             title: "Delete",
             key: "delete",
             render: (_, record) => (
-                <a className="text-danger" href="#" onClick={() => deleteObj(record)}>
+                <a
+                    className="text-danger"
+                    href="#"
+                    onClick={() => deleteObj(record)}
+                >
                     Delete
                 </a>
             ),
@@ -121,35 +138,26 @@ const ObjsPageLoggedInView = () => {
 
     return (
         <>
-            <Button
+            <MyButton
                 className={`m-4 ${styleUtils.blockCenter} ${styleUtils.flexCenter}`}
                 onClick={() => setShowAddObjDialog(true)}
-                style={{
-                    backgroundColor: "#164863",
-                    transition: "background-color 0.3s",
-                    borderColor: "#427d9d",
-                    borderWidth: "1px",
-                }}
-                onMouseDown={(e) => {
-                    e.currentTarget.style.backgroundColor = "#9bbec8";
-                    e.currentTarget.style.borderColor = "#9bbec8";
-                    e.currentTarget.style.borderWidth = "2px";
-                }}
-                onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = "#427d9d";
-                }}
-                onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = "#164863";
-                    e.currentTarget.style.borderWidth = "1px";
-                }}
             >
                 <FaPlus />
                 Create Scraping Configuration
-            </Button>
+            </MyButton>
             {objsLoading && <Spinner animation="border" variant="primary" />}
-            {showObjsLoadingError && <p className="text-danger">Something went wrong. Please refresh the page.</p>}
+            {showObjsLoadingError && (
+                <p className="text-danger">
+                    Something went wrong. Please refresh the page.
+                </p>
+            )}
             {!objsLoading && !showObjsLoadingError && (
-                <Table style={{ border: "1px solid #e6e6e6" }} columns={columns} dataSource={objs} rowKey={(objs) => objs._id} />
+                <Table
+                    style={{ border: "1px solid #e6e6e6" }}
+                    columns={columns}
+                    dataSource={objs}
+                    rowKey={(objs) => objs._id}
+                />
             )}
             {showAddObjDialog && (
                 <AddEditObjDialog
@@ -165,7 +173,13 @@ const ObjsPageLoggedInView = () => {
                     scrapeConfig={objToEdit}
                     onDismiss={() => setObjToEdit(null)}
                     onScrapeConfigSaved={(updatedObj) => {
-                        setObjs(objs.map((existingObj) => (existingObj._id === updatedObj._id ? updatedObj : existingObj)));
+                        setObjs(
+                            objs.map((existingObj) =>
+                                existingObj._id === updatedObj._id
+                                    ? updatedObj
+                                    : existingObj
+                            )
+                        );
                         setObjToEdit(null);
                         setShowAddObjDialog(false);
                     }}
