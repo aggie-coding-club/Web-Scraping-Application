@@ -7,7 +7,10 @@ interface SelectorEditableTableProps {
     setScrapeParametersArray: React.Dispatch<React.SetStateAction<any[]>>;
 }
 
-const SelectorEditableTable = ({ scrapeParametersArray, setScrapeParametersArray }: SelectorEditableTableProps) => {
+const SelectorEditableTable = ({
+    scrapeParametersArray,
+    setScrapeParametersArray,
+}: SelectorEditableTableProps) => {
     const columns: ColumnsType<any> = [
         {
             title: "Name",
@@ -18,7 +21,11 @@ const SelectorEditableTable = ({ scrapeParametersArray, setScrapeParametersArray
                     defaultValue={text}
                     onChange={(event) => {
                         setScrapeParametersArray(
-                            scrapeParametersArray.map((item, idx) => (idx === index ? { ...item, name: event.target.value } : item))
+                            scrapeParametersArray.map((item, idx) =>
+                                idx === index
+                                    ? { ...item, name: event.target.value }
+                                    : item
+                            )
                         );
                     }}
                 />
@@ -32,7 +39,11 @@ const SelectorEditableTable = ({ scrapeParametersArray, setScrapeParametersArray
                     defaultValue={text}
                     onChange={(event) => {
                         setScrapeParametersArray(
-                            scrapeParametersArray.map((item, idx) => (idx === index ? { ...item, value: event.target.value } : item))
+                            scrapeParametersArray.map((item, idx) =>
+                                idx === index
+                                    ? { ...item, value: event.target.value }
+                                    : item
+                            )
                         );
                     }}
                 />
@@ -46,7 +57,14 @@ const SelectorEditableTable = ({ scrapeParametersArray, setScrapeParametersArray
                     defaultValue={text}
                     onChange={(event) => {
                         setScrapeParametersArray(
-                            scrapeParametersArray.map((item, idx) => (idx === index ? { ...item, description: event.target.value } : item))
+                            scrapeParametersArray.map((item, idx) =>
+                                idx === index
+                                    ? {
+                                          ...item,
+                                          description: event.target.value,
+                                      }
+                                    : item
+                            )
                         );
                     }}
                 />
@@ -62,11 +80,22 @@ const SelectorEditableTable = ({ scrapeParametersArray, setScrapeParametersArray
                         href="#"
                         onClick={(e) => {
                             e.preventDefault();
-                            const lastElement = scrapeParametersArray[scrapeParametersArray.length - 1];
+                            const lastElement =
+                                scrapeParametersArray[
+                                    scrapeParametersArray.length - 1
+                                ];
                             if (!lastElement.name || !lastElement.value) {
                                 return;
                             }
-                            setScrapeParametersArray([...scrapeParametersArray, { id: uuidv4(), name: "", value: "", description: "" }]);
+                            setScrapeParametersArray([
+                                ...scrapeParametersArray,
+                                {
+                                    id: uuidv4(),
+                                    name: "",
+                                    value: "",
+                                    description: "",
+                                },
+                            ]);
                         }}
                     >
                         Add
@@ -76,7 +105,10 @@ const SelectorEditableTable = ({ scrapeParametersArray, setScrapeParametersArray
                         className="text-danger"
                         href="#"
                         onClick={() => {
-                            setScrapeParametersArray((prevArray) => [...prevArray.slice(0, index), ...prevArray.slice(index + 1)]);
+                            setScrapeParametersArray((prevArray) => [
+                                ...prevArray.slice(0, index),
+                                ...prevArray.slice(index + 1),
+                            ]);
                         }}
                     >
                         Delete

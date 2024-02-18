@@ -1,4 +1,10 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import {
+    createContext,
+    useContext,
+    useState,
+    useEffect,
+    ReactNode,
+} from "react";
 import { User } from "../models/user";
 import * as ObjsApi from "../network/objs_api";
 
@@ -31,14 +37,20 @@ export const UserProvider = ({ children }: UserProviderProps) => {
         fetchLoggedInUser();
     }, []);
 
-    return <UserContext.Provider value={{ loggedInUser, setLoggedInUser }}>{children}</UserContext.Provider>;
+    return (
+        <UserContext.Provider value={{ loggedInUser, setLoggedInUser }}>
+            {children}
+        </UserContext.Provider>
+    );
 };
 
 export const useUserContext = () => {
     const { loggedInUser, setLoggedInUser } = useContext(UserContext);
 
     if (loggedInUser === null || setLoggedInUser === null) {
-        throw new Error("User is null. Use useContext(userContext) if user can be null.");
+        throw new Error(
+            "User is null. Use useContext(userContext) if user can be null."
+        );
     }
     return { loggedInUser, setLoggedInUser };
 };

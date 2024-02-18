@@ -12,7 +12,12 @@ interface ObjProps {
     className?: string;
 }
 
-const Obj = ({ obj, onObjClicked, onDeleteObjClicked, className }: ObjProps) => {
+const Obj = ({
+    obj,
+    onObjClicked,
+    onDeleteObjClicked,
+    className,
+}: ObjProps) => {
     const { url, text, createdAt, updatedAt } = obj;
 
     // will be run at every render, formatDate is a computationally cheap function but can utilize something like useEffect for later optimization
@@ -24,7 +29,10 @@ const Obj = ({ obj, onObjClicked, onDeleteObjClicked, className }: ObjProps) => 
     }
 
     return (
-        <Card className={`${styles.objCard} ${className}`} onClick={() => onObjClicked(obj)}>
+        <Card
+            className={`${styles.objCard} ${className}`}
+            onClick={() => onObjClicked(obj)}
+        >
             <Card.Body className={styles.cardBody}>
                 <Card.Title className={styleUtils.flexCenter}>
                     {url}
@@ -38,7 +46,9 @@ const Obj = ({ obj, onObjClicked, onDeleteObjClicked, className }: ObjProps) => 
                 </Card.Title>
                 <Card.Text className={styles.cardText}>{text}</Card.Text>
             </Card.Body>
-            <Card.Footer className="text-muted">{createdUpdatedText}</Card.Footer>
+            <Card.Footer className="text-muted">
+                {createdUpdatedText}
+            </Card.Footer>
         </Card>
     );
 };

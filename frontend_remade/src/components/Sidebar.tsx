@@ -3,7 +3,12 @@ import HomeIcon from "@mui/icons-material/Home";
 import SettingsIcon from "@mui/icons-material/Settings";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MenuIcon from "@mui/icons-material/Menu";
-import { SidebarContainer, SidebarItem, IconWrapper, Text } from "../styles/SidebarStyles";
+import {
+    SidebarContainer,
+    SidebarItem,
+    IconWrapper,
+    Text,
+} from "../styles/SidebarStyles";
 
 type SidebarProps = {
     onToggle: (expanded: boolean) => void;

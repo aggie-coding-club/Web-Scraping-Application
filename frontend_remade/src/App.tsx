@@ -44,13 +44,22 @@ function App() {
                     onLogoutSuccessful={() => setLoggedInUser(null)}
                     sidebarExpanded={sidebarExpanded}
                 />
-                <div className={styles.contentWrapper} style={stylesContentWrapper}>
+                <div
+                    className={styles.contentWrapper}
+                    style={stylesContentWrapper}
+                >
                     <div className={styles.mainContent}>
                         <Routes>
                             <Route path="/" element={<ObjsPage />} />
                             <Route path="/example" element={<ExamplePage />} />
-                            <Route path="/settings" element={<SettingsPage />} />
-                            <Route path="/notifications" element={<NotificationsPage />} />
+                            <Route
+                                path="/settings"
+                                element={<SettingsPage />}
+                            />
+                            <Route
+                                path="/notifications"
+                                element={<NotificationsPage />}
+                            />
                             <Route path="/about" element={<AboutPage />} />
                             <Route path="/contact" element={<ContactPage />} />
                             <Route path="/*" element={<NotFoundPage />} />

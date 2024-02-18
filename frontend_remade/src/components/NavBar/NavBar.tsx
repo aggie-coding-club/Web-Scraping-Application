@@ -14,7 +14,12 @@ interface NavBarProps {
     sidebarExpanded: boolean;
 }
 
-const NavBar = ({ onSignUpClicked, onLoginClicked, onLogoutSuccessful, sidebarExpanded }: NavBarProps) => {
+const NavBar = ({
+    onSignUpClicked,
+    onLoginClicked,
+    onLogoutSuccessful,
+    sidebarExpanded,
+}: NavBarProps) => {
     const { loggedInUser } = useContext(UserContext);
 
     const navbarStyle = {
@@ -45,19 +50,32 @@ const NavBar = ({ onSignUpClicked, onLoginClicked, onLogoutSuccessful, sidebarEx
     }, []);
 
     return (
-        <Navbar bg="primary" variant="dark" expand="sm" sticky="top" style={navbarStyle}>
+        <Navbar
+            bg="primary"
+            variant="dark"
+            expand="sm"
+            sticky="top"
+            style={navbarStyle}
+        >
             <Container>
                 <Navbar.Brand as={Link} to="/">
-                    <p className="text-dark">Extractio - V2.0.1 - Desktop Only</p>
+                    <p className="text-dark">
+                        Extractio - V2.0.1 - Desktop Only
+                    </p>
                 </Navbar.Brand>
                 {/* TODO: Fix color of text changing slightly while transition from sidebar opening/closing is running */}
                 <Navbar.Toggle aria-controls="main-navbar" />
                 <Navbar.Collapse id="main-navbar">
                     <Nav className="ms-auto">
                         {loggedInUser ? (
-                            <NavBarLoggedInView onLogoutSuccessful={onLogoutSuccessful} />
+                            <NavBarLoggedInView
+                                onLogoutSuccessful={onLogoutSuccessful}
+                            />
                         ) : (
-                            <NavBarLoggedOutView onLoginClicked={onLoginClicked} onSignUpClicked={onSignUpClicked} />
+                            <NavBarLoggedOutView
+                                onLoginClicked={onLoginClicked}
+                                onSignUpClicked={onSignUpClicked}
+                            />
                         )}
                     </Nav>
                 </Navbar.Collapse>

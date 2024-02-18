@@ -22,10 +22,16 @@ function parseEscapeSequences(str: string): string {
 }
 
 const DiffViewer = ({ oldText, newText }: DiffViewerProps) => {
-    const [outputFormat, setOutputFormat] = useState<OutputFormatType>("line-by-line");
-    const [isParseEscapeSequences, setIsParseEscapeSequences] = useState<boolean>(false);
+    const [outputFormat, setOutputFormat] =
+        useState<OutputFormatType>("line-by-line");
+    const [isParseEscapeSequences, setIsParseEscapeSequences] =
+        useState<boolean>(false);
     const differences = isParseEscapeSequences
-        ? createPatch("File", parseEscapeSequences(oldText), parseEscapeSequences(newText))
+        ? createPatch(
+              "File",
+              parseEscapeSequences(oldText),
+              parseEscapeSequences(newText)
+          )
         : createPatch("File", oldText, newText);
 
     const html = Diff2Html.html(differences, {

@@ -10,7 +10,15 @@ interface ObjsPageProps {}
 const ObjsPage = ({}: ObjsPageProps) => {
     const { loggedInUser } = useContext(UserContext);
 
-    return <Container className={styles.objsPage}>{loggedInUser ? <ObjsPageLoggedInView /> : <ObjsPageLoggedOutView />}</Container>;
+    return (
+        <Container className={styles.objsPage}>
+            {loggedInUser ? (
+                <ObjsPageLoggedInView />
+            ) : (
+                <ObjsPageLoggedOutView />
+            )}
+        </Container>
+    );
 };
 
 export default ObjsPage;

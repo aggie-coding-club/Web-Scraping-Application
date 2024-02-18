@@ -1,18 +1,18 @@
 .appContainer {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 .contentWrapper {
-  display: flex;
-  flex: 1;
+    display: flex;
+    flex: 1;
 }
 
 .mainContent {
-  flex-grow: 1;
+    flex-grow: 1;
 }
 
 .sidebarExpanded {
-  margin-left: 300px;
+    margin-left: 300px;
 }
