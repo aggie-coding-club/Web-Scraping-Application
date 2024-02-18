@@ -1,26 +1,24 @@
 import scrapeConfig from "../models/scrapeConfig";
 import { scrapeWebsite } from "./scrapeWebsite";
 import NoteModel from "../models/obj";
-import UserModel from "../models/user"
+import UserModel from "../models/user";
 import { sendEmail } from "./emailNotification";
 
 let scrapeTimeout: NodeJS.Timeout;
 
-type ScrapingConfigObject = { [key: string]: string };
+function isScrapedDataChanged(oldScrapedData: ScrapedData, newScrapedData: ScrapedData): boolean {
+    if (oldScrapedData.url !== newScrapedData.url) {
+        return true;
+    }
 
-function processScrapingParameters(parameters: any[]): ScrapingConfigObject {
-    return parameters.reduce((obj, param) => {
-        const key = param.name;
-        const value = param.value;
+    if (oldScrapedData.selectors.length != newScrapedData.selectors.length) {
+        return true;
+    }
 
-        if (!key || !value) {
-            console.error("Invalid parameter format");
-            return obj;
-        }
+    const oldScrapedDataSelectorObject: { [key: string]: ScrapedSelector } = {};
+    oldScrapedData.selectors.forEach((selector) => (oldScrapedDataSelectorObject[selector.id] = selector));
 
-        obj[key] = value;
-        return obj;
-    }, {} as ScrapingConfigObject);
+    return newScrapedData.selectors.some((selector) => selector.content != oldScrapedDataSelectorObject[selector.id].content);
 }
 
 const checkAndExecuteScrape = async () => {
@@ -31,16 +29,29 @@ const checkAndExecuteScrape = async () => {
             console.log("No scheduled scrapes. Checking again in 10 second.");
             setNextScrapeTimeout(10 * 1000);
         } else if (currentScrape.timeToScrape.getTime() <= Date.now()) {
-            console.log("Scraping for:", currentScrape.url, "at time:", new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }), "America/Chicago");
+            console.log(
+                "Scraping for:",
+                currentScrape.url,
+                "at time:",
+                new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }),
+                "America/Chicago"
+            );
 
             const scrapedData = await scrapeWebsite(currentScrape.url, currentScrape.scrapeParameters);
 
             if (scrapedData === undefined) {
-                throw Error("Scrape failed.")
+                throw Error("Scrape failed.");
             } else {
-                await NoteModel.updateOne({ configId: currentScrape._id }, { $push: { scrapedData } });
+                const lastScrapedData = (await NoteModel.findOne({ configId: currentScrape._id }, { scrapedData: { $slice: -1 } }))?.scrapedData[0];
+                const isChanged = lastScrapedData ? isScrapedDataChanged(lastScrapedData, scrapedData) : true;
+
+                if (isChanged) {
+                    await NoteModel.updateOne({ configId: currentScrape._id }, { $push: { scrapedData } });
+                }
+                console.log(isChanged);
+
                 const userId = currentScrape.userId;
-                const user = (await UserModel.findById(userId).select('+email'));
+                const user = await UserModel.findById(userId).select("+email");
                 if (user) {
                     const { email } = user;
                     const { emailNotification } = currentScrape;

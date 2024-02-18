@@ -1,9 +1,9 @@
 type Selector = {
-    key: number;
+    id: string;
     name: string;
     value: string;
     description: string;
-}
+};
 
 type SelectorArray = Selector[];
 
@@ -18,4 +18,4 @@ type ScrapedData = {
     url: string;
     timestamp: number;
     selectors: ScrapedSelectorArray;
-}
+};
