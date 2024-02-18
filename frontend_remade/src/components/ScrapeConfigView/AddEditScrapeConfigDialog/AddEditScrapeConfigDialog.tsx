@@ -15,6 +15,14 @@ interface AddEditScrapeConfigProps {
   onScrapeConfigSaved: (scrapeConfig: Obj) => void;
 }
 
+interface scrapeParameterInterface {
+  id: number;
+  name: string;
+  value: string;
+  description?: string; // Optional property
+  edit?: boolean;
+}
+
 const AddEditObjDialog = ({
   scrapeConfig,
   onDismiss,
@@ -22,13 +30,15 @@ const AddEditObjDialog = ({
 }: AddEditScrapeConfigProps) => {
   const [iframeSrc, setIframeSrc] = useState("");
   const [selector, setSelector] = useState<any>("");
-  const [scrapeParametersArray, setScrapeParametersArray] = useState<any[]>(
+  const [scrapeParametersArray, setScrapeParametersArray] = useState<
+    scrapeParameterInterface[]
+  >(
     scrapeConfig?.scrapeParameters
       ? [
           ...scrapeConfig.scrapeParameters,
-          { id: 0, name: "", value: "", description: "" },
+          { id: 0, name: "", value: "", description: "", edit: true },
         ]
-      : [{ id: 0, name: "", value: "", description: "" }]
+      : [{ id: 0, name: "", value: "", description: "", edit: true }]
   );
 
   const {

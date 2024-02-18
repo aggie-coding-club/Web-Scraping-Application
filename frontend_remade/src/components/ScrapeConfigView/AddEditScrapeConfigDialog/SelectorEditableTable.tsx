@@ -57,6 +57,9 @@ const SelectorEditableTable = ({
     if (!lastElement.name || !lastElement.value) {
       return;
     }
+
+    scrapeParametersArray[scrapeParametersArray.length - 1].edit = false;
+
     setScrapeParametersArray([
       ...scrapeParametersArray,
       {
@@ -64,6 +67,7 @@ const SelectorEditableTable = ({
         name: "",
         value: "",
         description: "",
+        edit: true,
       },
     ]);
   };
@@ -79,36 +83,45 @@ const SelectorEditableTable = ({
       title: "Selector",
       dataIndex: "value",
 
-      render: (text, _, index) => (
-        <Input
-          defaultValue={text}
-          placeholder="span#video-title"
-          onChange={(event) => onSelectorInputChange({ event, index })}
-        />
-      ),
+      render: (text, _, index) =>
+        scrapeParametersArray[index].edit ? (
+          <Input
+            defaultValue={text}
+            placeholder="span#video-title"
+            onChange={(event) => onSelectorInputChange({ event, index })}
+          />
+        ) : (
+          <div>{text}</div>
+        ),
     },
     {
       title: "Name",
       dataIndex: "name",
       key: "name",
-      render: (text, _, index) => (
-        <Input
-          defaultValue={text}
-          placeholder="Title of Video"
-          onChange={(event) => onNameInputChange({ event, index })}
-        />
-      ),
+      render: (text, _, index) =>
+        scrapeParametersArray[index].edit ? (
+          <Input
+            defaultValue={text}
+            placeholder="Title of Video"
+            onChange={(event) => onNameInputChange({ event, index })}
+          />
+        ) : (
+          <div>{text}</div>
+        ),
     },
     {
       title: "Description",
       dataIndex: "description",
-      render: (text, _, index) => (
-        <Input
-          placeholder="(optional)"
-          defaultValue={text}
-          onChange={(event) => onDescriptionChange({ event, index })}
-        />
-      ),
+      render: (text, _, index) =>
+        scrapeParametersArray[index].edit ? (
+          <Input
+            placeholder="(optional)"
+            defaultValue={text}
+            onChange={(event) => onDescriptionChange({ event, index })}
+          />
+        ) : (
+          <div>{text}</div>
+        ),
     },
     {
       title: "Operation",
