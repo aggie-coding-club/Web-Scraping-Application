@@ -18,75 +18,66 @@ import UserContext from "./providers/UserProvider";
 import styles from "./styles/App.module.css";
 
 function App() {
-    const { setLoggedInUser } = useContext(UserContext);
-    const [showSignUpModal, setShowSignUpModal] = useState(false);
-    const [showLoginModal, setShowLoginModal] = useState(false);
-    const [sidebarExpanded, setSidebarExpanded] = useState(false);
-    const [sidebarWidth, setSidebarWidth] = useState("65px");
+  const { setLoggedInUser } = useContext(UserContext);
+  const [showSignUpModal, setShowSignUpModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [sidebarExpanded, setSidebarExpanded] = useState(false);
+  const [sidebarWidth, setSidebarWidth] = useState("65px");
 
-    const stylesContentWrapper = {
-        marginLeft: sidebarWidth,
-        transition: "margin-left 0.3s ease-in-out",
-    };
+  const stylesContentWrapper = {
+    marginLeft: sidebarWidth,
+    transition: "margin-left 0.3s ease-in-out",
+  };
 
-    useEffect(() => {
-        const newWidth = sidebarExpanded ? "300px" : "65px";
-        setSidebarWidth(newWidth);
-    }, [sidebarExpanded]);
+  useEffect(() => {
+    const newWidth = sidebarExpanded ? "300px" : "65px";
+    setSidebarWidth(newWidth);
+  }, [sidebarExpanded]);
 
-    return (
-        <BrowserRouter>
-            <div className={styles.appContainer}>
-                <Sidebar onToggle={setSidebarExpanded} />
-                <NavBar
-                    onLoginClicked={() => setShowLoginModal(true)}
-                    onSignUpClicked={() => setShowSignUpModal(true)}
-                    onLogoutSuccessful={() => setLoggedInUser(null)}
-                    sidebarExpanded={sidebarExpanded}
-                />
-                <div
-                    className={styles.contentWrapper}
-                    style={stylesContentWrapper}
-                >
-                    <div className={styles.mainContent}>
-                        <Routes>
-                            <Route path="/" element={<ObjsPage />} />
-                            <Route path="/example" element={<ExamplePage />} />
-                            <Route
-                                path="/settings"
-                                element={<SettingsPage />}
-                            />
-                            <Route
-                                path="/notifications"
-                                element={<NotificationsPage />}
-                            />
-                            <Route path="/about" element={<AboutPage />} />
-                            <Route path="/contact" element={<ContactPage />} />
-                            <Route path="/*" element={<NotFoundPage />} />
-                        </Routes>
-                    </div>
-                </div>
-                {showSignUpModal && (
-                    <SignUpModal
-                        onDismiss={() => setShowSignUpModal(false)}
-                        onSignUpSuccessful={(user) => {
-                            setLoggedInUser(user);
-                            setShowSignUpModal(false);
-                        }}
-                    />
-                )}
-                {showLoginModal && (
-                    <LoginModal
-                        onDismiss={() => setShowLoginModal(false)}
-                        onLoginSuccessful={(user) => {
-                            setLoggedInUser(user);
-                            setShowLoginModal(false);
-                        }}
-                    />
-                )}
-            </div>
-        </BrowserRouter>
-    );
+  return (
+    <BrowserRouter>
+      <div className={styles.appContainer}>
+        <Sidebar onToggle={setSidebarExpanded} />
+        <NavBar
+          onLoginClicked={() => setShowLoginModal(true)}
+          onSignUpClicked={() => setShowSignUpModal(true)}
+          onLogoutSuccessful={() => setLoggedInUser(null)}
+          sidebarExpanded={sidebarExpanded}
+        />
+        <div className={styles.contentWrapper} style={stylesContentWrapper}>
+          <div className={styles.mainContent}>
+            <Routes>
+              <Route path="/" element={<ObjsPage />} />
+              <Route path="/example" element={<ExamplePage />} />
+              <Route path="/settings" element={<SettingsPage />} />
+              <Route path="/notifications" element={<NotificationsPage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/contact" element={<ContactPage />} />
+              <Route path="/*" element={<NotFoundPage />} />
+            </Routes>
+          </div>
+        </div>
+        {showSignUpModal && (
+          <SignUpModal
+            onDismiss={() => setShowSignUpModal(false)}
+            onSignUpSuccessful={(user) => {
+              setLoggedInUser(user);
+              setShowSignUpModal(false);
+            }}
+          />
+        )}
+        {showLoginModal && (
+          <LoginModal
+            onDismiss={() => setShowLoginModal(false)}
+            onLoginSuccessful={(user) => {
+              setLoggedInUser(user);
+              setShowLoginModal(false);
+            }}
+          />
+        )}
+      </div>
+    </BrowserRouter>
+  );
 }
 
 export default App;

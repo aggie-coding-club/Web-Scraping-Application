@@ -1,58 +1,58 @@
 import {
-    createContext,
-    useContext,
-    useState,
-    useEffect,
-    ReactNode,
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
 } from "react";
 import { User } from "../models/user";
 import * as ObjsApi from "../network/objs_api";
 
 type UserContextType = {
-    loggedInUser: User | null;
-    setLoggedInUser: (user: User | null) => void;
+  loggedInUser: User | null;
+  setLoggedInUser: (user: User | null) => void;
 };
 
 const UserContext = createContext<UserContextType>({
-    loggedInUser: null,
-    setLoggedInUser: () => {},
+  loggedInUser: null,
+  setLoggedInUser: () => {},
 });
 
 type UserProviderProps = {
-    children: ReactNode;
+  children: ReactNode;
 };
 
 export const UserProvider = ({ children }: UserProviderProps) => {
-    const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
+  const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 
-    useEffect(() => {
-        async function fetchLoggedInUser() {
-            try {
-                const user = await ObjsApi.getLoggedInUser();
-                setLoggedInUser(user);
-            } catch (error) {
-                console.error(error);
-            }
-        }
-        fetchLoggedInUser();
-    }, []);
+  useEffect(() => {
+    async function fetchLoggedInUser() {
+      try {
+        const user = await ObjsApi.getLoggedInUser();
+        setLoggedInUser(user);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchLoggedInUser();
+  }, []);
 
-    return (
-        <UserContext.Provider value={{ loggedInUser, setLoggedInUser }}>
-            {children}
-        </UserContext.Provider>
-    );
+  return (
+    <UserContext.Provider value={{ loggedInUser, setLoggedInUser }}>
+      {children}
+    </UserContext.Provider>
+  );
 };
 
 export const useUserContext = () => {
-    const { loggedInUser, setLoggedInUser } = useContext(UserContext);
+  const { loggedInUser, setLoggedInUser } = useContext(UserContext);
 
-    if (loggedInUser === null || setLoggedInUser === null) {
-        throw new Error(
-            "User is null. Use useContext(userContext) if user can be null."
-        );
-    }
-    return { loggedInUser, setLoggedInUser };
+  if (loggedInUser === null || setLoggedInUser === null) {
+    throw new Error(
+      "User is null. Use useContext(userContext) if user can be null."
+    );
+  }
+  return { loggedInUser, setLoggedInUser };
 };
 
 export default UserContext;

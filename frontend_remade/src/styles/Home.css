@@ -1,180 +1,180 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
 
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
-    margin: 0;
-    font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  margin: 0;
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
 }
 
 .home-container {
-    width: 100%;
+  width: 100%;
 }
 
 .home-image img {
-    z-index: 10;
-    /* border: 2px solid var(--primary-color); */
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-    margin-left: 50px;
-    max-width: 700px;
-    /* border-color: var(--primary-color); */
+  z-index: 10;
+  /* border: 2px solid var(--primary-color); */
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  margin-left: 50px;
+  max-width: 700px;
+  /* border-color: var(--primary-color); */
 }
 
 #tsparticles {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    z-index: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 0;
 }
 
 .top-homepage {
-    flex: auto;
+  flex: auto;
 }
 .flex {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .text-content {
-    width: 50%;
+  width: 50%;
 }
 
 .home-image {
-    width: 5%;
+  width: 5%;
 }
 
 .company-logos-section {
-    text-align: center;
-    padding: 50px 0;
+  text-align: center;
+  padding: 50px 0;
 }
 
 .company-logos-section h3 {
-    font-size: 1.5em;
-    color: var(--primary-color);
+  font-size: 1.5em;
+  color: var(--primary-color);
 }
 
 .company-logos {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
 }
 
 .logo-item {
-    margin: 10px;
+  margin: 10px;
 }
 
 .company-logo {
-    max-width: 170px;
-    max-height: 170px;
-    object-fit: contain;
+  max-width: 170px;
+  max-height: 170px;
+  object-fit: contain;
 }
 
 /* Hero Section */
 .hero-section {
-    margin-top: 50px;
-    /* text-align: left; */
-    padding: 50px 0;
-    /* background: var(--light-color); */
-    border-radius: 15px;
-    width: 40%;
+  margin-top: 50px;
+  /* text-align: left; */
+  padding: 50px 0;
+  /* background: var(--light-color); */
+  border-radius: 15px;
+  width: 40%;
 }
 
 .hero-title {
-    font-size: 6em;
-    color: var(--primary-color);
-    margin-bottom: 20px;
-    animation: fadeInDown 1s ease-in-out;
+  font-size: 6em;
+  color: var(--primary-color);
+  margin-bottom: 20px;
+  animation: fadeInDown 1s ease-in-out;
 }
 
 .hero-subtitle {
-    width: 110%;
-    padding-left: 15px;
-    font-size: 1.5em;
-    color: var(--primary-color);
-    margin-bottom: 30px;
+  width: 110%;
+  padding-left: 15px;
+  font-size: 1.5em;
+  color: var(--primary-color);
+  margin-bottom: 30px;
 }
 
 .hero-cta {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    margin-left: 15px;
-    padding: 10px 20px;
-    background-color: var(--primary-color);
-    color: var(--light-color);
-    border: none;
-    border-radius: 5px;
-    font-size: 1.2em;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  margin-left: 15px;
+  padding: 10px 20px;
+  background-color: var(--primary-color);
+  color: var(--light-color);
+  border: none;
+  border-radius: 5px;
+  font-size: 1.2em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .hero-cta:hover {
-    background-color: var(--secondary-color);
+  background-color: var(--secondary-color);
 }
 
 .hero-cta:focus {
-    background-color: #9bbec8;
+  background-color: #9bbec8;
 }
 
 @media (max-width: 768px) {
-    .empower-section {
-        width: 95%;
-        padding: 30px;
-    }
-    .hero-title {
-        font-size: 4em;
-    }
+  .empower-section {
+    width: 95%;
+    padding: 30px;
+  }
+  .hero-title {
+    font-size: 4em;
+  }
 }
 
 /* Features Section */
 .feature-section {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    padding: 35px 0;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  padding: 35px 0;
 }
 
 .feature {
-    padding: 15px;
-    background-color: var(--lighter-color);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    animation: fadeInRight 1s ease-in-out;
-    flex-basis: 30%;
-    min-width: 250px;
-    margin: 10px;
-    transition: transform 0.3s ease !important;
-    gap: 15px;
-    border-radius: 15px;
+  padding: 15px;
+  background-color: var(--lighter-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  animation: fadeInRight 1s ease-in-out;
+  flex-basis: 30%;
+  min-width: 250px;
+  margin: 10px;
+  transition: transform 0.3s ease !important;
+  gap: 15px;
+  border-radius: 15px;
 }
 
 .feature:hover {
-    transform: translateY(-10px) !important;
+  transform: translateY(-10px) !important;
 }
 
 .feature-icon {
-    font-size: 3em;
-    color: var(--secondary-color);
-    display: block;
-    margin-bottom: 20px;
+  font-size: 3em;
+  color: var(--secondary-color);
+  display: block;
+  margin-bottom: 20px;
 }
 
 .feature-title {
-    color: var(--primary-color);
-    font-size: 1.5em;
-    margin-bottom: 10px;
+  color: var(--primary-color);
+  font-size: 1.5em;
+  margin-bottom: 10px;
 }
 
 .feature-description {
-    color: var(--primary-color);
-    font-size: 1em;
+  color: var(--primary-color);
+  font-size: 1em;
 }
 
 /* .feature-box {
@@ -204,99 +204,99 @@ body {
 .application-description-section,
 .real-time-notifications-section,
 .data-storage-section {
-    animation: fadeInRight 0.5s ease-in-out;
+  animation: fadeInRight 0.5s ease-in-out;
 }
 
 /* List Section */
 .list-section {
-    padding: 50px 0;
+  padding: 50px 0;
 }
 
 .list-item {
-    display: flex;
-    align-items: center;
-    margin: 20px;
-    padding: 20px;
-    background-color: var(--light-color);
-    border-radius: 15px;
-    transition: transform 0.3s ease;
-    gap: 15px;
+  display: flex;
+  align-items: center;
+  margin: 20px;
+  padding: 20px;
+  background-color: var(--light-color);
+  border-radius: 15px;
+  transition: transform 0.3s ease;
+  gap: 15px;
 }
 
 .list-item:hover {
-    transform: translateY(-10px);
+  transform: translateY(-10px);
 }
 
 .list-icon {
-    font-size: 2em;
-    color: var(--primary-color);
+  font-size: 2em;
+  color: var(--primary-color);
 }
 
 .list-title {
-    color: var(--primary-color);
-    font-size: 1.5em;
-    margin-bottom: 5px;
+  color: var(--primary-color);
+  font-size: 1.5em;
+  margin-bottom: 5px;
 }
 
 .list-description {
-    color: var(--primary-color);
-    font-size: 1em;
+  color: var(--primary-color);
+  font-size: 1em;
 }
 
 /* Section Headings */
 .section-heading {
-    font-size: 2em;
-    color: var(--primary-color);
-    text-align: center;
-    margin-bottom: 15px;
+  font-size: 2em;
+  color: var(--primary-color);
+  text-align: center;
+  margin-bottom: 15px;
 }
 
 .section-subheading {
-    font-size: 1.2em;
-    color: var(--primary-color);
-    text-align: center;
-    margin-bottom: 30px;
+  font-size: 1.2em;
+  color: var(--primary-color);
+  text-align: center;
+  margin-bottom: 30px;
 }
 
 .section-icon {
-    font-size: 4em;
-    color: var(--secondary-color);
-    display: block;
-    text-align: center;
-    margin: auto;
-    animation: fadeInUp 1s ease-in-out;
+  font-size: 4em;
+  color: var(--secondary-color);
+  display: block;
+  text-align: center;
+  margin: auto;
+  animation: fadeInUp 1s ease-in-out;
 }
 
 /* Animations */
 @keyframes fadeInDown {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeInRight {
-    from {
-        opacity: 0;
-        transform: translateX(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
