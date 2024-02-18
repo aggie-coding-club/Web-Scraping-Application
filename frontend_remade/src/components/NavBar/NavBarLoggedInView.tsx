@@ -1,6 +1,7 @@
 import { Button } from "react-bootstrap";
 import * as ObjsApi from "../../network/objs_api";
 import "../../styles/Navbar.css";
+import MyButton from "../ui/MyButton";
 
 interface NavBarLoggedInViewProps {
     onLogoutSuccessful: () => void;
@@ -17,7 +18,7 @@ const NavBarLoggedInView = ({ onLogoutSuccessful }: NavBarLoggedInViewProps) => 
         }
     }
 
-    return <Button onClick={logout}>Log Out</Button>;
+    return <MyButton onClick={logout} variant="secondary">Log Out</MyButton>;
 };
 
 export default NavBarLoggedInView;
