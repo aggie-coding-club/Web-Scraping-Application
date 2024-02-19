@@ -3,7 +3,7 @@ import styleUtils from "../styles/utils.module.css";
 import { Card } from "react-bootstrap";
 import { Obj as ObjModel } from "../../models/object";
 import { formatDate } from "../../utils/formatDate";
-import { MdDelete } from "react-icons/md";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 interface ObjProps {
   obj: ObjModel;
@@ -36,7 +36,7 @@ const Obj = ({
       <Card.Body className={styles.cardBody}>
         <Card.Title className={styleUtils.flexCenter}>
           {url}
-          <MdDelete
+          <DeleteIcon
             className="text-muted ms-auto"
             onClick={(e: React.MouseEvent) => {
               onDeleteObjClicked(obj);
