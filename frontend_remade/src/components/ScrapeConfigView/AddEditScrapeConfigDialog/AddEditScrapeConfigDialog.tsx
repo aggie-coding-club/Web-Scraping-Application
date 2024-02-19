@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { ScrapeConfig } from "../../../models/scrapeConfig";
+import { ScrapeConfig, ScrapeConfigInput } from "../../../models/scrapeConfig";
 import * as ObjApi from "../../../network/objs_api";
 import { fetchHtmlContent } from "../../../network/objs_api";
 import { SelectorEditableTable } from "./SelectorEditableTable";
@@ -35,7 +35,7 @@ const AddEditObjDialog = ({
     handleSubmit,
     watch,
     formState: { errors, isSubmitting },
-  } = useForm<ScrapeConfig>({
+  } = useForm<ScrapeConfigInput>({
     defaultValues: {
       name: scrapeConfig?.name || "",
       description: scrapeConfig?.description || "",
@@ -72,7 +72,7 @@ const AddEditObjDialog = ({
     return () => window.removeEventListener("message", receiveMessage);
   }, []);
 
-  async function onSubmit(input: ScrapeConfig) {
+  async function onSubmit(input: ScrapeConfigInput) {
     const inputWithScrapeParameters = {
       ...input,
       scrapeParameters: scrapeParametersArray.slice(0, -1),

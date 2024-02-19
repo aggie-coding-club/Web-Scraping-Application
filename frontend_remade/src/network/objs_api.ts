@@ -1,12 +1,10 @@
 import { useContext } from "react";
 import { ConflictError, UnauthorizedError } from "../errors/http_errors";
-import UserContext from "../providers/UserProvider";
-import { Obj } from "../models/object";
-import { User } from "../models/user";
-import { SignUpCredentials } from "../models/signUpCredentials";
 import { LoginCredentials } from "../models/loginCredentials";
 import { ScrapeConfig } from "../models/scrapeConfig";
-// import { ObjInput } from "../models/objInput";
+import { SignUpCredentials } from "../models/signUpCredentials";
+import { User } from "../models/user";
+import UserContext from "../providers/UserProvider";
 
 const API_BASE = "/api";
 
@@ -81,7 +79,7 @@ export async function logout(): Promise<void> {
   await request("/users/logout", { method: "POST" });
 }
 
-export async function fetchObjs(): Promise<Obj[]> {
+export async function fetchObjs(): Promise<ScrapeConfig[]> {
   return request("/scrape/getScrapingConfigs", { method: "GET" });
 }
 

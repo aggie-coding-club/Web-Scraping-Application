@@ -21,7 +21,7 @@ import styles from "./styles/App.module.css";
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#0e263f",
+      main: "#1e5085",
     },
     secondary: {
       main: "#5784e6",

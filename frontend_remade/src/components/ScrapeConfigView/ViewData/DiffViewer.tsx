@@ -2,7 +2,7 @@ import { createPatch } from "diff";
 import * as Diff2Html from "diff2html";
 import "diff2html/bundles/css/diff2html.min.css";
 import { useState } from "react";
-import "./diffviewer.css";
+import '../../../styles/Diffviewer.css';
 import { OutputFormatType } from "diff2html/lib/types";
 interface DiffViewerProps {
   oldText: string;
