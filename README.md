@@ -1,4 +1,5 @@
-[View Video](https://media.discordapp.net/attachments/1189240916712640556/1209014398514102282/chrome_FNVAOpK9ex.mp4?ex=65e56167&is=65d2ec67&hm=92794a090477078c95e9ce01fe0eef5e07c895d3a05d7acbdd31ac9bfa1bd8d2&format=webp&width=687&height=330)
+https://github.com/aggie-coding-club/Web-Scraping-Application/assets/59489624/988f8617-faaf-4a5a-be13-937861ca0099
+
 
 # NOTE: frontend folder is deprecated. frontend_remade is now the current folder
 
