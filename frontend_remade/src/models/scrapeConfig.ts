@@ -5,6 +5,7 @@ interface Selector {
 }
 
 export interface ScrapeConfig {
+  _id: string;
   name: string;
   description: string;
   url: string;

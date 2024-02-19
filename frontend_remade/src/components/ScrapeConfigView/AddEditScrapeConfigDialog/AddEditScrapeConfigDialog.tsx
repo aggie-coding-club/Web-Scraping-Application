@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { Button, Form, Modal } from "react-bootstrap";
+import { Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { ScrapeConfig } from "../../../models/scrapeConfig";
-import { Obj } from "../../../models/object";
 import * as ObjApi from "../../../network/objs_api";
 import { fetchHtmlContent } from "../../../network/objs_api";
 import { SelectorEditableTable } from "./SelectorEditableTable";
@@ -10,9 +9,9 @@ import TextInputField from "./TextInputField";
 import MyButton from "../../ui/MyButton";
 
 interface AddEditScrapeConfigProps {
-  scrapeConfig?: Obj;
+  scrapeConfig?: ScrapeConfig;
   onDismiss: () => void;
-  onScrapeConfigSaved: (scrapeConfig: Obj) => void;
+  onScrapeConfigSaved: (scrapeConfig: ScrapeConfig) => void;
 }
 
 const AddEditObjDialog = ({
@@ -175,7 +174,7 @@ const AddEditObjDialog = ({
                 scrapeParametersArray={scrapeParametersArray}
                 setScrapeParametersArray={setScrapeParametersArray}
               />
-              <MyButton disabled={isSubmitting}>Save</MyButton>
+              <MyButton style={{ marginBottom: '20px' }}disabled={isSubmitting}>Save</MyButton>
             </Form>
           </div>
         </div>
