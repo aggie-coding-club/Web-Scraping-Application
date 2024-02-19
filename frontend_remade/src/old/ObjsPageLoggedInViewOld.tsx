@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button, Col, Row, Spinner } from "react-bootstrap";
-import { FaPlus } from "react-icons/fa";
+import AddIcon from "@mui/icons-material/Add";
 import { Obj as ObjsModel } from "../models/object";
 import * as ObjsApi from "../network/objs_api";
 import styles from "../styles/ObjsPage.module.css";
@@ -86,7 +86,7 @@ const ObjsPageLoggedInView = () => {
           e.currentTarget.style.borderWidth = "1px";
         }}
       >
-        <FaPlus />
+        <AddIcon />
         Add new obj
       </Button>
       {objsLoading && <Spinner animation="border" variant="primary" />}

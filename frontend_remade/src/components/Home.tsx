@@ -3,7 +3,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 
 import HomeTable from "../assets/Table.png";
-import MyButton from "./ui/MyButton";
+import Button from "@mui/material/Button";
 
 import "../styles/Home.css";
 
@@ -25,9 +25,9 @@ const Home = () => {
             <h1 className="hero-title">
               <span className="highlight">Empower</span> your data collection
             </h1>
-            <MyButton href="/#" variant="primary">
+            <Button href="/#" variant="outlined">
               Get Started
-            </MyButton>
+            </Button>
           </div>
           <div className="home-image ms-auto">
             <img src={HomeTable} alt="Image" />

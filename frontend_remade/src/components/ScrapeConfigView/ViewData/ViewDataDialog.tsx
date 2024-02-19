@@ -2,7 +2,7 @@ import Table, { ColumnsType } from "antd/es/table";
 import { useRef, useState } from "react";
 import { Form, Modal, Tab, Tabs } from "react-bootstrap";
 import DiffViewer from "./DiffViewer";
-import MyButton from "../../ui/MyButton";
+import { Button } from "@mui/material";
 
 interface ViewDataDialogProps {
   dataToView?: any;
@@ -44,9 +44,9 @@ const ViewStringDialog = ({
       key: "select",
       render: () => (
         <>
-          <a className="text-secondary" href="#">
+          <Button href="#" variant="outlined">
             Select
-          </a>
+          </Button>
         </>
       ),
     },
@@ -148,9 +148,9 @@ const ViewStringDialog = ({
         </Tabs>
       </Modal.Body>
       <Modal.Footer>
-        <MyButton variant="secondary" onClick={onDismiss}>
+        <Button variant="outlined" onClick={onDismiss}>
           Close
-        </MyButton>
+        </Button>
       </Modal.Footer>
     </Modal>
   );
