@@ -6,7 +6,7 @@ import * as ObjApi from "../../../network/objs_api";
 import { fetchHtmlContent } from "../../../network/objs_api";
 import { SelectorEditableTable } from "./SelectorEditableTable";
 import TextInputField from "./TextInputField";
-import MyButton from "../../ui/MyButton";
+import { Button } from "@mui/material";
 
 interface AddEditScrapeConfigProps {
   scrapeConfig?: ScrapeConfig;
@@ -174,7 +174,9 @@ const AddEditObjDialog = ({
                 scrapeParametersArray={scrapeParametersArray}
                 setScrapeParametersArray={setScrapeParametersArray}
               />
-              <MyButton style={{ marginBottom: '20px' }}disabled={isSubmitting}>Save</MyButton>
+              <Button disabled={isSubmitting} variant="contained" type="submit">
+                Save
+              </Button>
             </Form>
           </div>
         </div>

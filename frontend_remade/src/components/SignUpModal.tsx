@@ -4,15 +4,19 @@ import { SignUpCredentials } from "../models/signUpCredentials";
 import * as ObjsApi from "../network/objs_api";
 import { Alert, Form, Modal } from "react-bootstrap";
 import TextInputField from "./ScrapeConfigView/AddEditScrapeConfigDialog/TextInputField";
-import styleUtils from "../styles/utils.module.css";
 import { useState } from "react";
 import { ConflictError } from "../errors/http_errors";
-import MyButton from "./ui/MyButton";
+import { Button } from "@mui/material";
 
 interface SignUpModalProps {
   onDismiss: () => void;
   onSignUpSuccessful: (user: User) => void;
 }
+
+const buttonContainerStyle = {
+  display: "flex",
+  justifyContent: "center",
+};
 
 const SignUpModal = ({ onDismiss, onSignUpSuccessful }: SignUpModalProps) => {
   const [errorText, setErrorText] = useState<string | null>(null);
@@ -73,9 +77,11 @@ const SignUpModal = ({ onDismiss, onSignUpSuccessful }: SignUpModalProps) => {
             registerOptions={{ required: "Required" }}
             error={errors.password}
           />
-          <MyButton disabled={isSubmitting} className={styleUtils.width100}>
-            Sign Up
-          </MyButton>
+          <div style={buttonContainerStyle}>
+            <Button disabled={isSubmitting} type="submit" variant="contained">
+              Sign up
+            </Button>
+          </div>
         </Form>
       </Modal.Body>
     </Modal>
