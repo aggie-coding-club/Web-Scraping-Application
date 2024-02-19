@@ -81,10 +81,16 @@ const ObjsPageLoggedInView = () => {
     {
       title: "Status",
       key: "status",
+      dataIndex: "status",
       align: "center",
-      render: () => (
-        <Badge pill bg="primary">Success</Badge>
-      )
+      render: (text) => {
+        if (text === "success") {
+          return <Badge pill bg="primary">Success</Badge>
+        } else if (text === "failed") {
+          return <Badge pill bg="danger">Failed</Badge>
+        }
+        return <Badge pill bg="secondary">Pending</Badge>
+      }
     },
     {
       title: "Website URL",
