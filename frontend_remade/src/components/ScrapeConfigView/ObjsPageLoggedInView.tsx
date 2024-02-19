@@ -89,6 +89,14 @@ const ObjsPageLoggedInView = () => {
       ),
     },
     {
+      title: "Last Changed",
+      key: "lastChanged",
+      dataIndex: "lastChanged",
+      render: (text) => {
+        return text ? new Date(text).toLocaleString() : "N/A";
+      }
+    },
+    {
       title: "Interval (min)",
       dataIndex: "scrapeIntervalMinute",
       key: "scrapeIntervalMinute",

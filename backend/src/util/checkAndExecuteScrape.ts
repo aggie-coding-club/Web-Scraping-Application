@@ -1,4 +1,4 @@
-import scrapeConfig from "../models/scrapeConfig";
+import ScrapeConfigModel from "../models/scrapeConfig";
 import { scrapeWebsite } from "./scrapeWebsite";
 import NoteModel from "../models/obj";
 import UserModel from "../models/user";
@@ -23,7 +23,7 @@ function isScrapedDataChanged(oldScrapedData: ScrapedData, newScrapedData: Scrap
 
 const checkAndExecuteScrape = async () => {
     try {
-        const [currentScrape] = await scrapeConfig.find({}).sort({ timeToScrape: 1 }).limit(1).exec();
+        const [currentScrape] = await ScrapeConfigModel.find({}).sort({ timeToScrape: 1 }).limit(1).exec();
 
         if (!currentScrape) {
             console.log("No scheduled scrapes. Checking again in 10 second.");
@@ -47,6 +47,7 @@ const checkAndExecuteScrape = async () => {
 
                 if (isChanged) {
                     await NoteModel.updateOne({ configId: currentScrape._id }, { $push: { scrapedData } });
+                    await ScrapeConfigModel.updateOne({ _id: currentScrape._id }, { lastChanged: new Date() });
                 }
                 console.log(isChanged);
 
@@ -65,7 +66,7 @@ const checkAndExecuteScrape = async () => {
             currentScrape.timeToScrape = new Date(Date.now() + currentScrape.scrapeIntervalMinute * 60000);
             await currentScrape.save();
 
-            const [nextScrape] = await scrapeConfig.find({}).sort({ timeToScrape: 1 }).limit(1).exec();
+            const [nextScrape] = await ScrapeConfigModel.find({}).sort({ timeToScrape: 1 }).limit(1).exec();
             setNextScrapeTimeout(nextScrape.scrapeIntervalMinute * 60000);
         } else {
             setNextScrapeTimeout(currentScrape.timeToScrape.getTime() - Date.now());
@@ -77,10 +78,10 @@ const checkAndExecuteScrape = async () => {
 };
 
 export const setNextScrapeTimeout = (interval: number) => {
-    // try {
-    //     clearTimeout(scrapeTimeout);
-    //     scrapeTimeout = setTimeout(checkAndExecuteScrape, interval);
-    // } catch {
-    //     setNextScrapeTimeout(1 * 1000);
-    // }
+    try {
+        clearTimeout(scrapeTimeout);
+        scrapeTimeout = setTimeout(checkAndExecuteScrape, interval);
+    } catch {
+        setNextScrapeTimeout(1 * 1000);
+    }
 };
