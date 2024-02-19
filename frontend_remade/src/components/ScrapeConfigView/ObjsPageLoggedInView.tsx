@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { Spinner } from "react-bootstrap";
-import Button from "@mui/material/Button";
+import { Button, IconButton } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { Obj, Obj as ObjsModel } from "../../models/object";
 import * as ObjsApi from "../../network/objs_api";
 import styleUtils from "../../styles/utils.module.css";
@@ -20,6 +22,17 @@ const ObjsPageLoggedInView = () => {
   const [objToEdit, setObjToEdit] = useState<ObjsModel | null>(null);
   const [stringToView, setStringToView] = useState<string | null>(null);
   const [dataToView, setDataToView] = useState<any>(null);
+
+  const onSelectClick = async (record: Obj, index: number) => {
+    const note = await ObjsApi.getObj(record._id);
+    setStringToView(
+      note.scrapedData
+        .map((data: any) => JSON.stringify(data, null, 2))
+        .join(",\n") || "Nothing Yet. Please Check Back Later."
+    );
+    setDataToView(note.scrapedData);
+    setScrapeParametersArray(objs[index].scrapeParameters);
+  };
 
   useEffect(() => {
     async function loadObjs() {
@@ -79,24 +92,13 @@ const ObjsPageLoggedInView = () => {
       title: "Data",
       key: "select",
       render: (_, record, index) => (
-        <>
-          <a
-            className="text-secondary"
-            href="#"
-            onClick={async () => {
-              const note = await ObjsApi.getObj(record._id);
-              setStringToView(
-                note.scrapedData
-                  .map((data: any) => JSON.stringify(data, null, 2))
-                  .join(",\n") || "Nothing Yet. Please Check Back Later."
-              );
-              setDataToView(note.scrapedData);
-              setScrapeParametersArray(objs[index].scrapeParameters);
-            }}
-          >
-            Select
-          </a>
-        </>
+        <Button
+          href="#"
+          variant="outlined"
+          onClick={() => onSelectClick(record, index)}
+        >
+          Select
+        </Button>
       ),
     },
     {
@@ -104,13 +106,9 @@ const ObjsPageLoggedInView = () => {
       key: "edit",
       render: (_, record) => (
         <>
-          <a
-            className="text-secondary"
-            href="#"
-            onClick={() => setObjToEdit(record)}
-          >
-            Edit
-          </a>
+          <IconButton onClick={() => setObjToEdit(record)}>
+            <EditIcon />
+          </IconButton>
         </>
       ),
     },
@@ -118,9 +116,9 @@ const ObjsPageLoggedInView = () => {
       title: "Delete",
       key: "delete",
       render: (_, record) => (
-        <a className="text-danger" href="#" onClick={() => deleteObj(record)}>
-          Delete
-        </a>
+        <IconButton onClick={() => deleteObj(record)}>
+          <DeleteIcon />
+        </IconButton>
       ),
     },
   ];

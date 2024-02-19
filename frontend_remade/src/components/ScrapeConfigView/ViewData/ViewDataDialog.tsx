@@ -44,9 +44,9 @@ const ViewStringDialog = ({
       key: "select",
       render: () => (
         <>
-          <a className="text-secondary" href="#">
+          <Button href="#" variant="outlined">
             Select
-          </a>
+          </Button>
         </>
       ),
     },
