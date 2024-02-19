@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Form, Modal } from "react-bootstrap";
+import { Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { ScrapeConfig } from "../../../models/scrapeConfig";
 import { Obj } from "../../../models/object";
@@ -7,7 +7,7 @@ import * as ObjApi from "../../../network/objs_api";
 import { fetchHtmlContent } from "../../../network/objs_api";
 import { SelectorEditableTable } from "./SelectorEditableTable";
 import TextInputField from "./TextInputField";
-import MyButton from "../../ui/MyButton";
+import { Button } from "@mui/material";
 
 interface AddEditScrapeConfigProps {
   scrapeConfig?: Obj;
@@ -175,7 +175,9 @@ const AddEditObjDialog = ({
                 scrapeParametersArray={scrapeParametersArray}
                 setScrapeParametersArray={setScrapeParametersArray}
               />
-              <MyButton disabled={isSubmitting}>Save</MyButton>
+              <Button disabled={isSubmitting} variant="contained" type="submit">
+                Save
+              </Button>
             </Form>
           </div>
         </div>

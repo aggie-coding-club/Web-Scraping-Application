@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { Spinner } from "react-bootstrap";
-import MyButton from "../ui/MyButton";
-import { FaPlus } from "react-icons/fa";
+import { Button, IconButton } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { Obj, Obj as ObjsModel } from "../../models/object";
 import * as ObjsApi from "../../network/objs_api";
 import styleUtils from "../../styles/utils.module.css";
@@ -9,6 +11,7 @@ import AddEditObjDialog from "./AddEditScrapeConfigDialog/AddEditScrapeConfigDia
 import ViewStringDialog from "./ViewData/ViewDataDialog";
 import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
+import { useTheme } from "@mui/material/styles";
 
 const ObjsPageLoggedInView = () => {
   const [objs, setObjs] = useState<ObjsModel[]>([]);
@@ -20,6 +23,22 @@ const ObjsPageLoggedInView = () => {
   const [objToEdit, setObjToEdit] = useState<ObjsModel | null>(null);
   const [stringToView, setStringToView] = useState<string | null>(null);
   const [dataToView, setDataToView] = useState<any>(null);
+
+  const theme = useTheme();
+  const urlStyle = {
+    color: theme.palette.secondary.main,
+    fontWeight: 500,
+  };
+  const onSelectClick = async (record: Obj, index: number) => {
+    const note = await ObjsApi.getObj(record._id);
+    setStringToView(
+      note.scrapedData
+        .map((data: any) => JSON.stringify(data, null, 2))
+        .join(",\n") || "Nothing Yet. Please Check Back Later."
+    );
+    setDataToView(note.scrapedData);
+    setScrapeParametersArray(objs[index].scrapeParameters);
+  };
 
   useEffect(() => {
     async function loadObjs() {
@@ -64,7 +83,7 @@ const ObjsPageLoggedInView = () => {
       dataIndex: "url",
       key: "url",
       render: (text) => (
-        <a href={text} style={{ color: "#315c9d" }}>
+        <a href={text} style={urlStyle}>
           {text}
         </a>
       ),
@@ -79,24 +98,9 @@ const ObjsPageLoggedInView = () => {
       title: "Data",
       key: "select",
       render: (_, record, index) => (
-        <>
-          <a
-            className="text-secondary"
-            href="#"
-            onClick={async () => {
-              const note = await ObjsApi.getObj(record._id);
-              setStringToView(
-                note.scrapedData
-                  .map((data: any) => JSON.stringify(data, null, 2))
-                  .join(",\n") || "Nothing Yet. Please Check Back Later."
-              );
-              setDataToView(note.scrapedData);
-              setScrapeParametersArray(objs[index].scrapeParameters);
-            }}
-          >
-            Select
-          </a>
-        </>
+        <Button variant="outlined" onClick={() => onSelectClick(record, index)}>
+          Select
+        </Button>
       ),
     },
     {
@@ -104,13 +108,9 @@ const ObjsPageLoggedInView = () => {
       key: "edit",
       render: (_, record) => (
         <>
-          <a
-            className="text-secondary"
-            href="#"
-            onClick={() => setObjToEdit(record)}
-          >
-            Edit
-          </a>
+          <IconButton onClick={() => setObjToEdit(record)}>
+            <EditIcon />
+          </IconButton>
         </>
       ),
     },
@@ -118,22 +118,23 @@ const ObjsPageLoggedInView = () => {
       title: "Delete",
       key: "delete",
       render: (_, record) => (
-        <a className="text-danger" href="#" onClick={() => deleteObj(record)}>
-          Delete
-        </a>
+        <IconButton onClick={() => deleteObj(record)}>
+          <DeleteIcon />
+        </IconButton>
       ),
     },
   ];
 
   return (
     <>
-      <MyButton
+      <Button
         className={`m-4 ${styleUtils.blockCenter} ${styleUtils.flexCenter}`}
         onClick={() => setShowAddObjDialog(true)}
+        startIcon={<AddIcon />}
+        variant="contained"
       >
-        <FaPlus />
-        Create Scraping Configuration
-      </MyButton>
+        Configuration
+      </Button>
       {objsLoading && <Spinner animation="border" variant="primary" />}
       {showObjsLoadingError && (
         <p className="text-danger">
