@@ -11,6 +11,7 @@ import AddEditObjDialog from "./AddEditScrapeConfigDialog/AddEditScrapeConfigDia
 import ViewStringDialog from "./ViewData/ViewDataDialog";
 import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
+import { useTheme } from "@mui/material/styles";
 
 const ObjsPageLoggedInView = () => {
   const [objs, setObjs] = useState<ObjsModel[]>([]);
@@ -23,6 +24,11 @@ const ObjsPageLoggedInView = () => {
   const [stringToView, setStringToView] = useState<string | null>(null);
   const [dataToView, setDataToView] = useState<any>(null);
 
+  const theme = useTheme();
+  const urlStyle = {
+    color: theme.palette.secondary.main,
+    fontWeight: 500,
+  };
   const onSelectClick = async (record: Obj, index: number) => {
     const note = await ObjsApi.getObj(record._id);
     setStringToView(
@@ -77,7 +83,7 @@ const ObjsPageLoggedInView = () => {
       dataIndex: "url",
       key: "url",
       render: (text) => (
-        <a href={text} style={{ color: "#315c9d" }}>
+        <a href={text} style={urlStyle}>
           {text}
         </a>
       ),
@@ -92,11 +98,7 @@ const ObjsPageLoggedInView = () => {
       title: "Data",
       key: "select",
       render: (_, record, index) => (
-        <Button
-          href="#"
-          variant="outlined"
-          onClick={() => onSelectClick(record, index)}
-        >
+        <Button variant="outlined" onClick={() => onSelectClick(record, index)}>
           Select
         </Button>
       ),

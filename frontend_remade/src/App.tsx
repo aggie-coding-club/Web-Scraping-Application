@@ -24,7 +24,7 @@ const theme = createTheme({
       main: "#0e263f",
     },
     secondary: {
-      main: "#a55ecb",
+      main: "#5784e6",
     },
   },
   typography: {
