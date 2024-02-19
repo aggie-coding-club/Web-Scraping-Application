@@ -54,30 +54,38 @@ const SelectorEditableTable = ({
   };
 
   // onAction
-  const onAdd = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    console.log("adding, or so you thought");
+  const onAdd = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    index: number
+  ) => {
     e.preventDefault();
-    const lastElement = scrapeParametersArray[scrapeParametersArray.length - 1];
-    if (!lastElement.name || !lastElement.value) {
+    const element = scrapeParametersArray[index];
+    if (!element.name || !element.value) {
       return;
     }
 
-    scrapeParametersArray[scrapeParametersArray.length - 1].edit = false;
+    let newArr = [...scrapeParametersArray];
+    newArr[index].edit = false;
 
-    setScrapeParametersArray([
-      ...scrapeParametersArray,
-      {
+    // if last element add new empty table column
+    if (index == scrapeParametersArray.length - 1) {
+      newArr.push({
         id: uuidv4(),
         name: "",
         value: "",
         description: "",
         edit: true,
-      },
-    ]);
+      });
+    }
+
+    setScrapeParametersArray(newArr);
   };
 
-  const onEdit = () => {
-    console.log("Editting...");
+  const onEdit = (index: number) => {
+    let newArr = [...scrapeParametersArray];
+    newArr[index].edit = true;
+
+    setScrapeParametersArray(newArr);
   };
 
   const onDelete = (index: number) => {
@@ -135,21 +143,21 @@ const SelectorEditableTable = ({
       title: "Operation",
       key: "operation",
       render: (_, __, index) => {
-        return index === scrapeParametersArray.length - 1 ? (
+        return scrapeParametersArray[index].edit ? (
           <Tooltip title="Add" arrow>
-            <IconButton onClick={(e) => onAdd(e)} color="secondary">
+            <IconButton onClick={(e) => onAdd(e, index)} color="secondary">
               <AddCircleIcon />
             </IconButton>
           </Tooltip>
         ) : (
           <div>
             <Tooltip title="Edit" arrow>
-              <IconButton onClick={() => onEdit()} color="secondary">
+              <IconButton onClick={() => onEdit(index)} color="secondary">
                 <EditIcon />
               </IconButton>
             </Tooltip>
             <Tooltip title="Delete" arrow>
-              <IconButton onClick={() => onDelete(index)} color="warning">
+              <IconButton onClick={() => onDelete(index)} color="error">
                 <DeleteOutlineIcon />
               </IconButton>
             </Tooltip>
