@@ -5,7 +5,6 @@ function getScrapedData(selectorArray: SelectorArray, url: string): ScrapedData 
         try {
             const element = document.querySelector(selector.value);
             const content = element ? element.textContent?.trim() || "" : "";
-            console.log(content);
             return { ...selector, content };
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : "Unknown error";

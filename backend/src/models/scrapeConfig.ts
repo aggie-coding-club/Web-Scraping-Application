@@ -10,6 +10,7 @@ interface IScrapeConfig extends Document {
     scrapeIntervalMinute: number;
     emailNotification: string;
     lastChanged: Date;
+    status: string;
 }
 
 const scrapeConfigSchema = new Schema<IScrapeConfig>(
@@ -23,6 +24,7 @@ const scrapeConfigSchema = new Schema<IScrapeConfig>(
         scrapeIntervalMinute: { type: Number, required: true },
         emailNotification: { type: String, required: true },
         lastChanged: { type: Date },
+        status: { type: String, default: "pending" },
     },
     { timestamps: true }
 );
