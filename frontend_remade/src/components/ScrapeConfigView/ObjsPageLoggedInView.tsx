@@ -1,12 +1,12 @@
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { Button, IconButton } from "@mui/material";
+import { Button, Chip, IconButton } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
-import { Badge, Spinner } from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
 import { ScrapeConfig } from "../../models/scrapeConfig";
 import * as ObjsApi from "../../network/objs_api";
 import styleUtils from "../../styles/utils.module.css";
@@ -85,11 +85,11 @@ const ObjsPageLoggedInView = () => {
       align: "center",
       render: (text) => {
         if (text === "success") {
-          return <Badge pill bg="primary">Success</Badge>
+          return <Chip label="Success" color="primary" />
         } else if (text === "failed") {
-          return <Badge pill bg="danger">Failed</Badge>
+          return <Chip label="Failed" color="warning" />
         }
-        return <Badge pill bg="secondary">Pending</Badge>
+        return <Chip label="Pending" color="default" />
       }
     },
     {
