@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Spinner } from "react-bootstrap";
-import MyButton from "../ui/MyButton";
-import { FaPlus } from "react-icons/fa";
+import Button from "@mui/material/Button";
+import AddIcon from "@mui/icons-material/Add";
 import { Obj, Obj as ObjsModel } from "../../models/object";
 import * as ObjsApi from "../../network/objs_api";
 import styleUtils from "../../styles/utils.module.css";
@@ -127,13 +127,14 @@ const ObjsPageLoggedInView = () => {
 
   return (
     <>
-      <MyButton
+      <Button
         className={`m-4 ${styleUtils.blockCenter} ${styleUtils.flexCenter}`}
         onClick={() => setShowAddObjDialog(true)}
+        startIcon={<AddIcon />}
+        variant="contained"
       >
-        <FaPlus />
-        Create Scraping Configuration
-      </MyButton>
+        Configuration
+      </Button>
       {objsLoading && <Spinner animation="border" variant="primary" />}
       {showObjsLoadingError && (
         <p className="text-danger">

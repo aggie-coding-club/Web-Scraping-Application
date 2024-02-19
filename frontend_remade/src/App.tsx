@@ -27,6 +27,12 @@ const theme = createTheme({
       main: "#a55ecb",
     },
   },
+  typography: {
+    fontFamily: ["Inter"].join(","),
+    button: {
+      textTransform: "none",
+    },
+  },
 });
 
 function App() {
