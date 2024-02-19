@@ -1,4 +1,4 @@
-https://github.com/aggie-coding-club/Web-Scraping-Application/assets/59489624/11872519-5edc-404e-8249-6afe603d06ad
+https://github.com/aggie-coding-club/Web-Scraping-Application/assets/59489624/988f8617-faaf-4a5a-be13-937861ca0099
 
 
 # NOTE: frontend folder is deprecated. frontend_remade is now the current folder
