@@ -174,7 +174,7 @@ const AddEditObjDialog = ({
                 scrapeParametersArray={scrapeParametersArray}
                 setScrapeParametersArray={setScrapeParametersArray}
               />
-              <Button disabled={isSubmitting} variant="contained" type="submit">
+              <Button style={{ marginBottom: '20px' }}disabled={isSubmitting} variant="contained" type="submit">
                 Save
               </Button>
             </Form>
