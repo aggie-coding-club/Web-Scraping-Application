@@ -6,7 +6,7 @@ import { useTheme } from "@mui/material/styles";
 import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
-import { Spinner } from "react-bootstrap";
+import { Badge, Spinner } from "react-bootstrap";
 import { ScrapeConfig } from "../../models/scrapeConfig";
 import * as ObjsApi from "../../network/objs_api";
 import styleUtils from "../../styles/utils.module.css";
@@ -77,6 +77,14 @@ const ObjsPageLoggedInView = () => {
       title: "Description",
       dataIndex: "description",
       key: "description",
+    },
+    {
+      title: "Status",
+      key: "status",
+      align: "center",
+      render: () => (
+        <Badge pill bg="primary">Success</Badge>
+      )
     },
     {
       title: "Website URL",
