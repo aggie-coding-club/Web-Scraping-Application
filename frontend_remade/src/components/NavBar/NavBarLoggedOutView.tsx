@@ -1,6 +1,7 @@
 import "../../styles/Navbar.css";
 import "../../styles/utils.module.css";
 import MyButton from "../ui/MyButton";
+import { Button } from "@mui/material";
 
 interface NavBarLoggedOutViewProps {
   onSignUpClicked: () => void;
@@ -18,21 +19,17 @@ const NavBarLoggedOutView = ({
 }: NavBarLoggedOutViewProps) => {
   return (
     <>
-      <MyButton
-        onClick={onSignUpClicked}
-        variant="secondary"
-        style={buttonStyle}
-      >
+      <Button onClick={onSignUpClicked} variant="contained" style={buttonStyle}>
         Sign up
-      </MyButton>
-      <MyButton
+      </Button>
+      <Button
         onClick={onLoginClicked}
-        variant="secondary"
+        variant="outlined"
         className="marginWidth5"
         style={buttonStyle}
       >
         Log In
-      </MyButton>
+      </Button>
     </>
   );
 };

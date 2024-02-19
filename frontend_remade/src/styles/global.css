@@ -29,55 +29,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: var(--primary-color);
-  text-decoration: inherit;
-}
-a:hover {
-  color: var(--secondary-color);
-}
-
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
 }
-
-button {
-  background-color: var(--primary-color);
-  color: var(--light-color);
-  border: 1px solid var(--primary-color);
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  padding: 8px 20px;
-}
-button:hover {
-  background-color: var(--secondary-color);
-  color: var(--lighter-color);
-  border: 1px solid var(--secondary-color);
-}
-button:active {
-  background-color: var(--accent-color);
-  border-color: var(--accent-color);
-}
-button:disabled {
-  background-color: var(--accent-color);
-  cursor: not-allowed;
-}
-
 @media (prefers-color-scheme: light) {
   :root {
     color: var(--primary-color);
     background-color: var(--light-color);
   }
-  a:hover {
-    color: var(--accent-color);
-  }
-}
-
-.my-btn-secondary {
-  background-color: var(--lighter-color);
-  color: var(--primary-color);
-  border: 1px solid var(--primary-color);
 }

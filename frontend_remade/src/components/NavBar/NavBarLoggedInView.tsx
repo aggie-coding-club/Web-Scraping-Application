@@ -1,6 +1,6 @@
 import * as ObjsApi from "../../network/objs_api";
 import "../../styles/Navbar.css";
-import MyButton from "../ui/MyButton";
+import Button from "@mui/material/Button";
 
 interface NavBarLoggedInViewProps {
   onLogoutSuccessful: () => void;
@@ -20,9 +20,9 @@ const NavBarLoggedInView = ({
   }
 
   return (
-    <MyButton onClick={logout} variant="secondary">
+    <Button onClick={logout} variant="outlined">
       Log Out
-    </MyButton>
+    </Button>
   );
 };
 

@@ -5,14 +5,18 @@ import { User } from "../models/user";
 import { LoginCredentials } from "../models/loginCredentials";
 import * as ObjsApi from "../network/objs_api";
 import TextInputField from "./ScrapeConfigView/AddEditScrapeConfigDialog/TextInputField";
-import styleUtils from "../styles/utils.module.css";
 import { UnauthorizedError } from "../errors/http_errors";
-import MyButton from "./ui/MyButton";
+import Button from "@mui/material/Button";
 
 interface LoginModalProps {
   onDismiss: () => void;
   onLoginSuccessful: (user: User) => void;
 }
+
+const buttonContainerStyle = {
+  display: "flex",
+  justifyContent: "center",
+};
 
 const LoginModal = ({ onDismiss, onLoginSuccessful }: LoginModalProps) => {
   const [errorText, setErrorText] = useState<string | null>(null);
@@ -62,9 +66,11 @@ const LoginModal = ({ onDismiss, onLoginSuccessful }: LoginModalProps) => {
             registerOptions={{ required: "Required" }}
             error={errors.password}
           />
-          <MyButton className={styleUtils.width100} disabled={isSubmitting}>
-            Log In
-          </MyButton>
+          <div style={buttonContainerStyle}>
+            <Button disabled={isSubmitting} variant="contained" type="submit">
+              Log In
+            </Button>
+          </div>
         </Form>
       </Modal.Body>
     </Modal>
