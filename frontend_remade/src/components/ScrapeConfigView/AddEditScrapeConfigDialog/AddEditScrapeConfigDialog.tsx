@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { ScrapeConfig } from "../../../models/scrapeConfig";
-import { Obj } from "../../../models/object";
+import { ScrapeConfig, ScrapeConfigInput } from "../../../models/scrapeConfig";
 import * as ObjApi from "../../../network/objs_api";
 import { fetchHtmlContent } from "../../../network/objs_api";
 import { SelectorEditableTable } from "./SelectorEditableTable";
@@ -10,9 +9,9 @@ import TextInputField from "./TextInputField";
 import { Button } from "@mui/material";
 
 interface AddEditScrapeConfigProps {
-  scrapeConfig?: Obj;
+  scrapeConfig?: ScrapeConfig;
   onDismiss: () => void;
-  onScrapeConfigSaved: (scrapeConfig: Obj) => void;
+  onScrapeConfigSaved: (scrapeConfig: ScrapeConfig) => void;
 }
 
 interface scrapeParameterInterface {
@@ -46,7 +45,7 @@ const AddEditObjDialog = ({
     handleSubmit,
     watch,
     formState: { errors, isSubmitting },
-  } = useForm<ScrapeConfig>({
+  } = useForm<ScrapeConfigInput>({
     defaultValues: {
       name: scrapeConfig?.name || "",
       description: scrapeConfig?.description || "",
@@ -83,7 +82,7 @@ const AddEditObjDialog = ({
     return () => window.removeEventListener("message", receiveMessage);
   }, []);
 
-  async function onSubmit(input: ScrapeConfig) {
+  async function onSubmit(input: ScrapeConfigInput) {
     const inputWithScrapeParameters = {
       ...input,
       scrapeParameters: scrapeParametersArray.slice(0, -1),
@@ -185,7 +184,7 @@ const AddEditObjDialog = ({
                 scrapeParametersArray={scrapeParametersArray}
                 setScrapeParametersArray={setScrapeParametersArray}
               />
-              <Button disabled={isSubmitting} variant="contained" type="submit">
+              <Button style={{ marginBottom: '20px' }}disabled={isSubmitting} variant="contained" type="submit">
                 Save
               </Button>
             </Form>

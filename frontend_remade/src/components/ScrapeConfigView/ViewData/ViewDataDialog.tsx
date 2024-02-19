@@ -38,6 +38,9 @@ const ViewStringDialog = ({
       title: "Timestamp",
       dataIndex: "timestamp",
       key: "timestamp",
+      render: (record) => {
+        return new Date(record).toLocaleString();
+      },
     },
     {
       title: "Data",
