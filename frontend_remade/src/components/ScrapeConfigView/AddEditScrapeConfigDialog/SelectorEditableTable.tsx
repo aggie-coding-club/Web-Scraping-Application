@@ -1,6 +1,10 @@
 import { Input } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
 import { v4 as uuidv4 } from "uuid";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import EditIcon from "@mui/icons-material/Edit";
+import { IconButton, Tooltip } from "@mui/material";
 
 interface SelectorEditableTableProps {
   scrapeParametersArray: any[];
@@ -50,7 +54,7 @@ const SelectorEditableTable = ({
   };
 
   // onAction
-  const onAdd = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+  const onAdd = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     console.log("adding, or so you thought");
     e.preventDefault();
     const lastElement = scrapeParametersArray[scrapeParametersArray.length - 1];
@@ -70,6 +74,10 @@ const SelectorEditableTable = ({
         edit: true,
       },
     ]);
+  };
+
+  const onEdit = () => {
+    console.log("Editting...");
   };
 
   const onDelete = (index: number) => {
@@ -128,13 +136,24 @@ const SelectorEditableTable = ({
       key: "operation",
       render: (_, __, index) => {
         return index === scrapeParametersArray.length - 1 ? (
-          <a className="text-success" href="#" onClick={(e) => onAdd(e)}>
-            Add
-          </a>
+          <Tooltip title="Add" arrow>
+            <IconButton onClick={(e) => onAdd(e)} color="secondary">
+              <AddCircleIcon />
+            </IconButton>
+          </Tooltip>
         ) : (
-          <a className="text-danger" href="#" onClick={() => onDelete(index)}>
-            Delete
-          </a>
+          <div>
+            <Tooltip title="Edit" arrow>
+              <IconButton onClick={() => onEdit()} color="secondary">
+                <EditIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Delete" arrow>
+              <IconButton onClick={() => onDelete(index)} color="warning">
+                <DeleteOutlineIcon />
+              </IconButton>
+            </Tooltip>
+          </div>
         );
       },
     },
