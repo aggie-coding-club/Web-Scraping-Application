@@ -29,7 +29,7 @@ const AddEditObjDialog = ({
 }: AddEditScrapeConfigProps) => {
   const [iframeSrc, setIframeSrc] = useState("");
   const [selector, setSelector] = useState<any>("");
-  const [scrapeParametersArray, setScrapeParametersArray] = useState<
+    const [scrapeParametersArray, setScrapeParametersArray] = useState<
     scrapeParameterInterface[]
   >(
     scrapeConfig?.scrapeParameters
@@ -59,7 +59,7 @@ const AddEditObjDialog = ({
   const url = watch("url");
 
   useEffect(() => {
-    if (url) {
+        if (url) {
       fetchHtmlContent(url)
         .then((htmlContent) => {
           setIframeSrc(htmlContent);
@@ -166,7 +166,7 @@ const AddEditObjDialog = ({
                 error={errors.scrapeIntervalMinute}
               />
               <Form.Group className="mb-3">
-                <Form.Label>Email Notifcation</Form.Label>
+                <Form.Label>Email Notification</Form.Label>
                 <Form.Select
                   {...register("emailNotification")}
                   aria-label="Email Notification Select"

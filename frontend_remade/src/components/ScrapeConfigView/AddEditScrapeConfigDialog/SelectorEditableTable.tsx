@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditIcon from "@mui/icons-material/Edit";
-import { IconButton, Tooltip } from "@mui/material";
+import { ButtonGroup, IconButton, Tooltip } from "@mui/material";
 
 interface SelectorEditableTableProps {
   scrapeParametersArray: any[];
@@ -22,7 +22,6 @@ const SelectorEditableTable = ({
 }: SelectorEditableTableProps) => {
   // input change functions
   const onSelectorInputChange = ({ event, index }: onChangeProps) => {
-    console.log("selector input change", scrapeParametersArray);
     setScrapeParametersArray(
       scrapeParametersArray.map((item, idx) =>
         idx === index ? { ...item, value: event.target.value } : item
@@ -31,7 +30,6 @@ const SelectorEditableTable = ({
   };
 
   const onNameInputChange = ({ event, index }: onChangeProps) => {
-    console.log("name input change");
     setScrapeParametersArray(
       scrapeParametersArray.map((item, idx) =>
         idx === index ? { ...item, name: event.target.value } : item
@@ -146,22 +144,22 @@ const SelectorEditableTable = ({
         return scrapeParametersArray[index].edit ? (
           <Tooltip title="Add" arrow>
             <IconButton onClick={(e) => onAdd(e, index)} color="secondary">
-              <AddCircleIcon />
+              <AddCircleIcon fontSize="small" />
             </IconButton>
           </Tooltip>
         ) : (
-          <div>
+          <ButtonGroup orientation="horizontal" size="small">
             <Tooltip title="Edit" arrow>
-              <IconButton onClick={() => onEdit(index)} color="secondary">
-                <EditIcon />
+              <IconButton onClick={() => onEdit(index)}>
+                <EditIcon fontSize="small" />
               </IconButton>
             </Tooltip>
             <Tooltip title="Delete" arrow>
-              <IconButton onClick={() => onDelete(index)} color="error">
-                <DeleteOutlineIcon />
+              <IconButton onClick={() => onDelete(index)}>
+                <DeleteOutlineIcon fontSize="small" />
               </IconButton>
             </Tooltip>
-          </div>
+          </ButtonGroup>
         );
       },
     },
