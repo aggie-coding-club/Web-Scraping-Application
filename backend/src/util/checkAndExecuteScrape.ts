@@ -24,11 +24,14 @@ function isScrapedDataChanged(oldScrapedData: ScrapedData, newScrapedData: Scrap
 const checkAndExecuteScrape = async () => {
     const [currentScrape] = await ScrapeConfigModel.find({}).sort({ timeToScrape: 1 }).limit(1).exec();
 
+    if (!currentScrape) {
+        console.log("No scheduled scrapes. Checking again in 10 second.");
+        setNextScrapeTimeout(10 * 1000);
+        return;
+    }
+
     try {
-        if (!currentScrape) {
-            console.log("No scheduled scrapes. Checking again in 10 second.");
-            setNextScrapeTimeout(10 * 1000);
-        } else if (currentScrape.timeToScrape.getTime() <= Date.now()) {
+        if (currentScrape.timeToScrape.getTime() <= Date.now()) {
             console.log(
                 "Scraping for:",
                 currentScrape.url,
