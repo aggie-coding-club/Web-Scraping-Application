@@ -1,67 +1,31 @@
-import Table, { ColumnsType } from "antd/es/table";
+import { Button } from "@mui/material";
 import { useRef, useState } from "react";
 import { Form, Modal, Tab, Tabs } from "react-bootstrap";
 import DiffViewer from "./DiffViewer";
-import { Button } from "@mui/material";
+import SelectorsTable from "./SelectorsTable";
+import DataArrayTable from "./DataArrayTable";
+import DataTable from "./DataTable";
 
 interface ViewDataDialogProps {
-  dataToView?: any;
+  dataToView?: any[];
   stringToView?: string;
   onDismiss: () => void;
   scrapeParametersArray: any[];
 }
 
-const ViewStringDialog = ({
-  dataToView,
-  stringToView,
-  onDismiss,
-  scrapeParametersArray,
-}: ViewDataDialogProps) => {
-  const parameterColumns: ColumnsType<any> = [
-    {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
-    },
-    {
-      title: "Selector",
-      dataIndex: "value",
-    },
-    {
-      title: "Description",
-      dataIndex: "description",
-    },
-  ];
+const ViewDataDialog = ({ dataToView, stringToView, onDismiss, scrapeParametersArray }: ViewDataDialogProps) => {
+  if (dataToView === undefined) {
+    dataToView = [];
+  }
 
-  const dataColumns: ColumnsType<any> = [
-    {
-      title: "Timestamp",
-      dataIndex: "timestamp",
-      key: "timestamp",
-      render: (record) => {
-        return new Date(record).toLocaleString();
-      },
-    },
-    {
-      title: "Data",
-      key: "select",
-      render: () => (
-        <>
-          <Button href="#" variant="outlined">
-            Select
-          </Button>
-        </>
-      ),
-    },
-  ];
+  const [index, setIndex] = useState<number | null>(null);
+  const [oldText, setOldText] = useState("");
+  const [newText, setNewText] = useState("");
 
   const textareaScrapeParamsRef = useRef<HTMLTextAreaElement>(null);
   const textareaScrapedDataRef = useRef<HTMLTextAreaElement>(null);
   const textareaOldTextRef = useRef<HTMLTextAreaElement>(null);
   const textareaNewTextRef = useRef<HTMLTextAreaElement>(null);
-
-  const [oldText, setOldText] = useState("");
-  const [newText, setNewText] = useState("");
 
   const adjustHeight = (textareaRef: any) => {
     const textarea = textareaRef.current;
@@ -95,15 +59,16 @@ const ViewStringDialog = ({
           onSelect={handleSelect}
         >
           <Tab eventKey="table" title="Table Format">
-            <Form.Label style={{ marginBottom: "20px" }}>
-              Selectors Table
-            </Form.Label>
-            <Table
-              dataSource={scrapeParametersArray}
-              columns={parameterColumns}
-            />
+            <Form.Label style={{ marginBottom: "20px" }}>Selectors Table</Form.Label>
+            <SelectorsTable dataSource={scrapeParametersArray} />
+            {index !== null && (
+              <>
+                <Form.Label style={{ marginBottom: "20px" }}>{new Date(dataToView[index].timestamp).toLocaleString()} Scraped Data</Form.Label>
+                <DataTable dataSource={dataToView[index].selectors} />
+              </>
+            )}
             <Form.Label style={{ marginBottom: "20px" }}>Data Table</Form.Label>
-            <Table dataSource={dataToView} columns={dataColumns} />
+            <DataArrayTable dataSource={dataToView} setIndex={setIndex} />
           </Tab>
           <Tab eventKey="json" title="JSON Format">
             <Form.Label style={{ marginBottom: "20px" }}>
@@ -148,6 +113,10 @@ const ViewStringDialog = ({
             />
             <DiffViewer oldText={oldText} newText={newText} />
           </Tab>
+          {index !== null && (
+            <Tab eventKey="data" title="Data">
+            </Tab>
+          )}
         </Tabs>
       </Modal.Body>
       <Modal.Footer>
@@ -159,4 +128,4 @@ const ViewStringDialog = ({
   );
 };
 
-export default ViewStringDialog;
+export default ViewDataDialog;
