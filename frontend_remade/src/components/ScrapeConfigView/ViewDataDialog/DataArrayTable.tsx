@@ -1,5 +1,5 @@
 import Table, { ColumnsType } from "antd/es/table";
-import { Button } from "react-bootstrap";
+import { Button } from "@mui/material";
 
 interface DataArrayTableProps {
     dataSource: any;
@@ -20,11 +20,9 @@ const DataArrayTable = ({ dataSource, setIndex }: DataArrayTableProps) => {
             title: "Data",
             key: "select",
             render: (_, __, index) => (
-                <>
-                    <Button href="#" variant="outlined" onClick={() => setIndex(index)}>
-                        Select
-                    </Button>
-                </>
+                <Button variant="outlined" onClick={() => setIndex(index)}>
+                    Select
+                </Button>
             ),
         },
     ];
