@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { ScrapeConfig, ScrapeConfigInput } from "../../../models/scrapeConfig";
+import {
+  Selector,
+  ScrapeConfig,
+  ScrapeConfigInput,
+} from "../../../models/scrapeConfig";
 import * as ObjApi from "../../../network/objs_api";
 import { fetchHtmlContent } from "../../../network/objs_api";
 import { SelectorEditableTable } from "./SelectorEditableTable";
@@ -14,11 +18,7 @@ interface AddEditScrapeConfigProps {
   onScrapeConfigSaved: (scrapeConfig: ScrapeConfig) => void;
 }
 
-interface scrapeParameterInterface {
-  id: number;
-  name: string;
-  value: string;
-  description?: string; // Optional property
+interface scrapeParameterInterface extends Selector {
   edit?: boolean;
 }
 
@@ -29,16 +29,8 @@ const AddEditObjDialog = ({
 }: AddEditScrapeConfigProps) => {
   const [iframeSrc, setIframeSrc] = useState("");
   const [selector, setSelector] = useState<any>("");
-    const [scrapeParametersArray, setScrapeParametersArray] = useState<
-    scrapeParameterInterface[]
-  >(
-    scrapeConfig?.scrapeParameters
-      ? [
-          ...scrapeConfig.scrapeParameters,
-          { id: 0, name: "", value: "", description: "", edit: true },
-        ]
-      : [{ id: 0, name: "", value: "", description: "", edit: true }]
-  );
+  const [scrapeParametersArray, setScrapeParametersArray] =
+    useState<scrapeParameterInterface[]>();
 
   const {
     register,
@@ -59,7 +51,7 @@ const AddEditObjDialog = ({
   const url = watch("url");
 
   useEffect(() => {
-        if (url) {
+    if (url) {
       fetchHtmlContent(url)
         .then((htmlContent) => {
           setIframeSrc(htmlContent);
@@ -69,6 +61,15 @@ const AddEditObjDialog = ({
   }, [url]);
 
   useEffect(() => {
+    // initialize setScrapeParametersArray
+    let initialArr: scrapeParameterInterface[] = [
+      { id: 0, name: "", value: "", description: "", edit: true },
+    ];
+    if (scrapeConfig?.scrapeParameters) {
+      initialArr.unshift(...scrapeConfig.scrapeParameters); // add to beginning of array
+    }
+
+    setScrapeParametersArray(initialArr);
     const receiveMessage = (event: any) => {
       if (event.origin !== window.location.origin) {
         return;
@@ -87,6 +88,8 @@ const AddEditObjDialog = ({
       ...input,
       scrapeParameters: scrapeParametersArray.slice(0, -1),
     };
+
+    console.log(inputWithScrapeParameters);
     try {
       const scrapeConfigResponse = scrapeConfig
         ? await ObjApi.updateObj(scrapeConfig._id, inputWithScrapeParameters)
@@ -184,7 +187,12 @@ const AddEditObjDialog = ({
                 scrapeParametersArray={scrapeParametersArray}
                 setScrapeParametersArray={setScrapeParametersArray}
               />
-              <Button style={{ marginBottom: '20px' }}disabled={isSubmitting} variant="contained" type="submit">
+              <Button
+                style={{ marginBottom: "20px" }}
+                disabled={isSubmitting}
+                variant="contained"
+                type="submit"
+              >
                 Save
               </Button>
             </Form>

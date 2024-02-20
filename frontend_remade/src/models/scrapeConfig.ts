@@ -1,7 +1,8 @@
-interface Selector {
-  key: number;
+export interface Selector {
+  id: number;
   name: string;
-  tag: string;
+  value: string;
+  description?: string;
 }
 
 export interface ScrapeConfigInput {

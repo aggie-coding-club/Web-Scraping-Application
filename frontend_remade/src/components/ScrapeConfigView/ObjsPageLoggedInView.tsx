@@ -83,8 +83,10 @@ const ObjsPageLoggedInView = () => {
       key: "status",
       align: "center",
       render: () => (
-        <Badge pill bg="primary">Success</Badge>
-      )
+        <Badge pill bg="primary">
+          Success
+        </Badge>
+      ),
     },
     {
       title: "Website URL",
@@ -102,7 +104,7 @@ const ObjsPageLoggedInView = () => {
       dataIndex: "lastChanged",
       render: (text) => {
         return text ? new Date(text).toLocaleString() : "N/A";
-      }
+      },
     },
     {
       title: "Interval (min)",
