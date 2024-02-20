@@ -11,7 +11,7 @@ import { ScrapeConfig } from "../../models/scrapeConfig";
 import * as ObjsApi from "../../network/objs_api";
 import styleUtils from "../../styles/utils.module.css";
 import AddEditObjDialog from "./AddEditScrapeConfigDialog/AddEditScrapeConfigDialog";
-import ViewStringDialog from "./ViewData/ViewDataDialog";
+import ViewDataDialog from "./ViewDataDialog/ViewDataDialog";
 
 const ObjsPageLoggedInView = () => {
   const [objs, setObjs] = useState<ScrapeConfig[]>([]);
@@ -196,7 +196,7 @@ const ObjsPageLoggedInView = () => {
         />
       )}
       {stringToView && (
-        <ViewStringDialog
+        <ViewDataDialog
           dataToView={dataToView}
           stringToView={stringToView}
           onDismiss={() => setStringToView(null)}
