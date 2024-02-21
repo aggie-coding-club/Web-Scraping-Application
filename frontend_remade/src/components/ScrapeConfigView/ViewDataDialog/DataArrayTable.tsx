@@ -27,7 +27,7 @@ const DataArrayTable = ({ dataSource, setIndex }: DataArrayTableProps) => {
     },
   ];
 
-  return <Table dataSource={dataSource} columns={columns} />;
+  return <Table rowKey="timestamp" dataSource={dataSource} columns={columns} />;
 };
 
 export default DataArrayTable;

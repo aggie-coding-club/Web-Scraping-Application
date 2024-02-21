@@ -14,14 +14,16 @@ const SelectorsTable = ({ dataSource }: SelectorsTableProps) => {
     {
       title: "Selector",
       dataIndex: "value",
+      key: "value",
     },
     {
       title: "Description",
       dataIndex: "description",
+      key: "description",
     },
   ];
 
-  return <Table dataSource={dataSource} columns={columns} />;
+  return <Table rowKey="id" dataSource={dataSource} columns={columns} />;
 };
 
 export default SelectorsTable;
