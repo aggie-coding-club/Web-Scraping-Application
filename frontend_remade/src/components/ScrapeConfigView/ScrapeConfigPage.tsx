@@ -12,16 +12,17 @@ import * as ObjsApi from "../../network/objs_api";
 import styleUtils from "../../styles/utils.module.css";
 import AddEditObjDialog from "./AddEditScrapeConfigDialog/AddEditScrapeConfigDialog";
 import ViewDataDialog from "./ViewDataDialog/ViewDataDialog";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
-const ObjsPageLoggedInView = () => {
+const ScrapeConfigPage = () => {
   const [objs, setObjs] = useState<ScrapeConfig[]>([]);
   const [objsLoading, setObjsLoading] = useState(true);
   const [showObjsLoadingError, setShowObjsLoadingError] = useState(false);
-  const [scrapeParametersArray, setScrapeParametersArray] = useState<any[]>([]);
+  const [selectedScrapeConfig, setSelectedScrapeConfig] =
+    useState<ScrapeConfig>();
 
   const [showAddObjDialog, setShowAddObjDialog] = useState(false);
   const [objToEdit, setObjToEdit] = useState<ScrapeConfig | null>(null);
-  const [stringToView, setStringToView] = useState<string | null>(null);
   const [dataToView, setDataToView] = useState<any>(null);
 
   const theme = useTheme();
@@ -31,13 +32,8 @@ const ObjsPageLoggedInView = () => {
   };
   const onSelectClick = async (record: ScrapeConfig, index: number) => {
     const note = await ObjsApi.getObj(record._id);
-    setStringToView(
-      note.scrapedData
-        .map((data: any) => JSON.stringify(data, null, 2))
-        .join(",\n") || "Nothing Yet. Please Check Back Later."
-    );
     setDataToView(note.scrapedData);
-    setScrapeParametersArray(objs[index].scrapeParameters);
+    setSelectedScrapeConfig(objs[index]);
   };
 
   useEffect(() => {
@@ -79,18 +75,18 @@ const ObjsPageLoggedInView = () => {
       key: "description",
     },
     {
-      title: "Status",
+      title: "Last Scrape",
       key: "status",
       dataIndex: "status",
       align: "center",
       render: (text) => {
         if (text === "success") {
-          return <Chip label="Success" color="primary" />
+          return <Chip label="Finished" color="primary" />;
         } else if (text === "failed") {
-          return <Chip label="Failed" color="warning" />
+          return <Chip label="Failed" color="warning" />;
         }
-        return <Chip label="Pending" color="default" />
-      }
+        return <Chip label="Pending" color="default" />;
+      },
     },
     {
       title: "Website URL",
@@ -108,7 +104,7 @@ const ObjsPageLoggedInView = () => {
       dataIndex: "lastChanged",
       render: (text) => {
         return text ? new Date(text).toLocaleString() : "N/A";
-      }
+      },
     },
     {
       title: "Interval (min)",
@@ -117,28 +113,29 @@ const ObjsPageLoggedInView = () => {
       align: "center",
     },
     {
-      title: "Data",
-      key: "select",
+      title: "View",
+      key: "view",
+      align: "center",
       render: (_, record, index) => (
-        <Button variant="outlined" onClick={() => onSelectClick(record, index)}>
-          Select
-        </Button>
+        <IconButton onClick={() => onSelectClick(record, index)}>
+          <VisibilityIcon />
+        </IconButton>
       ),
     },
     {
       title: "Edit",
       key: "edit",
+      align: "center",
       render: (_, record) => (
-        <>
-          <IconButton onClick={() => setObjToEdit(record)}>
-            <EditIcon />
-          </IconButton>
-        </>
+        <IconButton onClick={() => setObjToEdit(record)}>
+          <EditIcon />
+        </IconButton>
       ),
     },
     {
       title: "Delete",
       key: "delete",
+      align: "center",
       render: (_, record) => (
         <IconButton onClick={() => deleteObj(record)}>
           <DeleteIcon />
@@ -195,16 +192,16 @@ const ObjsPageLoggedInView = () => {
           }}
         />
       )}
-      {stringToView && (
+      {dataToView && (
         <ViewDataDialog
+          scrapeConfig={selectedScrapeConfig!}
           dataToView={dataToView}
-          stringToView={stringToView}
-          onDismiss={() => setStringToView(null)}
-          scrapeParametersArray={scrapeParametersArray}
+          onDismiss={() => setDataToView(null)}
+          scrapeParametersArray={selectedScrapeConfig!.scrapeParameters}
         />
       )}
     </>
   );
 };
 
-export default ObjsPageLoggedInView;
+export default ScrapeConfigPage;

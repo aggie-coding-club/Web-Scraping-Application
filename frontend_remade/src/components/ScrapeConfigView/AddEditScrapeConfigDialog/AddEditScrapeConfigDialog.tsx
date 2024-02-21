@@ -24,9 +24,9 @@ const AddEditObjDialog = ({
   const [scrapeParametersArray, setScrapeParametersArray] = useState<any[]>(
     scrapeConfig?.scrapeParameters
       ? [
-        ...scrapeConfig.scrapeParameters,
-        { id: 0, name: "", value: "", description: "" },
-      ]
+          ...scrapeConfig.scrapeParameters,
+          { id: 0, name: "", value: "", description: "" },
+        ]
       : [{ id: 0, name: "", value: "", description: "" }]
   );
 
@@ -91,7 +91,7 @@ const AddEditObjDialog = ({
   return (
     <Modal show onHide={onDismiss} fullscreen={true}>
       <Modal.Header closeButton>
-        <Modal.Title style={{ fontSize: '18px' }}>
+        <Modal.Title style={{ fontSize: "18px" }}>
           {scrapeConfig ? "Edit Configuration" : "Create Configuration"}
         </Modal.Title>
       </Modal.Header>
@@ -174,7 +174,12 @@ const AddEditObjDialog = ({
                 scrapeParametersArray={scrapeParametersArray}
                 setScrapeParametersArray={setScrapeParametersArray}
               />
-              <Button style={{ marginBottom: '20px' }} disabled={isSubmitting} variant="contained" type="submit">
+              <Button
+                style={{ marginBottom: "20px" }}
+                disabled={isSubmitting}
+                variant="contained"
+                type="submit"
+              >
                 Save
               </Button>
             </Form>

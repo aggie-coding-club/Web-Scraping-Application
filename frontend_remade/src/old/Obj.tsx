@@ -44,7 +44,7 @@ const Obj = ({
             }}
           />
         </Card.Title>
-        <Card.Text className={styles.cardText}>{'text'}</Card.Text>
+        <Card.Text className={styles.cardText}>{"text"}</Card.Text>
       </Card.Body>
       <Card.Footer className="text-muted">{createdUpdatedText}</Card.Footer>
     </Card>
