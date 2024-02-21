@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
 import { scrapeParameterInterface } from "../../../models/scrapeConfig";
@@ -24,6 +24,10 @@ const SelectorEditableTable = ({
   scrapeParametersArray,
   setScrapeParametersArray,
 }: SelectorEditableTableProps) => {
+  // ---- State -----
+  const [nameError, setNameError] = useState<boolean>(false);
+  const [selectorError, setSelectorError] = useState<boolean>(false);
+
   // ---- Input Change Functions -----
 
   // update selector value if click on window
@@ -45,6 +49,8 @@ const SelectorEditableTable = ({
   }, [scrapeParametersArray]);
 
   const onSelectorInputChange = ({ event, index }: onChangeProps) => {
+    if (selectorError) setSelectorError(false);
+
     setScrapeParametersArray(
       scrapeParametersArray.map((item, idx) =>
         idx === index ? { ...item, value: event.target.value } : item
@@ -53,22 +59,11 @@ const SelectorEditableTable = ({
   };
 
   const onNameInputChange = ({ event, index }: onChangeProps) => {
+    if (nameError) setNameError(false);
+
     setScrapeParametersArray(
       scrapeParametersArray.map((item, idx) =>
         idx === index ? { ...item, name: event.target.value } : item
-      )
-    );
-  };
-
-  const onDescriptionChange = ({ event, index }: onChangeProps) => {
-    setScrapeParametersArray(
-      scrapeParametersArray.map((item, idx) =>
-        idx === index
-          ? {
-              ...item,
-              description: event.target.value,
-            }
-          : item
       )
     );
   };
@@ -81,6 +76,13 @@ const SelectorEditableTable = ({
     e.preventDefault();
     const element = scrapeParametersArray[index];
     if (!element.name || !element.value) {
+      if (!element.name) {
+        setNameError(true);
+      }
+
+      if (!element.value) {
+        setSelectorError(true);
+      }
       return;
     }
 
@@ -126,6 +128,7 @@ const SelectorEditableTable = ({
             defaultValue={text}
             value={text}
             placeholder="span#video-title"
+            status={selectorError ? "error" : ""}
             onChange={(event) => onSelectorInputChange({ event, index })}
           />
         ) : (
@@ -141,21 +144,8 @@ const SelectorEditableTable = ({
           <Input
             defaultValue={text}
             placeholder="Title of Video"
+            status={nameError ? "error" : ""}
             onChange={(event) => onNameInputChange({ event, index })}
-          />
-        ) : (
-          <div>{text}</div>
-        ),
-    },
-    {
-      title: "Description",
-      dataIndex: "description",
-      render: (text, _, index) =>
-        scrapeParametersArray[index].edit ? (
-          <Input
-            placeholder="(optional)"
-            defaultValue={text}
-            onChange={(event) => onDescriptionChange({ event, index })}
           />
         ) : (
           <div>{text}</div>
@@ -189,7 +179,14 @@ const SelectorEditableTable = ({
     },
   ];
 
-  return <Table dataSource={scrapeParametersArray} columns={columns} />;
+  return (
+    <Table
+      dataSource={scrapeParametersArray}
+      columns={columns}
+      size="small"
+      pagination={false}
+    />
+  );
 };
 
 export { SelectorEditableTable };

@@ -166,7 +166,7 @@ const AddEditObjDialog = ({
                 setScrapeParametersArray={setScrapeParametersArray}
               />
               <Button
-                style={{ marginBottom: "20px" }}
+                style={{ margin: "20px 0" }}
                 disabled={isSubmitting}
                 variant="contained"
                 type="submit"
