@@ -121,7 +121,7 @@ const SelectorEditableTable = ({
     {
       title: "Selector",
       dataIndex: "value",
-
+      key: "value",
       render: (text, _, index) =>
         scrapeParametersArray[index].edit ? (
           <Input
