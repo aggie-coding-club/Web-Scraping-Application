@@ -26,6 +26,9 @@ const theme = createTheme({
     secondary: {
       main: "#5784e6",
     },
+    warning: {
+      main: "#ca110b",
+    },
   },
   typography: {
     fontFamily: ["Inter"].join(","),

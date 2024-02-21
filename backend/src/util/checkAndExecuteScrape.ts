@@ -22,13 +22,16 @@ function isScrapedDataChanged(oldScrapedData: ScrapedData, newScrapedData: Scrap
 }
 
 const checkAndExecuteScrape = async () => {
-    try {
-        const [currentScrape] = await ScrapeConfigModel.find({}).sort({ timeToScrape: 1 }).limit(1).exec();
+    const [currentScrape] = await ScrapeConfigModel.find({}).sort({ timeToScrape: 1 }).limit(1).exec();
 
-        if (!currentScrape) {
-            console.log("No scheduled scrapes. Checking again in 10 second.");
-            setNextScrapeTimeout(10 * 1000);
-        } else if (currentScrape.timeToScrape.getTime() <= Date.now()) {
+    if (!currentScrape) {
+        console.log("No scheduled scrapes. Checking again in 10 second.");
+        setNextScrapeTimeout(10 * 1000);
+        return;
+    }
+
+    try {
+        if (currentScrape.timeToScrape.getTime() <= Date.now()) {
             console.log(
                 "Scraping for:",
                 currentScrape.url,
@@ -61,19 +64,20 @@ const checkAndExecuteScrape = async () => {
                     }
                 }
                 console.log("Scrape successful.");
+                await ScrapeConfigModel.updateOne({ _id: currentScrape._id }, { status: "success" });
             }
-
-            currentScrape.timeToScrape = new Date(Date.now() + currentScrape.scrapeIntervalMinute * 60000);
-            await currentScrape.save();
-
-            const [nextScrape] = await ScrapeConfigModel.find({}).sort({ timeToScrape: 1 }).limit(1).exec();
-            setNextScrapeTimeout(nextScrape.scrapeIntervalMinute * 60000);
         } else {
             setNextScrapeTimeout(currentScrape.timeToScrape.getTime() - Date.now());
         }
     } catch (error) {
         console.error("Error in checkAndExecuteScrape:", error);
-        setNextScrapeTimeout(1 * 1000);
+        await ScrapeConfigModel.updateOne({ _id: currentScrape._id }, { status: "failed" });
+    } finally {
+        currentScrape.timeToScrape = new Date(Date.now() + currentScrape.scrapeIntervalMinute * 60000);
+        await currentScrape.save();
+
+        const [nextScrape] = await ScrapeConfigModel.find({}).sort({ timeToScrape: 1 }).limit(1).exec();
+        setNextScrapeTimeout(nextScrape.scrapeIntervalMinute * 60000);
     }
 };
 

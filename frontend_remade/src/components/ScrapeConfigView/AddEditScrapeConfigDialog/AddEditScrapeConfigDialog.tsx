@@ -107,7 +107,7 @@ const AddEditObjDialog = ({
   return (
     <Modal show onHide={onDismiss} fullscreen={true}>
       <Modal.Header closeButton>
-        <Modal.Title>
+        <Modal.Title style={{ fontSize: "18px" }}>
           {scrapeConfig ? "Edit Configuration" : "Create Configuration"}
         </Modal.Title>
       </Modal.Header>
