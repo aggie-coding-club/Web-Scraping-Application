@@ -1,3 +1,4 @@
+import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
@@ -10,7 +11,6 @@ import * as ObjApi from "../../../network/objs_api";
 import { fetchHtmlContent } from "../../../network/objs_api";
 import { SelectorEditableTable } from "./SelectorEditableTable";
 import TextInputField from "./TextInputField";
-import { Button } from "@mui/material";
 import { v4 as uuidv4 } from "uuid";
 
 interface AddEditScrapeConfigProps {

@@ -185,6 +185,7 @@ const SelectorEditableTable = ({
       columns={columns}
       size="small"
       pagination={false}
+      rowKey="value"
     />
   );
 };
