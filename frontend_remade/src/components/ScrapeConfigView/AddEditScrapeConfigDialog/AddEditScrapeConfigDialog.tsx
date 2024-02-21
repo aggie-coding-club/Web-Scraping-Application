@@ -1,12 +1,13 @@
+import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
+import { v4 as uuidv4 } from "uuid";
 import { ScrapeConfig, ScrapeConfigInput } from "../../../models/scrapeConfig";
 import * as ObjApi from "../../../network/objs_api";
 import { fetchHtmlContent } from "../../../network/objs_api";
 import { SelectorEditableTable } from "./SelectorEditableTable";
 import TextInputField from "./TextInputField";
-import { Button } from "@mui/material";
 
 interface AddEditScrapeConfigProps {
   scrapeConfig?: ScrapeConfig;
@@ -25,9 +26,9 @@ const AddEditObjDialog = ({
     scrapeConfig?.scrapeParameters
       ? [
           ...scrapeConfig.scrapeParameters,
-          { id: 0, name: "", value: "", description: "" },
+          { id: uuidv4(), name: "", value: "", description: "" },
         ]
-      : [{ id: 0, name: "", value: "", description: "" }]
+      : [{ id: uuidv4(), name: "", value: "", description: "" }]
   );
 
   const {

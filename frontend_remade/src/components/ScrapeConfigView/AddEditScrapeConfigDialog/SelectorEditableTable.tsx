@@ -11,6 +11,8 @@ const SelectorEditableTable = ({
   scrapeParametersArray,
   setScrapeParametersArray,
 }: SelectorEditableTableProps) => {
+  console.log(scrapeParametersArray);
+
   const columns: ColumnsType<any> = [
     {
       title: "Name",
@@ -32,6 +34,7 @@ const SelectorEditableTable = ({
     {
       title: "Selector",
       dataIndex: "value",
+      key: "value",
       render: (text, _, index) => (
         <Input
           defaultValue={text}
@@ -48,6 +51,7 @@ const SelectorEditableTable = ({
     {
       title: "Description",
       dataIndex: "description",
+      key: "description",
       render: (text, _, index) => (
         <Input
           defaultValue={text}
@@ -112,7 +116,9 @@ const SelectorEditableTable = ({
     },
   ];
 
-  return <Table dataSource={scrapeParametersArray} columns={columns} />;
+  return (
+    <Table rowKey="id" dataSource={scrapeParametersArray} columns={columns} />
+  );
 };
 
 export { SelectorEditableTable };
