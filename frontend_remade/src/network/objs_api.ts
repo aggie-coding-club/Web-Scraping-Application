@@ -91,7 +91,10 @@ export async function createObj(obj: any): Promise<ScrapeConfig> {
   });
 }
 
-export async function updateObj(objId: string, obj: any): Promise<ScrapeConfig> {
+export async function updateObj(
+  objId: string,
+  obj: any
+): Promise<ScrapeConfig> {
   return request(`/scrape/updateScrapingConfig/${objId}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
