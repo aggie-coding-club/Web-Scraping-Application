@@ -1,5 +1,6 @@
 import { Input } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
+import { scrapeParameterInterface } from "../../../models/scrapeConfig";
 import { v4 as uuidv4 } from "uuid";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
@@ -7,8 +8,10 @@ import EditIcon from "@mui/icons-material/Edit";
 import { ButtonGroup, IconButton, Tooltip } from "@mui/material";
 
 interface SelectorEditableTableProps {
-  scrapeParametersArray: any[];
-  setScrapeParametersArray: React.Dispatch<React.SetStateAction<any[]>>;
+  scrapeParametersArray: scrapeParameterInterface[];
+  setScrapeParametersArray: React.Dispatch<
+    React.SetStateAction<scrapeParameterInterface[]>
+  >;
 }
 
 interface onChangeProps {
@@ -38,7 +41,6 @@ const SelectorEditableTable = ({
   };
 
   const onDescriptionChange = ({ event, index }: onChangeProps) => {
-    console.log("description input change");
     setScrapeParametersArray(
       scrapeParametersArray.map((item, idx) =>
         idx === index
@@ -62,8 +64,9 @@ const SelectorEditableTable = ({
       return;
     }
 
-    let newArr = [...scrapeParametersArray];
-    newArr[index].edit = false;
+    let newArr: scrapeParameterInterface[] = [...scrapeParametersArray];
+
+    delete newArr[index].edit; // remove edit field to make it like Selector field
 
     // if last element add new empty table column
     if (index == scrapeParametersArray.length - 1) {

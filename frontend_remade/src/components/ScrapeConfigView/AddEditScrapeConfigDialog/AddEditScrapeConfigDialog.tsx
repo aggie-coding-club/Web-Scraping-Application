@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import {
-  Selector,
+  scrapeParameterInterface,
   ScrapeConfig,
   ScrapeConfigInput,
 } from "../../../models/scrapeConfig";
@@ -11,6 +11,7 @@ import { fetchHtmlContent } from "../../../network/objs_api";
 import { SelectorEditableTable } from "./SelectorEditableTable";
 import TextInputField from "./TextInputField";
 import { Button } from "@mui/material";
+import { v4 as uuidv4 } from "uuid";
 
 interface AddEditScrapeConfigProps {
   scrapeConfig?: ScrapeConfig;
@@ -18,19 +19,28 @@ interface AddEditScrapeConfigProps {
   onScrapeConfigSaved: (scrapeConfig: ScrapeConfig) => void;
 }
 
-interface scrapeParameterInterface extends Selector {
-  edit?: boolean;
-}
-
 const AddEditObjDialog = ({
   scrapeConfig,
   onDismiss,
   onScrapeConfigSaved,
 }: AddEditScrapeConfigProps) => {
+  const initializeScrapeParemetersArray = (): scrapeParameterInterface[] => {
+    let initialArr: scrapeParameterInterface[] = [
+      { id: uuidv4(), name: "", value: "", description: "", edit: true },
+    ];
+    if (scrapeConfig?.scrapeParameters) {
+      initialArr.unshift(...scrapeConfig.scrapeParameters); // add to beginning of array
+    }
+
+    return initialArr;
+  };
+
+  // ------ States -------
   const [iframeSrc, setIframeSrc] = useState("");
   const [selector, setSelector] = useState<any>("");
-  const [scrapeParametersArray, setScrapeParametersArray] =
-    useState<scrapeParameterInterface[]>();
+  const [scrapeParametersArray, setScrapeParametersArray] = useState<
+    scrapeParameterInterface[]
+  >(initializeScrapeParemetersArray());
 
   const {
     register,
@@ -50,6 +60,7 @@ const AddEditObjDialog = ({
 
   const url = watch("url");
 
+  // runs on change to url
   useEffect(() => {
     if (url) {
       fetchHtmlContent(url)
@@ -60,16 +71,8 @@ const AddEditObjDialog = ({
     }
   }, [url]);
 
+  // runs when component rendered
   useEffect(() => {
-    // initialize setScrapeParametersArray
-    let initialArr: scrapeParameterInterface[] = [
-      { id: 0, name: "", value: "", description: "", edit: true },
-    ];
-    if (scrapeConfig?.scrapeParameters) {
-      initialArr.unshift(...scrapeConfig.scrapeParameters); // add to beginning of array
-    }
-
-    setScrapeParametersArray(initialArr);
     const receiveMessage = (event: any) => {
       if (event.origin !== window.location.origin) {
         return;
