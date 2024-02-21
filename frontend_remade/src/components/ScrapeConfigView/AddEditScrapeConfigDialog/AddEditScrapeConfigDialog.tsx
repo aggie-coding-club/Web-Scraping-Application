@@ -37,7 +37,6 @@ const AddEditObjDialog = ({
 
   // ------ States -------
   const [iframeSrc, setIframeSrc] = useState("");
-  const [selector, setSelector] = useState<any>("");
   const [scrapeParametersArray, setScrapeParametersArray] = useState<
     scrapeParameterInterface[]
   >(initializeScrapeParemetersArray());
@@ -71,28 +70,12 @@ const AddEditObjDialog = ({
     }
   }, [url]);
 
-  // runs when component rendered
-  useEffect(() => {
-    const receiveMessage = (event: any) => {
-      if (event.origin !== window.location.origin) {
-        return;
-      }
-      if (event.data.selector) {
-        setSelector(event.data.selector);
-      }
-    };
-
-    window.addEventListener("message", receiveMessage);
-    return () => window.removeEventListener("message", receiveMessage);
-  }, []);
-
   async function onSubmit(input: ScrapeConfigInput) {
     const inputWithScrapeParameters = {
       ...input,
       scrapeParameters: scrapeParametersArray.slice(0, -1),
     };
 
-    console.log(inputWithScrapeParameters);
     try {
       const scrapeConfigResponse = scrapeConfig
         ? await ObjApi.updateObj(scrapeConfig._id, inputWithScrapeParameters)
@@ -154,14 +137,6 @@ const AddEditObjDialog = ({
                 registerOptions={{ required: "Required" }}
                 error={errors.url}
               />
-              <Form.Group className="mb-3">
-                <Form.Label>Captured Selector</Form.Label>
-                <Form.Control
-                  placeholder=".example"
-                  value={selector}
-                  readOnly={true}
-                />
-              </Form.Group>
               <TextInputField
                 name="scrapeIntervalMinute"
                 label="Scrape Interval (Minutes)"

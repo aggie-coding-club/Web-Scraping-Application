@@ -1,7 +1,7 @@
 interface Selector {
   id: string;
   name: string;
-  value: string;
+  value: string; // selector value
   description?: string;
 }
 

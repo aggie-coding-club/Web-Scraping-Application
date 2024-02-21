@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Input } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
 import { scrapeParameterInterface } from "../../../models/scrapeConfig";
@@ -23,7 +24,26 @@ const SelectorEditableTable = ({
   scrapeParametersArray,
   setScrapeParametersArray,
 }: SelectorEditableTableProps) => {
-  // input change functions
+  // ---- Input Change Functions -----
+
+  // update selector value if click on window
+  useEffect(() => {
+    const receiveMessage = (event: any) => {
+      if (event.origin !== window.location.origin) {
+        return;
+      }
+      if (event.data.selector) {
+        // set selector value at end of array
+        let myArr: scrapeParameterInterface[] = [...scrapeParametersArray];
+        myArr[myArr.length - 1].value = event.data.selector;
+        setScrapeParametersArray([...myArr]);
+      }
+    };
+
+    window.addEventListener("message", receiveMessage);
+    return () => window.removeEventListener("message", receiveMessage);
+  }, [scrapeParametersArray]);
+
   const onSelectorInputChange = ({ event, index }: onChangeProps) => {
     setScrapeParametersArray(
       scrapeParametersArray.map((item, idx) =>
@@ -104,6 +124,7 @@ const SelectorEditableTable = ({
         scrapeParametersArray[index].edit ? (
           <Input
             defaultValue={text}
+            value={text}
             placeholder="span#video-title"
             onChange={(event) => onSelectorInputChange({ event, index })}
           />
