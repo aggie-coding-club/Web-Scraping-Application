@@ -2,7 +2,7 @@ import styles from "../styles/Obj.module.css";
 import styleUtils from "../styles/utils.module.css";
 import { Card } from "react-bootstrap";
 import { formatDate } from "../../utils/formatDate";
-import { MdDelete } from "react-icons/md";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { ScrapeConfig } from "../../models/scrapeConfig";
 
 interface ObjProps {
@@ -36,7 +36,7 @@ const Obj = ({
       <Card.Body className={styles.cardBody}>
         <Card.Title className={styleUtils.flexCenter}>
           {url}
-          <MdDelete
+          <DeleteIcon
             className="text-muted ms-auto"
             onClick={(e: React.MouseEvent) => {
               onDeleteObjClicked(obj);
