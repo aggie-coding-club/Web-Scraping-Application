@@ -44,6 +44,7 @@ const AddEditObjDialog = ({
       scrapeParameters: scrapeParametersArray.slice(0, -1),
       scrapeIntervalMinute: scrapeConfig?.scrapeIntervalMinute || 60,
       emailNotification: "none",
+      saveDataOn: "save_on_changes",
     },
   });
 
@@ -156,6 +157,18 @@ const AddEditObjDialog = ({
                 registerOptions={{ required: "Required" }}
                 error={errors.scrapeIntervalMinute}
               />
+              <Form.Group className="mb-3">
+                <Form.Label>Save Data On</Form.Label>
+                <Form.Select
+                  {...register("saveDataOn")}
+                  aria-label="Save Data Setting Select"
+                >
+                  <option value="save_on_changes">Save on changes only</option>
+                  <option value="save_on_scrape">
+                    Save on successful scrape
+                  </option>
+                </Form.Select>
+              </Form.Group>
               <Form.Group className="mb-3">
                 <Form.Label>Email Notifcation</Form.Label>
                 <Form.Select

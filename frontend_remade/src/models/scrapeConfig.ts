@@ -11,6 +11,7 @@ export interface ScrapeConfigInput {
   scrapeParameters: Selector[];
   scrapeIntervalMinute: number;
   emailNotification: string;
+  saveDataOn: string;
 }
 
 export interface ScrapeConfig extends ScrapeConfigInput {
