@@ -5,15 +5,15 @@ interface IData {
   value: string;
 }
 
-interface ISelector extends Document {
+export interface ISelector extends Document {
   name: string;
-  selector: string;
-  data: IData[];
+  selectorValue: string;
+  data?: IData[];
 }
 
 const selectorSchema = new Schema<ISelector>({
   name: { type: String, required: true },
-  selector: { type: String, required: true },
+  selectorValue: { type: String, required: true },
   data: [
     {
       timestamp: { type: Date, required: true },
@@ -22,4 +22,4 @@ const selectorSchema = new Schema<ISelector>({
   ],
 });
 
-const SelectorModel = model<ISelector>("Selector", selectorSchema);
+export const SelectorModel = model<ISelector>("Selector", selectorSchema);

@@ -1,8 +1,8 @@
 import { Document, model, Schema } from "mongoose";
 
-interface ISelectorMetadata extends Document {
+export interface ISelectorMetadata {
   name: string;
-  selector: string;
+  selectorValue: string;
   objectId: Schema.Types.ObjectId;
 }
 
@@ -17,7 +17,7 @@ interface IScrapeMetadata extends Document {
   emailNotification: string;
   lastSuccessfulScrape: Date;
   lastDataChangeTime: Date; //
-  selectors: ISelectorMetadata[];
+  selectorsMetadata: ISelectorMetadata[];
 }
 
 const scrapeMetadataSchema = new Schema<IScrapeMetadata>(
@@ -31,7 +31,7 @@ const scrapeMetadataSchema = new Schema<IScrapeMetadata>(
     scrapeIntervalMinute: { type: Number, required: true },
     emailNotification: { type: String, required: true },
     lastSuccessfulScrape: { type: Date },
-    selectors: [
+    selectorsMetadata: [
       {
         name: { type: String, required: true },
         selector: { type: String, required: true },
@@ -46,7 +46,7 @@ const scrapeMetadataSchema = new Schema<IScrapeMetadata>(
   { timestamps: true }
 );
 
-const ScrapeMetadataModel = model<IScrapeMetadata>(
+export const ScrapeMetadataModel = model<IScrapeMetadata>(
   "ScrapeMetadata",
   scrapeMetadataSchema
 );
