@@ -1,6 +1,7 @@
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Button, Chip, IconButton } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { Table } from "antd";
@@ -8,21 +9,23 @@ import type { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { Spinner } from "react-bootstrap";
 import { ScrapeConfig } from "../../models/scrapeConfig";
-import * as ObjsApi from "../../network/objs_api";
+import * as apis from "../../network/apis";
 import styleUtils from "../../styles/utils.module.css";
-import AddEditObjDialog from "./AddEditScrapeConfigDialog/AddEditScrapeConfigDialog";
-import ViewDataDialog from "./ViewDataDialog/ViewDataDialog";
-import VisibilityIcon from "@mui/icons-material/Visibility";
+import { AddEditScrapeConfigDialog } from "./AddEditScrapeConfigDialog/AddEditScrapeConfigDialog";
+import { ViewDataDialog } from "./ViewDataDialog/ViewDataDialog";
 
-const ScrapeConfigPage = () => {
-  const [objs, setObjs] = useState<ScrapeConfig[]>([]);
-  const [objsLoading, setObjsLoading] = useState(true);
-  const [showObjsLoadingError, setShowObjsLoadingError] = useState(false);
+const ScrapeConfigView = () => {
+  const [scrapeConfig, setScrapeConfigs] = useState<ScrapeConfig[]>([]);
+  const [scrapeConfigsLoading, setScrapeConfigsLoading] = useState(true);
+  const [showScrapeConfigsLoadingError, setShowScrapeConfigsLoadingError] =
+    useState(false);
   const [selectedScrapeConfig, setSelectedScrapeConfig] =
     useState<ScrapeConfig>();
 
-  const [showAddObjDialog, setShowAddObjDialog] = useState(false);
-  const [objToEdit, setObjToEdit] = useState<ScrapeConfig | null>(null);
+  const [showAddScrapeConfigDialog, setShowAddScrapeConfigDialog] =
+    useState(false);
+  const [scrapeConfigToEdit, setScrapeConfigToEdit] =
+    useState<ScrapeConfig | null>(null);
   const [dataToView, setDataToView] = useState<any>(null);
 
   const theme = useTheme();
@@ -31,32 +34,34 @@ const ScrapeConfigPage = () => {
     fontWeight: 500,
   };
   const onSelectClick = async (record: ScrapeConfig, index: number) => {
-    const note = await ObjsApi.getObj(record._id);
+    const note = await apis.getObj(record._id);
     setDataToView(note.scrapedData);
-    setSelectedScrapeConfig(objs[index]);
+    setSelectedScrapeConfig(scrapeConfig[index]);
   };
 
   useEffect(() => {
-    async function loadObjs() {
+    async function loadScrapeConfigs() {
       try {
-        setShowObjsLoadingError(false);
-        setObjsLoading(true);
-        const objs = await ObjsApi.fetchObjs();
-        setObjs(objs);
+        setShowScrapeConfigsLoadingError(false);
+        setScrapeConfigsLoading(true);
+        const scrapeConfigs = await apis.fetchObjs();
+        setScrapeConfigs(scrapeConfigs);
       } catch (error) {
         console.error(error);
-        setShowObjsLoadingError(true);
+        setShowScrapeConfigsLoadingError(true);
       } finally {
-        setObjsLoading(false);
+        setScrapeConfigsLoading(false);
       }
     }
-    loadObjs();
+    loadScrapeConfigs();
   }, []);
 
   async function deleteObj(obj: ScrapeConfig) {
     try {
-      await ObjsApi.deleteObj(obj._id);
-      setObjs(objs.filter((existingObj) => existingObj._id !== obj._id));
+      await apis.deleteObj(obj._id);
+      setScrapeConfigs(
+        scrapeConfig.filter((existingObj) => existingObj._id !== obj._id)
+      );
     } catch (error) {
       console.error(error);
       alert(error);
@@ -129,7 +134,7 @@ const ScrapeConfigPage = () => {
       key: "edit",
       align: "center",
       render: (_, record) => (
-        <IconButton onClick={() => setObjToEdit(record)}>
+        <IconButton onClick={() => setScrapeConfigToEdit(record)}>
           <EditIcon />
         </IconButton>
       ),
@@ -150,47 +155,49 @@ const ScrapeConfigPage = () => {
     <>
       <Button
         className={`m-4 ${styleUtils.blockCenter} ${styleUtils.flexCenter}`}
-        onClick={() => setShowAddObjDialog(true)}
+        onClick={() => setShowAddScrapeConfigDialog(true)}
         startIcon={<AddIcon />}
         variant="contained"
       >
         Configuration
       </Button>
-      {objsLoading && <Spinner animation="border" variant="primary" />}
-      {showObjsLoadingError && (
+      {scrapeConfigsLoading && <Spinner animation="border" variant="primary" />}
+      {showScrapeConfigsLoadingError && (
         <p className="text-danger">
           Something went wrong. Please refresh the page.
         </p>
       )}
-      {!objsLoading && !showObjsLoadingError && (
+      {!scrapeConfigsLoading && !showScrapeConfigsLoadingError && (
         <Table
           style={{ border: "1px solid #e6e6e6" }}
           columns={columns}
-          dataSource={objs}
-          rowKey={(objs) => objs._id}
+          dataSource={scrapeConfig}
+          rowKey={(scrapeConfigs) => scrapeConfigs._id}
         />
       )}
-      {showAddObjDialog && (
-        <AddEditObjDialog
-          onDismiss={() => setShowAddObjDialog(false)}
+      {showAddScrapeConfigDialog && (
+        <AddEditScrapeConfigDialog
+          onDismiss={() => setShowAddScrapeConfigDialog(false)}
           onScrapeConfigSaved={(newObj) => {
-            setObjs([...objs, newObj]);
-            setShowAddObjDialog(false);
+            setScrapeConfigs([...scrapeConfig, newObj]);
+            setShowAddScrapeConfigDialog(false);
           }}
         />
       )}
-      {objToEdit && (
-        <AddEditObjDialog
-          scrapeConfig={objToEdit}
-          onDismiss={() => setObjToEdit(null)}
-          onScrapeConfigSaved={(updatedObj) => {
-            setObjs(
-              objs.map((existingObj) =>
-                existingObj._id === updatedObj._id ? updatedObj : existingObj
+      {scrapeConfigToEdit && (
+        <AddEditScrapeConfigDialog
+          scrapeConfig={scrapeConfigToEdit}
+          onDismiss={() => setScrapeConfigToEdit(null)}
+          onScrapeConfigSaved={(updatedScrapeConfig) => {
+            setScrapeConfigs(
+              scrapeConfig.map((existingObj) =>
+                existingObj._id === updatedScrapeConfig._id
+                  ? updatedScrapeConfig
+                  : existingObj
               )
             );
-            setObjToEdit(null);
-            setShowAddObjDialog(false);
+            setScrapeConfigToEdit(null);
+            setShowAddScrapeConfigDialog(false);
           }}
         />
       )}
@@ -206,4 +213,4 @@ const ScrapeConfigPage = () => {
   );
 };
 
-export default ScrapeConfigPage;
+export { ScrapeConfigView };

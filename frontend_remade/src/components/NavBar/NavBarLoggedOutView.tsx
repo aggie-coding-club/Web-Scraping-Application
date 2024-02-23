@@ -33,4 +33,4 @@ const NavBarLoggedOutView = ({
   );
 };
 
-export default NavBarLoggedOutView;
+export { NavBarLoggedOutView };

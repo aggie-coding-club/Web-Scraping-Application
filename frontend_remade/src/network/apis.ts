@@ -4,7 +4,7 @@ import { LoginCredentials } from "../models/loginCredentials";
 import { ScrapeConfig } from "../models/scrapeConfig";
 import { SignUpCredentials } from "../models/signUpCredentials";
 import { User } from "../models/user";
-import UserContext from "../providers/UserProvider";
+import { UserContext } from "../providers/UserProvider";
 
 const API_BASE = "/api";
 

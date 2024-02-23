@@ -28,4 +28,4 @@ const DataTable = ({ dataSource }: DataTableProps) => {
   return <Table dataSource={dataSource} columns={columns} />;
 };
 
-export default DataTable;
+export { DataTable };

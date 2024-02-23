@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
-import NavBarLoggedInView from "./NavBarLoggedInView";
-import NavBarLoggedOutView from "./NavBarLoggedOutView";
+import { NavBarLoggedInView } from "./NavBarLoggedInView";
+import { NavBarLoggedOutView } from "./NavBarLoggedOutView";
 import { Link } from "react-router-dom";
 import "../../styles/Navbar.css";
 import { useContext } from "react";
-import UserContext from "../../providers/UserProvider";
+import { UserContext } from "../../providers/UserProvider";
 
 interface NavBarProps {
   onSignUpClicked: () => void;
@@ -80,4 +80,4 @@ const NavBar = ({
   );
 };
 
-export default NavBar;
+export { NavBar };

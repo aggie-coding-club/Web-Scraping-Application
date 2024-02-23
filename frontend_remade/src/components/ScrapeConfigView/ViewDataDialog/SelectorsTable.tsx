@@ -26,4 +26,4 @@ const SelectorsTable = ({ dataSource }: SelectorsTableProps) => {
   return <Table rowKey="id" dataSource={dataSource} columns={columns} />;
 };
 
-export default SelectorsTable;
+export { SelectorsTable };

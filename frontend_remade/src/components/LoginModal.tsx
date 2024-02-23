@@ -1,12 +1,12 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { Alert, Form, Modal } from "react-bootstrap";
-import { User } from "../models/user";
-import { LoginCredentials } from "../models/loginCredentials";
-import * as ObjsApi from "../network/objs_api";
-import TextInputField from "./ScrapeConfigView/AddEditScrapeConfigDialog/TextInputField";
-import { UnauthorizedError } from "../errors/http_errors";
 import Button from "@mui/material/Button";
+import { useState } from "react";
+import { Alert, Form, Modal } from "react-bootstrap";
+import { useForm } from "react-hook-form";
+import { UnauthorizedError } from "../errors/http_errors";
+import { LoginCredentials } from "../models/loginCredentials";
+import { User } from "../models/user";
+import * as api from "../network/apis";
+import { TextInputField } from "./ScrapeConfigView/AddEditScrapeConfigDialog/TextInputField";
 
 interface LoginModalProps {
   onDismiss: () => void;
@@ -28,7 +28,7 @@ const LoginModal = ({ onDismiss, onLoginSuccessful }: LoginModalProps) => {
 
   async function onSubmit(credentials: LoginCredentials) {
     try {
-      const user = await ObjsApi.login(credentials);
+      const user = await api.login(credentials);
       onLoginSuccessful(user);
     } catch (error) {
       if (error instanceof UnauthorizedError) {
@@ -77,4 +77,4 @@ const LoginModal = ({ onDismiss, onLoginSuccessful }: LoginModalProps) => {
   );
 };
 
-export default LoginModal;
+export { LoginModal };

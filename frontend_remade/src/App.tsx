@@ -2,20 +2,20 @@ import { useContext, useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
-import LoginModal from "./components/LoginModal";
-import NavBar from "./components/NavBar/NavBar";
-import SignUpModal from "./components/SignUpModal";
+import { LoginModal } from "./components/LoginModal";
+import { NavBar } from "./components/NavBar/NavBar";
+import { SignUpModal } from "./components/SignUpModal";
 import { Sidebar } from "./components/Sidebar";
 
-import ObjsPage from "./pages/ObjsPage";
-import ExamplePage from "./pages/ExamplePage";
-import SettingsPage from "./pages/SettingsPage";
-import NotificationsPage from "./pages/NotificationsPage";
-import AboutPage from "./pages/AboutPage";
-import ContactPage from "./pages/ContactPage";
-import NotFoundPage from "./pages/NotFoundPage";
+import { ScrapeConfigPage } from "./pages/ScrapeConfigPage";
+import { ExamplePage } from "./pages/ExamplePage";
+import { SettingsPage } from "./pages/SettingsPage";
+import { NotificationsPage } from "./pages/NotificationsPage";
+import { AboutPage } from "./pages/AboutPage";
+import { ContactPage } from "./pages/ContactPage";
+import { NotFoundPage } from "./pages/NotFoundPage";
 
-import UserContext from "./providers/UserProvider";
+import { UserContext } from "./providers/UserProvider";
 import styles from "./styles/App.module.css";
 
 const theme = createTheme({
@@ -72,7 +72,7 @@ function App() {
           <div className={styles.contentWrapper} style={stylesContentWrapper}>
             <div className={styles.mainContent}>
               <Routes>
-                <Route path="/" element={<ObjsPage />} />
+                <Route path="/" element={<ScrapeConfigPage />} />
                 <Route path="/example" element={<ExamplePage />} />
                 <Route path="/settings" element={<SettingsPage />} />
                 <Route path="/notifications" element={<NotificationsPage />} />

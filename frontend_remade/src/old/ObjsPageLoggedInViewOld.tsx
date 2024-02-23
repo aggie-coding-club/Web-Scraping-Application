@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Button, Col, Row, Spinner } from "react-bootstrap";
 import AddIcon from "@mui/icons-material/Add";
 import { Obj as ObjsModel } from "../models/object";
-import * as ObjsApi from "../network/objs_api";
+import * as ObjsApi from "../network/apis";
 import styles from "../styles/ObjsPage.module.css";
 import styleUtils from "../styles/utils.module.css";
 import AddEditObjDialog from "./AddEditObjDialog";

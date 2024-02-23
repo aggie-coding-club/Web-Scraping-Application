@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form";
 import { User } from "../models/user";
 import { SignUpCredentials } from "../models/signUpCredentials";
-import * as ObjsApi from "../network/objs_api";
+import * as ObjsApi from "../network/apis";
 import { Alert, Form, Modal } from "react-bootstrap";
-import TextInputField from "./ScrapeConfigView/AddEditScrapeConfigDialog/TextInputField";
+import { TextInputField } from "./ScrapeConfigView/AddEditScrapeConfigDialog/TextInputField";
 import { useState } from "react";
 import { ConflictError } from "../errors/http_errors";
 import { Button } from "@mui/material";
@@ -88,4 +88,4 @@ const SignUpModal = ({ onDismiss, onSignUpSuccessful }: SignUpModalProps) => {
   );
 };
 
-export default SignUpModal;
+export { SignUpModal };
