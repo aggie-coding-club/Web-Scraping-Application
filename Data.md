@@ -1,15 +1,16 @@
 # MongoDB
 
-## Metadata
+## ScrapeMetadata
 
 ```json
 {
   "_id": ObjectId("unique_metadata_id"),
   "name": "Ryan Trahan",
   "note": "Lorem ipsum dolor sit...",
-  "status": "Success",
   "url": "www.awesomeness.com",
-  "lastScraped": "233455",
+  "status": "Success",
+  "lastSuccessfulScraped": "233455", // time that data was successfully scraped
+"lastDataChangeTime": "923235", // time that the scraped data was actually different
   "interval": 60,
   "selectors": [
     {
@@ -26,12 +27,11 @@
 }
 ```
 
-## Selector Data
+## Selectors
 
 ```json
 {
   "_id": ObjectId("selectorData_id1"),
-  "metadataId": ObjectId("unique_metadata_id"),
   "name": "sub count",
   "selector": "yt-formatted-string#sub-count",
   "data": [
