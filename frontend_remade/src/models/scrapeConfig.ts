@@ -1,7 +1,12 @@
 interface Selector {
-  key: number;
+  id: string;
   name: string;
-  tag: string;
+  value: string; // selector value
+  description?: string;
+}
+
+export interface scrapeParameterInterface extends Selector {
+  edit?: boolean;
 }
 
 export interface ScrapeConfigInput {
