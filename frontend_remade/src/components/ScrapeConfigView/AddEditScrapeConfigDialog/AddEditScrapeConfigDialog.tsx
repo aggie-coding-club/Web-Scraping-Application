@@ -148,12 +148,12 @@ const AddEditObjDialog = ({
                 error={errors.scrapeIntervalMinute}
               />
               <Form.Group className="mb-3">
-                <Form.Label>Save Data On</Form.Label>
+                <Form.Label>Data Saving</Form.Label>
                 <Form.Select
                   {...register("saveDataOn")}
                   aria-label="Save Data Setting Select"
                 >
-                  <option value="save_on_changes">Save on changes only</option>
+                  <option value="save_on_changes">Save only on changes</option>
                   <option value="save_on_scrape">
                     Save on successful scrape
                   </option>
