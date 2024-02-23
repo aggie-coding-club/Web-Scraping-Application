@@ -81,7 +81,9 @@ const ScrapeConfigPage = () => {
       align: "center",
       render: (text) => {
         if (text === "success") {
-          return <Chip label="Finished" color="primary" />;
+          return (
+            <Chip label="Finished" color="success" style={{ color: "white" }} />
+          );
         } else if (text === "failed") {
           return <Chip label="Failed" color="warning" />;
         }

@@ -29,6 +29,9 @@ const theme = createTheme({
     warning: {
       main: "#ca110b",
     },
+    success: {
+      main: "#53BA4A",
+    },
   },
   typography: {
     fontFamily: ["Inter"].join(","),
