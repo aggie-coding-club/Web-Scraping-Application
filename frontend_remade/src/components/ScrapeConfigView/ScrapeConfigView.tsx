@@ -1,8 +1,8 @@
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
+import SettingsIcon from "@mui/icons-material/Settings";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { Button, Chip, IconButton } from "@mui/material";
+import { Button, IconButton } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
@@ -85,14 +85,41 @@ const ScrapeConfigView = () => {
       dataIndex: "status",
       align: "center",
       render: (text) => {
+        let backgroundColor;
+        let label;
+
         if (text === "success") {
-          return (
-            <Chip label="Finished" color="success" style={{ color: "white" }} />
-          );
+          backgroundColor = theme.palette.primary.main;
+          label = "Finished";
         } else if (text === "failed") {
-          return <Chip label="Failed" color="warning" />;
+          backgroundColor = theme.palette.warning.main;
+          label = "Failed";
+        } else {
+          backgroundColor = "gray";
+          label = "Pending";
         }
-        return <Chip label="Pending" color="default" />;
+
+        return (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "4px",
+            }}
+          >
+            <div
+              style={{
+                borderRadius: "50%",
+                width: "12px",
+                height: "12px",
+                color: "white",
+                backgroundColor,
+              }}
+            ></div>
+            <div>{label}</div>
+          </div>
+        );
       },
     },
     {
@@ -135,7 +162,7 @@ const ScrapeConfigView = () => {
       align: "center",
       render: (_, record) => (
         <IconButton onClick={() => setScrapeConfigToEdit(record)}>
-          <EditIcon />
+          <SettingsIcon />
         </IconButton>
       ),
     },
@@ -158,6 +185,7 @@ const ScrapeConfigView = () => {
         onClick={() => setShowAddScrapeConfigDialog(true)}
         startIcon={<AddIcon />}
         variant="contained"
+        style={{ boxShadow: "0 0 2px 2px rgba(0,0,0,0.08)" }}
       >
         Configuration
       </Button>
