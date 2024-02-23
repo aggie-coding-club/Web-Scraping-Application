@@ -1,12 +1,15 @@
-import { Request, Response } from "express";
+import { Request, RequestHandler, Response } from "express";
 import { ISelector } from "../models/selectorModel";
 import {
   ISelectorMetadata,
+  IScrapeMetadata,
   ScrapeMetadataModel,
 } from "../models/scrapeMetadataModel";
 import { assertIsDefined } from "../util/assertIsDefined";
-import { createSelector } from "./selectorController";
+import { createSelector, getSelectorByObjectId } from "./selectorController";
 import { setNextScrapeTimeout } from "../util/checkAndExecuteScrape";
+import createHttpError from "http-errors";
+import { Schema } from "mongoose";
 
 export const createScrapingConfig = async (req: Request, res: Response) => {
   try {
@@ -71,5 +74,49 @@ export const getScrapingConfigs = async (req: Request, res: Response) => {
   }
 };
 
+// gets selector data based on name
+export const getSelectorDataByKey: RequestHandler = async (req, res, next) => {
+  const { userId } = req.session;
+  const { scrapingConfigId, key } = req.params;
+  try {
+    const myScrapingConfig: IScrapeMetadata | null =
+      await ScrapeMetadataModel.findById(scrapingConfigId).exec();
+
+    if (!myScrapingConfig) {
+      return res
+        .status(404)
+        .json({ message: "Scraping configuration not found" });
+    }
+
+    if (myScrapingConfig.userId.toString() !== userId?.toString()) {
+      throw createHttpError(403, "Forbidden");
+    }
+
+    let objectId: Schema.Types.ObjectId | null = null;
+    for (const selectorMetadata of myScrapingConfig.selectorsMetadata) {
+      if (selectorMetadata.key === key) {
+        // get selector
+        objectId = selectorMetadata.objectId;
+        break;
+      }
+    }
+
+    if (objectId == null) {
+      throw createHttpError(404, "Selector ID not Found in config");
+    }
+
+    let selectorData: ISelector | null = await getSelectorByObjectId(objectId);
+
+    if (selectorData == null) {
+      console.error("Selector ID in found metadata, but not in database o.O");
+      throw createHttpError(500, "Internal Server Error");
+    }
+
+    return res.status(200).json(selectorData);
+  } catch (error) {
+    console.error("Error in getSelectorData:", error);
+    next(error);
+  }
+};
 // FIXME: add updateScrapingConfig
 // FIXME: add deleteScrapingConfig

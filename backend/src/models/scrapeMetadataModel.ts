@@ -1,12 +1,13 @@
 import { Document, model, Schema } from "mongoose";
 
 export interface ISelectorMetadata {
+  key: string;
   name: string;
   selectorValue: string;
   objectId: Schema.Types.ObjectId;
 }
 
-interface IScrapeMetadata extends Document {
+export interface IScrapeMetadata extends Document {
   userId: Schema.Types.ObjectId;
   name: string;
   note: string;

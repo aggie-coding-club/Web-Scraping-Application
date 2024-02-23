@@ -7,6 +7,7 @@ export const createSelector = async (
 ): Promise<ISelectorMetadata | null> => {
   try {
     const mySelector = new SelectorModel({
+      key: selector.key,
       name: selector.name,
       selectorValue: selector.selectorValue,
       data: [],
@@ -15,6 +16,7 @@ export const createSelector = async (
     const savedSelector = await mySelector.save();
 
     const metadata: ISelectorMetadata = {
+      key: selector.key,
       name: selector.name,
       selectorValue: selector.selectorValue,
       objectId: savedSelector._id,
@@ -28,9 +30,11 @@ export const createSelector = async (
   return null;
 };
 
-export const getSelector = async (objectId: mongoose.Types.ObjectId) => {
+export const getSelectorByObjectId = async (
+  objectId: mongoose.Schema.Types.ObjectId
+): Promise<ISelector | null> => {
   try {
-    const selector = await SelectorModel.findById(objectId);
+    const selector: ISelector | null = await SelectorModel.findById(objectId);
     return selector;
   } catch (error) {
     console.error("Error in getSelector:", error);
