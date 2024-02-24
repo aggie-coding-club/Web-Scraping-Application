@@ -79,37 +79,41 @@ export async function logout(): Promise<void> {
   await request("/users/logout", { method: "POST" });
 }
 
-export async function fetchObjs(): Promise<ScrapeConfig[]> {
+export async function fetchScrapeConfigs(): Promise<ScrapeConfig[]> {
   return request("/scrape/getScrapingConfigs", { method: "GET" });
 }
 
-export async function createObj(obj: any): Promise<ScrapeConfig> {
+export async function createScrapeConfig(
+  scrapeConfig: any
+): Promise<ScrapeConfig> {
   return request("/scrape/createScrapingConfig", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(obj),
+    body: JSON.stringify(scrapeConfig),
   });
 }
 
-export async function updateObj(
-  objId: string,
-  obj: any
+export async function updateScrapeConfig(
+  scrapeConfigId: string,
+  scrapeConfig: any
 ): Promise<ScrapeConfig> {
-  return request(`/scrape/updateScrapingConfig/${objId}`, {
+  return request(`/scrape/updateScrapingConfig/${scrapeConfigId}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(obj),
+    body: JSON.stringify(scrapeConfig),
   });
 }
 
-export async function deleteObj(objId: string): Promise<void> {
-  await request(`/scrape/deleteScrapingConfig/${objId}`, {
+export async function deleteScrapeConfig(
+  scrapeConfigId: string
+): Promise<void> {
+  await request(`/scrape/deleteScrapingConfig/${scrapeConfigId}`, {
     method: "DELETE",
   });
 }
 
-export async function getObj(objId: string): Promise<any> {
-  return request(`/objs/${objId}`, { method: "GET" });
+export async function getNote(scrapeConfigId: string): Promise<any> {
+  return request(`/objs/${scrapeConfigId}`, { method: "GET" });
 }
 
 export async function fetchHtmlContent(url: string): Promise<string> {

@@ -21,7 +21,7 @@ const ObjsPageLoggedInView = () => {
       try {
         setShowObjsLoadingError(false);
         setObjsLoading(true);
-        const objs = await ObjsApi.fetchObjs();
+        const objs = await ObjsApi.fetchScrapeConfigs();
         setObjs(objs);
       } catch (error) {
         console.error(error);
@@ -35,7 +35,7 @@ const ObjsPageLoggedInView = () => {
 
   async function deleteObj(obj: ObjsModel) {
     try {
-      await ObjsApi.deleteObj(obj._id);
+      await ObjsApi.deleteScrapeConfig(obj._id);
       setObjs(objs.filter((existingObj) => existingObj._id !== obj._id));
     } catch (error) {
       console.error(error);

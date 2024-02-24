@@ -79,8 +79,11 @@ const AddEditScrapeConfigDialog = ({
 
     try {
       const scrapeConfigResponse = scrapeConfig
-        ? await Apis.updateObj(scrapeConfig._id, inputWithScrapeParameters)
-        : await Apis.createObj(inputWithScrapeParameters);
+        ? await Apis.updateScrapeConfig(
+            scrapeConfig._id,
+            inputWithScrapeParameters
+          )
+        : await Apis.createScrapeConfig(inputWithScrapeParameters);
       onScrapeConfigSaved(scrapeConfigResponse);
     } catch (error) {
       console.error(error);

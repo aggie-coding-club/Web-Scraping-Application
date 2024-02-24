@@ -15,7 +15,7 @@ import { AddEditScrapeConfigDialog } from "./AddEditScrapeConfigDialog/AddEditSc
 import { ViewDataDialog } from "./ViewDataDialog/ViewDataDialog";
 
 const ScrapeConfigView = () => {
-  const [scrapeConfig, setScrapeConfigs] = useState<ScrapeConfig[]>([]);
+  const [scrapeConfigs, setScrapeConfigs] = useState<ScrapeConfig[]>([]);
   const [scrapeConfigsLoading, setScrapeConfigsLoading] = useState(true);
   const [showScrapeConfigsLoadingError, setShowScrapeConfigsLoadingError] =
     useState(false);
@@ -34,9 +34,9 @@ const ScrapeConfigView = () => {
     fontWeight: 500,
   };
   const onSelectClick = async (record: ScrapeConfig, index: number) => {
-    const note = await apis.getObj(record._id);
+    const note = await apis.getNote(record._id);
     setDataToView(note.scrapedData);
-    setSelectedScrapeConfig(scrapeConfig[index]);
+    setSelectedScrapeConfig(scrapeConfigs[index]);
   };
 
   useEffect(() => {
@@ -44,7 +44,7 @@ const ScrapeConfigView = () => {
       try {
         setShowScrapeConfigsLoadingError(false);
         setScrapeConfigsLoading(true);
-        const scrapeConfigs = await apis.fetchObjs();
+        const scrapeConfigs = await apis.fetchScrapeConfigs();
         setScrapeConfigs(scrapeConfigs);
       } catch (error) {
         console.error(error);
@@ -56,11 +56,14 @@ const ScrapeConfigView = () => {
     loadScrapeConfigs();
   }, []);
 
-  async function deleteObj(obj: ScrapeConfig) {
+  async function deleteScrapeConfig(scrapeConfig: ScrapeConfig) {
     try {
-      await apis.deleteObj(obj._id);
+      await apis.deleteScrapeConfig(scrapeConfig._id);
       setScrapeConfigs(
-        scrapeConfig.filter((existingObj) => existingObj._id !== obj._id)
+        scrapeConfigs.filter(
+          (existingScrapeConfig) =>
+            existingScrapeConfig._id !== scrapeConfig._id
+        )
       );
     } catch (error) {
       console.error(error);
@@ -171,7 +174,7 @@ const ScrapeConfigView = () => {
       key: "delete",
       align: "center",
       render: (_, record) => (
-        <IconButton onClick={() => deleteObj(record)}>
+        <IconButton onClick={() => deleteScrapeConfig(record)}>
           <DeleteIcon />
         </IconButton>
       ),
@@ -199,15 +202,15 @@ const ScrapeConfigView = () => {
         <Table
           style={{ border: "1px solid #e6e6e6" }}
           columns={columns}
-          dataSource={scrapeConfig}
+          dataSource={scrapeConfigs}
           rowKey={(scrapeConfigs) => scrapeConfigs._id}
         />
       )}
       {showAddScrapeConfigDialog && (
         <AddEditScrapeConfigDialog
           onDismiss={() => setShowAddScrapeConfigDialog(false)}
-          onScrapeConfigSaved={(newObj) => {
-            setScrapeConfigs([...scrapeConfig, newObj]);
+          onScrapeConfigSaved={(newScrapeConfig) => {
+            setScrapeConfigs([...scrapeConfigs, newScrapeConfig]);
             setShowAddScrapeConfigDialog(false);
           }}
         />
@@ -218,10 +221,10 @@ const ScrapeConfigView = () => {
           onDismiss={() => setScrapeConfigToEdit(null)}
           onScrapeConfigSaved={(updatedScrapeConfig) => {
             setScrapeConfigs(
-              scrapeConfig.map((existingObj) =>
-                existingObj._id === updatedScrapeConfig._id
+              scrapeConfigs.map((existingScrapeConfig) =>
+                existingScrapeConfig._id === updatedScrapeConfig._id
                   ? updatedScrapeConfig
-                  : existingObj
+                  : existingScrapeConfig
               )
             );
             setScrapeConfigToEdit(null);
