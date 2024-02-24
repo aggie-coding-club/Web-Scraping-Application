@@ -34,8 +34,7 @@ export const getSelectorByObjectId = async (
   objectId: mongoose.Schema.Types.ObjectId
 ): Promise<ISelector | null> => {
   try {
-    const selector: ISelector | null = await SelectorModel.findById(objectId);
-    return selector;
+    return await SelectorModel.findById(objectId);
   } catch (error) {
     console.error("Error in getSelector:", error);
     throw error; // Rethrow the error to be handled by the calling function

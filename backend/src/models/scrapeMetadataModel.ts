@@ -35,7 +35,7 @@ const scrapeMetadataSchema = new Schema<IScrapeMetadata>(
     selectorsMetadata: [
       {
         name: { type: String, required: true },
-        selector: { type: String, required: true },
+        selectorValue: { type: String, required: true },
         objectId: {
           type: Schema.Types.ObjectId,
           required: true,

@@ -11,6 +11,61 @@ import { setNextScrapeTimeout } from "../util/checkAndExecuteScrape";
 import createHttpError from "http-errors";
 import { Schema } from "mongoose";
 
+export const testGet = async (req: Request, res: Response) => {
+  try {
+    console.log("[SUCCESS] Test Get");
+    const { userId } = req.session;
+
+    const { name, note, url, scrapeIntervalMinute, emailNotification } =
+      req.body;
+
+    console.log("userId:", userId);
+
+    console.log("name:", name);
+    console.log("name:", name);
+    console.log("note:", note);
+    console.log("url:", url);
+    console.log("scrapeIntervalMinute:", scrapeIntervalMinute);
+    console.log("emailNotification:", emailNotification);
+
+    res.status(200).send();
+  } catch (error) {
+    console.error("Error in test:", error);
+  }
+};
+
+export const testPost = async (req: Request, res: Response) => {
+  try {
+    console.log("[SUCCESS] Test Post");
+    console.log("Session:", req.session);
+    const { userId } = req.session;
+
+    const { name, note, url, scrapeIntervalMinute, emailNotification } =
+      req.body;
+
+    console.log("userId:", userId);
+
+    console.log("name:", name);
+    console.log("note:", note);
+    console.log("url:", url);
+    console.log("scrapeIntervalMinute:", scrapeIntervalMinute);
+    console.log("emailNotification:", emailNotification);
+
+    const { selectors }: { selectors: ISelector[] } = req.body;
+    console.log("selectors:");
+    for (const selector of selectors) {
+      console.log("-------:");
+      console.log("key: ", selector.key);
+      console.log("name: ", selector.name);
+      console.log("value: ", selector.selectorValue);
+    }
+
+    res.status(200).send();
+  } catch (error) {
+    console.error("Error in test:", error);
+  }
+};
+
 export const createScrapingConfig = async (req: Request, res: Response) => {
   try {
     const { userId } = req.session;
@@ -49,7 +104,9 @@ export const createScrapingConfig = async (req: Request, res: Response) => {
 
     await config.save();
 
-    setNextScrapeTimeout(0); // FIXME!!!
+    // setNextScrapeTimeout(0); // FIXME!!!
+
+    res.status(204).send();
   } catch (error) {
     console.error(
       "Error in createScrapingConfig in scrapeMetadataController.ts:",
