@@ -3,10 +3,10 @@ import { Button } from "@mui/material";
 import { useState } from "react";
 import { Form, Modal, Tab, Tabs } from "react-bootstrap";
 import { ScrapeConfig } from "../../../models/scrapeConfig";
-import DataArrayTable from "./DataArrayTable";
-import DataTable from "./DataTable";
-import DiffViewer from "./DiffViewer";
-import SelectorsTable from "./SelectorsTable";
+import { DataArrayTable } from "./DataArrayTable";
+import { DataTable } from "./DataTable";
+import { DiffViewer } from "./DiffViewer";
+import { SelectorsTable } from "./SelectorsTable";
 
 interface ViewDataDialogProps {
   scrapeConfig: ScrapeConfig;
@@ -99,4 +99,4 @@ const ViewDataDialog = ({
   );
 };
 
-export default ViewDataDialog;
+export { ViewDataDialog };

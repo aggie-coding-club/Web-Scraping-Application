@@ -30,4 +30,4 @@ const DataArrayTable = ({ dataSource, setIndex }: DataArrayTableProps) => {
   return <Table rowKey="timestamp" dataSource={dataSource} columns={columns} />;
 };
 
-export default DataArrayTable;
+export { DataArrayTable };

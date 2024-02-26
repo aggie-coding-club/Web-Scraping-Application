@@ -35,4 +35,4 @@ const TextInputField = ({
   );
 };
 
-export default TextInputField;
+export { TextInputField };

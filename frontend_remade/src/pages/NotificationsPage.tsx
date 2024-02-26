@@ -32,4 +32,4 @@ const NotificationsPage = () => {
   );
 };
 
-export default NotificationsPage;
+export { NotificationsPage };
