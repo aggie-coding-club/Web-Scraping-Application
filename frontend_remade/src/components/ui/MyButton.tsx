@@ -13,6 +13,7 @@ interface MyButtonProps {
   style?: {
     [key: string]: any;
   };
+  type?: "button" | "submit" | "reset";
 }
 
 const PRIMARY_BTN_CLASS = ""; // default
@@ -26,6 +27,7 @@ const MyButton = ({
   onClick,
   disabled,
   style,
+  type = "button",
 }: MyButtonProps) => {
   let myClass: string = PRIMARY_BTN_CLASS;
 
@@ -48,6 +50,7 @@ const MyButton = ({
   return (
     <div>
       <button
+        type={type}
         className={`${myClass} ${className}`}
         onClick={handleClick}
         disabled={disabled}

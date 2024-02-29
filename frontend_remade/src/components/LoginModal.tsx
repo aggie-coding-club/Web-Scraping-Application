@@ -8,7 +8,8 @@ import TextInputField from "./ScrapeConfigView/AddEditScrapeConfigDialog/TextInp
 import styleUtils from "../styles/utils.module.css";
 import { UnauthorizedError } from "../errors/http_errors";
 import MyButton from "./ui/MyButton";
-
+import { supabase } from "../providers/supabaseClient";
+import googleLogo from "../assets/google.svg";
 interface LoginModalProps {
   onDismiss: () => void;
   onLoginSuccessful: (user: User) => void;
@@ -22,6 +23,7 @@ const LoginModal = ({ onDismiss, onLoginSuccessful }: LoginModalProps) => {
     formState: { errors, isSubmitting },
   } = useForm<LoginCredentials>();
 
+  // Handle MongoDB based login
   async function onSubmit(credentials: LoginCredentials) {
     try {
       const user = await ObjsApi.login(credentials);
@@ -35,6 +37,20 @@ const LoginModal = ({ onDismiss, onLoginSuccessful }: LoginModalProps) => {
       console.error(error);
     }
   }
+
+  // Handle Google OAuth login
+  const handleGoogleLogin = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+    });
+    if (error) {
+      setErrorText(error.message);
+    } else {
+      // You might want to handle the successful Google login here
+      // For example, you could close the modal and/or refresh user data
+      // This may involve fetching user data from your backend using the Supabase session info, if you're linking Supabase auth with your MongoDB users
+    }
+  };
 
   return (
     <Modal show onHide={onDismiss}>
@@ -62,8 +78,13 @@ const LoginModal = ({ onDismiss, onLoginSuccessful }: LoginModalProps) => {
             registerOptions={{ required: "Required" }}
             error={errors.password}
           />
-          <MyButton className={styleUtils.width100} disabled={isSubmitting}>
+          <MyButton className={styleUtils.width100} disabled={isSubmitting} type="submit">
             Log In
+          </MyButton>
+          {/* Add a button for Google OAuth login */}
+          <MyButton className={`${styleUtils.width100} mt-3 ${styleUtils.googlesignupbtn}`} onClick={handleGoogleLogin}>
+            <img src={googleLogo} alt="Google" />
+            Log In with Google
           </MyButton>
         </Form>
       </Modal.Body>

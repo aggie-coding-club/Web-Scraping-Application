@@ -14,3 +14,28 @@
 .width100 {
   width: 100%;
 }
+
+.googlesignupbtn {
+  background-color: #4285F4; /* Google's blue */
+  color: white; /* Text color */
+  border: none; /* Removes the border */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border-radius: 4px;
+  /* font-weight: bold; */
+  transition: background-color 0.3s;
+  height: 42px;
+}
+
+.googlesignupbtn:hover {
+  background-color: #6c9ff0; 
+}
+
+.googlesignupbtn img {
+  margin-right: 10px; /* Adds some space between the logo and the text */
+  width: 22px;
+  height: 22px;
+}
+

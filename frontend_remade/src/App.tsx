@@ -1,5 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { supabase } from "./providers/supabaseClient";
+import * as ObjsApi from "./network/objs_api";
 
 import LoginModal from "./components/LoginModal";
 import NavBar from "./components/NavBar/NavBar";
@@ -13,6 +15,7 @@ import NotificationsPage from "./pages/NotificationsPage";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import OAuthCallback from './components/OAuthCallback';
 
 import UserContext from "./providers/UserProvider";
 import styles from "./styles/App.module.css";
@@ -34,6 +37,58 @@ function App() {
     setSidebarWidth(newWidth);
   }, [sidebarExpanded]);
 
+  useEffect(() => {
+    const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_IN') {
+        // Get user details from the session
+        if( session){
+        const { user } = session;
+        // console.log("Signed In", user); // Show the user for the session
+        const userDetails = {
+          email: user.email,
+          fullName: `${user.user_metadata.full_name}_${user.user_metadata.provider_id}` || "DefaultUsername",
+        };
+
+        // Construct credentials to sign up in MongoDB
+        const credentials = {
+          username: userDetails.fullName || "DefaultUsername",
+          email: userDetails.email ?? 'testingemail', // Provide a default value for email
+          password: 'shashankmt', // You might not need a password for OAuth users
+        };
+
+        try {
+          // Call your API to handle the sign-up / link account process in MongoDB
+          const user = await ObjsApi.signUp(credentials);
+          console.log(user, "has signed up");
+          setLoggedInUser(user);
+        } catch (error) {
+            // If the sign up fails, check if it's because the user already exists
+            if ((error as Error).message.includes('Username already in use.')) {
+              // If the user already exists, try to log them in
+              try {
+                const credentialsForLogin = {
+                  username: credentials.username,
+                  password: credentials.password,
+                };
+                const user = await ObjsApi.login(credentialsForLogin);
+                // console.log(user, "has logged in"); //Show User logged in
+                setLoggedInUser(user);
+              } catch (loginError) {
+                // Handle any errors that occur during login
+                console.error(loginError);
+              }
+            }else{
+              console.error(error);
+            }
+        }
+      }
+      }
+    });
+
+    // Clean up the event listener when the component unmounts
+    return () => authListener.subscription.unsubscribe();
+  }, []);
+
   return (
     <BrowserRouter>
       <div className={styles.appContainer}>
@@ -54,6 +109,7 @@ function App() {
               <Route path="/about" element={<AboutPage />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/*" element={<NotFoundPage />} />
+              <Route path="/oauth/callback" element={<OAuthCallback />} />
             </Routes>
           </div>
         </div>
