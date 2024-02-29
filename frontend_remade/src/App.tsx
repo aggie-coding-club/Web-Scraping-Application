@@ -59,7 +59,7 @@ function App() {
         try {
           // Call your API to handle the sign-up / link account process in MongoDB
           const user = await ObjsApi.signUp(credentials);
-          console.log(user, "has signed up");
+          // console.log(user, "has signed up"); // SHow the user that signed up
           setLoggedInUser(user);
         } catch (error) {
             // If the sign up fails, check if it's because the user already exists
