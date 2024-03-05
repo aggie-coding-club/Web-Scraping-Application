@@ -1,11 +1,10 @@
 import { useContext } from "react";
 import { ConflictError, UnauthorizedError } from "../errors/http_errors";
-import UserContext from "../providers/UserProvider";
-import { Obj } from "../models/object";
-import { User } from "../models/user";
-import { SignUpCredentials } from "../models/signUpCredentials";
 import { LoginCredentials } from "../models/loginCredentials";
-// import { ObjInput } from "../models/objInput";
+import { ScrapeConfig } from "../models/scrapeConfig";
+import { SignUpCredentials } from "../models/signUpCredentials";
+import { User } from "../models/user";
+import UserContext from "../providers/UserProvider";
 import { supabase } from "../providers/supabaseClient";
 
 const API_BASE = "/api";
@@ -98,11 +97,11 @@ export async function logout(): Promise<void> {
   await request("/users/logout", { method: "POST" });
 }
 
-export async function fetchObjs(): Promise<Obj[]> {
+export async function fetchObjs(): Promise<ScrapeConfig[]> {
   return request("/scrape/getScrapingConfigs", { method: "GET" });
 }
 
-export async function createObj(obj: any): Promise<Obj> {
+export async function createObj(obj: any): Promise<ScrapeConfig> {
   return request("/scrape/createScrapingConfig", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -110,7 +109,10 @@ export async function createObj(obj: any): Promise<Obj> {
   });
 }
 
-export async function updateObj(objId: string, obj: any): Promise<Obj> {
+export async function updateObj(
+  objId: string,
+  obj: any
+): Promise<ScrapeConfig> {
   return request(`/scrape/updateScrapingConfig/${objId}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },

@@ -1,24 +1,24 @@
 import styles from "../styles/Obj.module.css";
 import styleUtils from "../styles/utils.module.css";
 import { Card } from "react-bootstrap";
-import { Obj as ObjModel } from "../../models/object";
 import { formatDate } from "../../utils/formatDate";
-import { MdDelete } from "react-icons/md";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { ScrapeConfig } from "../../models/scrapeConfig";
 
 interface ObjProps {
-  obj: ObjModel;
-  onObjClicked: (obj: ObjModel) => void;
-  onDeleteObjClicked: (obj: ObjModel) => void;
+  scrapeConfig: ScrapeConfig;
+  onObjClicked: (obj: ScrapeConfig) => void;
+  onDeleteObjClicked: (obj: ScrapeConfig) => void;
   className?: string;
 }
 
 const Obj = ({
-  obj,
+  scrapeConfig,
   onObjClicked,
   onDeleteObjClicked,
   className,
 }: ObjProps) => {
-  const { url, text, createdAt, updatedAt } = obj;
+  const { url, text, createdAt, updatedAt } = scrapeConfig;
 
   // will be run at every render, formatDate is a computationally cheap function but can utilize something like useEffect for later optimization
   let createdUpdatedText: string;
@@ -36,7 +36,7 @@ const Obj = ({
       <Card.Body className={styles.cardBody}>
         <Card.Title className={styleUtils.flexCenter}>
           {url}
-          <MdDelete
+          <DeleteIcon
             className="text-muted ms-auto"
             onClick={(e: React.MouseEvent) => {
               onDeleteObjClicked(obj);
@@ -44,7 +44,7 @@ const Obj = ({
             }}
           />
         </Card.Title>
-        <Card.Text className={styles.cardText}>{text}</Card.Text>
+        <Card.Text className={styles.cardText}>{"text"}</Card.Text>
       </Card.Body>
       <Card.Footer className="text-muted">{createdUpdatedText}</Card.Footer>
     </Card>

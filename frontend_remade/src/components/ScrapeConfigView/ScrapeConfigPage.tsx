@@ -1,25 +1,40 @@
+import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import { Button, Chip, IconButton } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import { Table } from "antd";
+import type { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { Spinner } from "react-bootstrap";
-import MyButton from "../ui/MyButton";
-import { FaPlus } from "react-icons/fa";
-import { Obj, Obj as ObjsModel } from "../../models/object";
+import { ScrapeConfig } from "../../models/scrapeConfig";
 import * as ObjsApi from "../../network/objs_api";
 import styleUtils from "../../styles/utils.module.css";
 import AddEditObjDialog from "./AddEditScrapeConfigDialog/AddEditScrapeConfigDialog";
-import ViewStringDialog from "./ViewData/ViewDataDialog";
-import { Table } from "antd";
-import type { ColumnsType } from "antd/es/table";
+import ViewDataDialog from "./ViewDataDialog/ViewDataDialog";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
-const ObjsPageLoggedInView = () => {
-  const [objs, setObjs] = useState<ObjsModel[]>([]);
+const ScrapeConfigPage = () => {
+  const [objs, setObjs] = useState<ScrapeConfig[]>([]);
   const [objsLoading, setObjsLoading] = useState(true);
   const [showObjsLoadingError, setShowObjsLoadingError] = useState(false);
-  const [scrapeParametersArray, setScrapeParametersArray] = useState<any[]>([]);
+  const [selectedScrapeConfig, setSelectedScrapeConfig] =
+    useState<ScrapeConfig>();
 
   const [showAddObjDialog, setShowAddObjDialog] = useState(false);
-  const [objToEdit, setObjToEdit] = useState<ObjsModel | null>(null);
-  const [stringToView, setStringToView] = useState<string | null>(null);
+  const [objToEdit, setObjToEdit] = useState<ScrapeConfig | null>(null);
   const [dataToView, setDataToView] = useState<any>(null);
+
+  const theme = useTheme();
+  const urlStyle = {
+    color: theme.palette.secondary.main,
+    fontWeight: 500,
+  };
+  const onSelectClick = async (record: ScrapeConfig, index: number) => {
+    const note = await ObjsApi.getObj(record._id);
+    setDataToView(note.scrapedData);
+    setSelectedScrapeConfig(objs[index]);
+  };
 
   useEffect(() => {
     async function loadObjs() {
@@ -38,7 +53,7 @@ const ObjsPageLoggedInView = () => {
     loadObjs();
   }, []);
 
-  async function deleteObj(obj: ObjsModel) {
+  async function deleteObj(obj: ScrapeConfig) {
     try {
       await ObjsApi.deleteObj(obj._id);
       setObjs(objs.filter((existingObj) => existingObj._id !== obj._id));
@@ -48,7 +63,7 @@ const ObjsPageLoggedInView = () => {
     }
   }
 
-  const columns: ColumnsType<Obj> = [
+  const columns: ColumnsType<ScrapeConfig> = [
     {
       title: "Name",
       dataIndex: "name",
@@ -60,14 +75,38 @@ const ObjsPageLoggedInView = () => {
       key: "description",
     },
     {
+      title: "Last Scrape",
+      key: "status",
+      dataIndex: "status",
+      align: "center",
+      render: (text) => {
+        if (text === "success") {
+          return (
+            <Chip label="Finished" color="success" style={{ color: "white" }} />
+          );
+        } else if (text === "failed") {
+          return <Chip label="Failed" color="warning" />;
+        }
+        return <Chip label="Pending" color="default" />;
+      },
+    },
+    {
       title: "Website URL",
       dataIndex: "url",
       key: "url",
       render: (text) => (
-        <a href={text} style={{ color: "#315c9d" }}>
+        <a href={text} style={urlStyle}>
           {text}
         </a>
       ),
+    },
+    {
+      title: "Last Changed",
+      key: "lastChanged",
+      dataIndex: "lastChanged",
+      render: (text) => {
+        return text ? new Date(text).toLocaleString() : "N/A";
+      },
     },
     {
       title: "Interval (min)",
@@ -76,64 +115,47 @@ const ObjsPageLoggedInView = () => {
       align: "center",
     },
     {
-      title: "Data",
-      key: "select",
+      title: "View",
+      key: "view",
+      align: "center",
       render: (_, record, index) => (
-        <>
-          <a
-            className="text-secondary"
-            href="#"
-            onClick={async () => {
-              const note = await ObjsApi.getObj(record._id);
-              setStringToView(
-                note.scrapedData
-                  .map((data: any) => JSON.stringify(data, null, 2))
-                  .join(",\n") || "Nothing Yet. Please Check Back Later."
-              );
-              setDataToView(note.scrapedData);
-              setScrapeParametersArray(objs[index].scrapeParameters);
-            }}
-          >
-            Select
-          </a>
-        </>
+        <IconButton onClick={() => onSelectClick(record, index)}>
+          <VisibilityIcon />
+        </IconButton>
       ),
     },
     {
       title: "Edit",
       key: "edit",
+      align: "center",
       render: (_, record) => (
-        <>
-          <a
-            className="text-secondary"
-            href="#"
-            onClick={() => setObjToEdit(record)}
-          >
-            Edit
-          </a>
-        </>
+        <IconButton onClick={() => setObjToEdit(record)}>
+          <EditIcon />
+        </IconButton>
       ),
     },
     {
       title: "Delete",
       key: "delete",
+      align: "center",
       render: (_, record) => (
-        <a className="text-danger" href="#" onClick={() => deleteObj(record)}>
-          Delete
-        </a>
+        <IconButton onClick={() => deleteObj(record)}>
+          <DeleteIcon />
+        </IconButton>
       ),
     },
   ];
 
   return (
     <>
-      <MyButton
+      <Button
         className={`m-4 ${styleUtils.blockCenter} ${styleUtils.flexCenter}`}
         onClick={() => setShowAddObjDialog(true)}
+        startIcon={<AddIcon />}
+        variant="contained"
       >
-        <FaPlus />
-        Create Scraping Configuration
-      </MyButton>
+        Configuration
+      </Button>
       {objsLoading && <Spinner animation="border" variant="primary" />}
       {showObjsLoadingError && (
         <p className="text-danger">
@@ -172,16 +194,16 @@ const ObjsPageLoggedInView = () => {
           }}
         />
       )}
-      {stringToView && (
-        <ViewStringDialog
+      {dataToView && (
+        <ViewDataDialog
+          scrapeConfig={selectedScrapeConfig!}
           dataToView={dataToView}
-          stringToView={stringToView}
-          onDismiss={() => setStringToView(null)}
-          scrapeParametersArray={scrapeParametersArray}
+          onDismiss={() => setDataToView(null)}
+          scrapeParametersArray={selectedScrapeConfig!.scrapeParameters}
         />
       )}
     </>
   );
 };
 
-export default ObjsPageLoggedInView;
+export default ScrapeConfigPage;

@@ -42,7 +42,7 @@ app.use((req, res, next) => {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
     console.error(error);
-    let errorMessage = "An unkown error occurred";
+    let errorMessage = "An unknown error occurred";
     let statusCode = 500;
     if (isHttpError(error)) {
         statusCode = error.status;

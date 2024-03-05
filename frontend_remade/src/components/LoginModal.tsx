@@ -5,7 +5,6 @@ import { User } from "../models/user";
 import { LoginCredentials } from "../models/loginCredentials";
 import * as ObjsApi from "../network/objs_api";
 import TextInputField from "./ScrapeConfigView/AddEditScrapeConfigDialog/TextInputField";
-import styleUtils from "../styles/utils.module.css";
 import { UnauthorizedError } from "../errors/http_errors";
 import MyButton from "./ui/MyButton";
 import { supabase } from "../providers/supabaseClient";
@@ -14,6 +13,11 @@ interface LoginModalProps {
   onDismiss: () => void;
   onLoginSuccessful: (user: User) => void;
 }
+
+const buttonContainerStyle = {
+  display: "flex",
+  justifyContent: "center",
+};
 
 const LoginModal = ({ onDismiss, onLoginSuccessful }: LoginModalProps) => {
   const [errorText, setErrorText] = useState<string | null>(null);

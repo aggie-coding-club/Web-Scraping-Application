@@ -1,18 +1,22 @@
+import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Button, Form, Modal } from "react-bootstrap";
+import { Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { ScrapeConfig } from "../../../models/scrapeConfig";
-import { Obj } from "../../../models/object";
+import {
+  scrapeParameterInterface,
+  ScrapeConfig,
+  ScrapeConfigInput,
+} from "../../../models/scrapeConfig";
 import * as ObjApi from "../../../network/objs_api";
 import { fetchHtmlContent } from "../../../network/objs_api";
 import { SelectorEditableTable } from "./SelectorEditableTable";
 import TextInputField from "./TextInputField";
-import MyButton from "../../ui/MyButton";
+import { v4 as uuidv4 } from "uuid";
 
 interface AddEditScrapeConfigProps {
-  scrapeConfig?: Obj;
+  scrapeConfig?: ScrapeConfig;
   onDismiss: () => void;
-  onScrapeConfigSaved: (scrapeConfig: Obj) => void;
+  onScrapeConfigSaved: (scrapeConfig: ScrapeConfig) => void;
 }
 
 const AddEditObjDialog = ({
@@ -20,23 +24,29 @@ const AddEditObjDialog = ({
   onDismiss,
   onScrapeConfigSaved,
 }: AddEditScrapeConfigProps) => {
+  const initializeScrapeParemetersArray = (): scrapeParameterInterface[] => {
+    let initialArr: scrapeParameterInterface[] = [
+      { id: uuidv4(), name: "", value: "", description: "", edit: true },
+    ];
+    if (scrapeConfig?.scrapeParameters) {
+      initialArr.unshift(...scrapeConfig.scrapeParameters); // add to beginning of array
+    }
+
+    return initialArr;
+  };
+
+  // ------ States -------
   const [iframeSrc, setIframeSrc] = useState("");
-  const [selector, setSelector] = useState<any>("");
-  const [scrapeParametersArray, setScrapeParametersArray] = useState<any[]>(
-    scrapeConfig?.scrapeParameters
-      ? [
-          ...scrapeConfig.scrapeParameters,
-          { id: 0, name: "", value: "", description: "" },
-        ]
-      : [{ id: 0, name: "", value: "", description: "" }]
-  );
+  const [scrapeParametersArray, setScrapeParametersArray] = useState<
+    scrapeParameterInterface[]
+  >(initializeScrapeParemetersArray());
 
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors, isSubmitting },
-  } = useForm<ScrapeConfig>({
+  } = useForm<ScrapeConfigInput>({
     defaultValues: {
       name: scrapeConfig?.name || "",
       description: scrapeConfig?.description || "",
@@ -44,11 +54,13 @@ const AddEditObjDialog = ({
       scrapeParameters: scrapeParametersArray.slice(0, -1),
       scrapeIntervalMinute: scrapeConfig?.scrapeIntervalMinute || 60,
       emailNotification: "none",
+      saveDataOn: "save_on_changes",
     },
   });
 
   const url = watch("url");
 
+  // runs on change to url
   useEffect(() => {
     if (url) {
       fetchHtmlContent(url)
@@ -59,25 +71,12 @@ const AddEditObjDialog = ({
     }
   }, [url]);
 
-  useEffect(() => {
-    const receiveMessage = (event: any) => {
-      if (event.origin !== window.location.origin) {
-        return;
-      }
-      if (event.data.selector) {
-        setSelector(event.data.selector);
-      }
-    };
-
-    window.addEventListener("message", receiveMessage);
-    return () => window.removeEventListener("message", receiveMessage);
-  }, []);
-
-  async function onSubmit(input: ScrapeConfig) {
+  async function onSubmit(input: ScrapeConfigInput) {
     const inputWithScrapeParameters = {
       ...input,
       scrapeParameters: scrapeParametersArray.slice(0, -1),
     };
+
     try {
       const scrapeConfigResponse = scrapeConfig
         ? await ObjApi.updateObj(scrapeConfig._id, inputWithScrapeParameters)
@@ -92,7 +91,7 @@ const AddEditObjDialog = ({
   return (
     <Modal show onHide={onDismiss} fullscreen={true}>
       <Modal.Header closeButton>
-        <Modal.Title>
+        <Modal.Title style={{ fontSize: "18px" }}>
           {scrapeConfig ? "Edit Configuration" : "Create Configuration"}
         </Modal.Title>
       </Modal.Header>
@@ -139,14 +138,6 @@ const AddEditObjDialog = ({
                 registerOptions={{ required: "Required" }}
                 error={errors.url}
               />
-              <Form.Group className="mb-3">
-                <Form.Label>Captured Selector</Form.Label>
-                <Form.Control
-                  placeholder=".example"
-                  value={selector}
-                  readOnly={true}
-                />
-              </Form.Group>
               <TextInputField
                 name="scrapeIntervalMinute"
                 label="Scrape Interval (Minutes)"
@@ -157,7 +148,19 @@ const AddEditObjDialog = ({
                 error={errors.scrapeIntervalMinute}
               />
               <Form.Group className="mb-3">
-                <Form.Label>Email Notifcation</Form.Label>
+                <Form.Label>Data Saving</Form.Label>
+                <Form.Select
+                  {...register("saveDataOn")}
+                  aria-label="Save Data Setting Select"
+                >
+                  <option value="save_on_changes">Save only on changes</option>
+                  <option value="save_on_scrape">
+                    Save on successful scrape
+                  </option>
+                </Form.Select>
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Email Notification</Form.Label>
                 <Form.Select
                   {...register("emailNotification")}
                   aria-label="Email Notification Select"
@@ -175,7 +178,14 @@ const AddEditObjDialog = ({
                 scrapeParametersArray={scrapeParametersArray}
                 setScrapeParametersArray={setScrapeParametersArray}
               />
-              <MyButton disabled={isSubmitting}>Save</MyButton>
+              <Button
+                style={{ margin: "20px 0" }}
+                disabled={isSubmitting}
+                variant="contained"
+                type="submit"
+              >
+                Save
+              </Button>
             </Form>
           </div>
         </div>

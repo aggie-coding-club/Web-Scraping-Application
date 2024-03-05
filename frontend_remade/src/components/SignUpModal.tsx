@@ -17,6 +17,11 @@ interface SignUpModalProps {
   onSignUpSuccessful: (user: User) => void;
 }
 
+const buttonContainerStyle = {
+  display: "flex",
+  justifyContent: "center",
+};
+
 const SignUpModal = ({ onDismiss, onSignUpSuccessful }: SignUpModalProps) => {
   const [errorText, setErrorText] = useState<string | null>(null);
 
