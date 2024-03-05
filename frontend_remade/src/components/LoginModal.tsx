@@ -9,6 +9,7 @@ import { UnauthorizedError } from "../errors/http_errors";
 import MyButton from "./ui/MyButton";
 import { supabase } from "../providers/supabaseClient";
 import googleLogo from "../assets/google.svg";
+import styleUtils from "../styles/utils.module.css";
 interface LoginModalProps {
   onDismiss: () => void;
   onLoginSuccessful: (user: User) => void;
