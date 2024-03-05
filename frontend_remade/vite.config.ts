@@ -5,7 +5,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/api': 'http://localhost:5000' // proxy for CORS
+      '/api': 'http://localhost:5001' // proxy for CORS, Mac users use 5001
     }
   }
 });
