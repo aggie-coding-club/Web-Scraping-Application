@@ -13,6 +13,9 @@ import * as apis from "../../network/apis";
 import styleUtils from "../../styles/utils.module.css";
 import { AddEditScrapeConfigDialog } from "./AddEditScrapeConfigDialog/AddEditScrapeConfigDialog";
 import { ViewDataDialog } from "./ViewDataDialog/ViewDataDialog";
+import ApiIcon from "@mui/icons-material/Api";
+import { Api } from "@mui/icons-material";
+import KeyIcon from "@mui/icons-material/Key";
 
 const ScrapeConfigView = () => {
   const [scrapeConfigs, setScrapeConfigs] = useState<ScrapeConfig[]>([]);
@@ -176,6 +179,16 @@ const ScrapeConfigView = () => {
       render: (_, record) => (
         <IconButton onClick={() => deleteScrapeConfig(record)}>
           <DeleteIcon />
+        </IconButton>
+      ),
+    },
+    {
+      title: "API",
+      key: "api_key",
+      align: "center",
+      render: (_, record) => (
+        <IconButton onClick={() => {}}>
+          <KeyIcon />
         </IconButton>
       ),
     },
