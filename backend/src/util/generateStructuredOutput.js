@@ -6,73 +6,6 @@ const tiktoken = require("tiktoken");
 // TODO: Allows for categories that use more than one token
 // TODO: Turn back into TS
 
-// Python defined for function calling, don't have the time to convert into JS
-// def LLM_classification(categories, input):
-//   categories = [category.lower() for category in categories]
-//   formatted_categories = ""
-
-//   if len(categories) == 2:
-//     formatted_categories = categories[0] + " or " + categories[1]
-//   else:
-//     formatted_categories = ", ".join(categories[:-1]).lower()
-//     formatted_categories += ", or " + categories[-1].lower()
-
-//   class_probs = {}
-//   tools = [
-//     {
-//       "type": "function",
-//       "function": {
-//         "name": "get_current_weather",
-//         "description": "Get the current weather in a given location",
-//         "parameters": {
-//           "type": "object",
-//           "properties": {
-//             "location": {
-//               "type": "string",
-//               "description": "The city and state, e.g. San Francisco, CA",
-//             },
-//             "unit": {"type": "string", "enum": ["celsius", "fahrenheit"]},
-//           },
-//           "required": ["location"],
-//         },
-//       }
-//     }
-//   ]
-
-//   for category in categories:
-//     completion = client.chat.completions.create(
-//       model="gpt-4-turbo-preview",
-//       messages = [{"role": "user", "content": "Boston is 93 degree F"}],
-//       logprobs=True,
-//       top_logprobs=20,
-//       temperature=0,
-//       top_p=0,
-//       # max_tokens=1,
-//       n=1,
-//       # logit_bias={enc.encode(category)[0]:100},
-//       tools=tools,
-//       tool_choice=tools[0],
-//       seed=0
-//     )
-//     print(completion)
-//     class_probs[completion.choices[0].logprobs.content[0].token] = completion.choices[0].logprobs.content[0].logprob
-
-//   # going to apply log-sum-exp trick instead because it's more numerically stable than exponentiating each term and normalize by sum
-//   # https://gregorygundersen.com/blog/2020/02/09/log-sum-exp/
-//   # https://cookbook.openai.com/examples/using_logprobs
-
-//   log_p_max = np.max(list(class_probs.values()))
-//   sum_prob = 0
-
-//   for category, prob in class_probs.items():
-//     class_probs[category] = (prob, np.exp(prob - log_p_max))
-//     sum_prob += class_probs[category][1]
-
-//   for category, prob in class_probs.items():
-//     class_probs[category] = {"log_prob": prob[0], "norm_prob": class_probs[category][1] / sum_prob}
-
-//   return class_probs
-
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const enc = tiktoken.encoding_for_model("gpt-4-turbo-preview");
 
@@ -206,39 +139,17 @@ async function generate_structured_data(data_schema, input) {
     seed: 42,
   });
 
+  console.log(completion.usage.total_tokens);
+
   const structured_output =
     completion.choices[0].message.tool_calls[0].function.arguments;
 
-  console.log(JSON.stringify(JSON.parse(structured_output), null, 4));
+  return JSON.stringify(JSON.parse(structured_output), null, 4);
 }
 
-generate_structured_data(yt_data, transcribed_image);
-// Output
-`
-{
-  "channel_name": "Exil - Hiboky",
-  "view_count": "10M views",
-  "subscribers": "31K subscribers",
-  "posted_date": "5 years ago",
-  "comments": [
-      {
-          "author": "@hornyhippo",
-          "text": "1:07 is probably what ur looking for",
-          "data": "4 years ago"
-      },
-      {
-          "author": "@vantablack8258",
-          "text": "\"This is the story you started, Eren.\" -Armin",
-          "data": "3 years ago (edited)"
-      },
-      {
-          "author": "@naija9031",
-          "text": "\"People's lives don't end when they die, it ends when they lose faith.\"",
-          "data": "1 year ago (edited)"
-      }
-  ]
+function capitalize(s) {
+  return s && s[0].toUpperCase() + s.slice(1);
 }
-`;
 
 async function LLM_classification(categories, input) {
   categories = categories.map((category) => category.toLowerCase());
@@ -259,10 +170,11 @@ async function LLM_classification(categories, input) {
     const completion = await client.chat.completions.create({
       model: "gpt-4-turbo-preview",
       messages: [
-        {
-          role: "system",
-          content: `Classify the input into one of the following categories: ${formattedCategories}. Your goal is to output only the classification`,
-        },
+        // Two different ways, classification or answering question with categories
+        // {
+        //   role: "system",
+        //   content: `Classify the input or respond to the question with the following categories: ${formattedCategories}. Your goal is to output only one of the categories`,
+        // },
         { role: "user", content: input },
       ],
       logprobs: true,
@@ -271,22 +183,25 @@ async function LLM_classification(categories, input) {
       top_p: 0,
       max_tokens: 1,
       n: 1,
-      logit_bias: { [enc.encode(category)[0]]: 100 },
+      logit_bias: { [enc.encode(capitalize(category))[0]]: 100 },
       seed: 42,
     });
 
     debug = completion;
+    console.log(completion.usage.total_tokens);
 
     const firstToken = completion.choices[0].logprobs.content[0];
     classProbs[firstToken.token] = firstToken.logprob;
+    // console.log(firstToken.logprob);
+    // console.log(firstToken.token);
   }
-  console.log(debug.choices[0].logprobs.content[0].top_logprobs);
+  // console.log(debug.choices[0].logprobs.content[0].top_logprobs);
 
   const debugClassProbs = {};
   for (let key in classProbs) {
     debugClassProbs[key] = Math.exp(classProbs[key]);
   }
-  console.log(debugClassProbs);
+  // console.log(debugClassProbs);
 
   // going to apply log-sum-exp trick instead because it's more numerically stable than exponentiating each term and normalize by sum
   // https://gregorygundersen.com/blog/2020/02/09/log-sum-exp/
@@ -305,6 +220,26 @@ async function LLM_classification(categories, input) {
 
   return classProbs;
 }
+
+generate_structured_data(yt_data, transcribed_image).then((res) => {
+  console.log(res);
+});
+
+// LLM_classification(["Yes", "No"], `Is this sarcasm? 'He's so smart his IQ is the same as a gorrila'`).then((res) => {
+//   console.log(res);
+// });
+
+// LLM_classification(["True", "False"], "Is this sarcasm? 'You are pretty smart for a man'").then((res) => {
+//   console.log(res);
+// });
+
+// LLM_classification(["True", "False"], "Is this sarcasm? 'I don't have the energy to pretend to like you today'").then((res) => {
+//   console.log(res);
+// });
+
+// LLM_classification(["True", "False"], "Is this sarcasm? 'Is it time for your medication or mine?'").then((res) => {
+//   console.log(res);
+// });
 
 // LLM_classification(["positive", "negative"], "I am happy").then((res) => {
 //   console.log(res);
@@ -410,6 +345,6 @@ async function LLM_classification(categories, input) {
 //   console.log(res);
 // });
 
-LLM_classification(["Better", "Worse"], "Naruto compared to Dragon Balls").then((res) => {
-  console.log(res);
-});
+// LLM_classification(["Better", "Worse"], "Naruto compared to Dragon Balls").then((res) => {
+//   console.log(res);
+// });
