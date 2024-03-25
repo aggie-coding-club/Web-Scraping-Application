@@ -226,7 +226,7 @@ generate_structured_data(yt_data, transcribed_image).then((res) => {
   console.log(res);
 });
 
-LLM_classification(["True", "False"], "Is this sarcasm? 'Is it time for your medication or mine?'").then((res) => {
+LLM_classification(["Yes", "No"], "Is this sarcasm? 'Is it time for your medication or mine?'").then((res) => {
   console.log(res);
 });
 
