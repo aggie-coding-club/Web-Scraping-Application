@@ -1,0 +1,415 @@
+require("dotenv").config();
+const OpenAI = require("openai");
+const tiktoken = require("tiktoken");
+
+// TODO: Fix the import and export
+// TODO: Allows for categories that use more than one token
+// TODO: Turn back into TS
+
+// Python defined for function calling, don't have the time to convert into JS
+// def LLM_classification(categories, input):
+//   categories = [category.lower() for category in categories]
+//   formatted_categories = ""
+
+//   if len(categories) == 2:
+//     formatted_categories = categories[0] + " or " + categories[1]
+//   else:
+//     formatted_categories = ", ".join(categories[:-1]).lower()
+//     formatted_categories += ", or " + categories[-1].lower()
+
+//   class_probs = {}
+//   tools = [
+//     {
+//       "type": "function",
+//       "function": {
+//         "name": "get_current_weather",
+//         "description": "Get the current weather in a given location",
+//         "parameters": {
+//           "type": "object",
+//           "properties": {
+//             "location": {
+//               "type": "string",
+//               "description": "The city and state, e.g. San Francisco, CA",
+//             },
+//             "unit": {"type": "string", "enum": ["celsius", "fahrenheit"]},
+//           },
+//           "required": ["location"],
+//         },
+//       }
+//     }
+//   ]
+
+//   for category in categories:
+//     completion = client.chat.completions.create(
+//       model="gpt-4-turbo-preview",
+//       messages = [{"role": "user", "content": "Boston is 93 degree F"}],
+//       logprobs=True,
+//       top_logprobs=20,
+//       temperature=0,
+//       top_p=0,
+//       # max_tokens=1,
+//       n=1,
+//       # logit_bias={enc.encode(category)[0]:100},
+//       tools=tools,
+//       tool_choice=tools[0],
+//       seed=0
+//     )
+//     print(completion)
+//     class_probs[completion.choices[0].logprobs.content[0].token] = completion.choices[0].logprobs.content[0].logprob
+
+//   # going to apply log-sum-exp trick instead because it's more numerically stable than exponentiating each term and normalize by sum
+//   # https://gregorygundersen.com/blog/2020/02/09/log-sum-exp/
+//   # https://cookbook.openai.com/examples/using_logprobs
+
+//   log_p_max = np.max(list(class_probs.values()))
+//   sum_prob = 0
+
+//   for category, prob in class_probs.items():
+//     class_probs[category] = (prob, np.exp(prob - log_p_max))
+//     sum_prob += class_probs[category][1]
+
+//   for category, prob in class_probs.items():
+//     class_probs[category] = {"log_prob": prob[0], "norm_prob": class_probs[category][1] / sum_prob}
+
+//   return class_probs
+
+const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const enc = tiktoken.encoding_for_model("gpt-4-turbo-preview");
+
+const transcribed_image = `
+Exil - Hiboky
+
+Romain Spiteri
+Subscribe
+31K subscribers
+
+10M views 5 years ago
+It's my first song in this channel. I hope you will love it
+You can stream this song on : ...more
+
+351K
+
+Share Download ...
+
+Next: 2 Hour Beautiful Piano Music for Studying an...
+Instrumental Music Full Final List - 3 / 316
+
+All Melodies Soundtracks Beats Ani
+
+Discover how an education at
+Texas A&M RELLIS can help y...
+Texas A&M-RELLIS
+54K views
+Sponsored
+
+[slowed+reverb] Exil - Hiboky (1
+hour)
+aesthetic nightcore
+45K views 3 years ago
+
+Shorts remixing this video
+
+8,591 Comments = Sort by
+
+Add a comment...
+
+@hornyhippo 4 years ago
+1:07 is probably what ur looking for
+10K
+Reply
+     161 replies
+
+@vantablack8258 3 years ago (edited)
+"This is the story you started, Eren."
+
+-Armin
+4K
+Reply
+     40 replies
+
+@naija9031 1 year ago (edited)
+"People's lives don't end when they die, it ends when they lose faith."
+
+Type here to search
+`;
+
+const yt_data = {
+  type: "object",
+  properties: {
+    channel_name: {
+      type: "string",
+      description: "The name of the channel",
+    },
+    view_count: {
+      type: "string",
+      description: "The video view count",
+    },
+    subscribers: {
+      type: "string",
+      description: "The number of subscribers",
+    },
+    posted_date: {
+      type: "string",
+      description: "The date the video was posted",
+    },
+    comments: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          author: {
+            type: "string",
+            description: "The author of the comment",
+          },
+          text: {
+            type: "string",
+            description: "The text of the comment",
+          },
+          date: {
+            type: "string",
+            description: "The date the comment was posted",
+          },
+        },
+        required: ["author", "text", "date"],
+      },
+    },
+  },
+  required: [
+    "channel_name",
+    "view_count",
+    "subscribers",
+    "comments",
+    "posted_date",
+  ],
+}
+
+async function generate_structured_data(data_schema, input) {
+  tools = [
+    {
+      type: "function",
+      function: {
+        name: "generate_structured_ouput",
+        description: "Generate structured output from unstructured data",
+        parameters: data_schema,
+      },
+    },
+  ];
+  
+  const completion = await client.chat.completions.create({
+    model: "gpt-4-turbo-preview",
+    messages: [{ role: "user", content: input }],
+    temperature: 0,
+    top_p: 0,
+    n: 1,
+    tools: tools,
+    tool_choice: tools[0],
+    seed: 42,
+  });
+
+  const structured_output =
+    completion.choices[0].message.tool_calls[0].function.arguments;
+
+  console.log(JSON.stringify(JSON.parse(structured_output), null, 4));
+}
+
+generate_structured_data(yt_data, transcribed_image);
+// Output
+`
+{
+  "channel_name": "Exil - Hiboky",
+  "view_count": "10M views",
+  "subscribers": "31K subscribers",
+  "posted_date": "5 years ago",
+  "comments": [
+      {
+          "author": "@hornyhippo",
+          "text": "1:07 is probably what ur looking for",
+          "data": "4 years ago"
+      },
+      {
+          "author": "@vantablack8258",
+          "text": "\"This is the story you started, Eren.\" -Armin",
+          "data": "3 years ago (edited)"
+      },
+      {
+          "author": "@naija9031",
+          "text": "\"People's lives don't end when they die, it ends when they lose faith.\"",
+          "data": "1 year ago (edited)"
+      }
+  ]
+}
+`;
+
+async function LLM_classification(categories, input) {
+  categories = categories.map((category) => category.toLowerCase());
+
+  let formattedCategories;
+  if (categories.length === 2) {
+    formattedCategories = `${categories[0]} or ${categories[1]}`;
+  } else {
+    formattedCategories = `${categories
+      .slice(0, -1)
+      .join(", ")
+      .toLowerCase()}, or ${categories[categories.length - 1].toLowerCase()}`;
+  }
+
+  let debug;
+  let classProbs = {};
+  for (let category of categories) {
+    const completion = await client.chat.completions.create({
+      model: "gpt-4-turbo-preview",
+      messages: [
+        {
+          role: "system",
+          content: `Classify the input into one of the following categories: ${formattedCategories}. Your goal is to output only the classification`,
+        },
+        { role: "user", content: input },
+      ],
+      logprobs: true,
+      top_logprobs: 20,
+      temperature: 0,
+      top_p: 0,
+      max_tokens: 1,
+      n: 1,
+      logit_bias: { [enc.encode(category)[0]]: 100 },
+      seed: 42,
+    });
+
+    debug = completion;
+
+    const firstToken = completion.choices[0].logprobs.content[0];
+    classProbs[firstToken.token] = firstToken.logprob;
+  }
+  console.log(debug.choices[0].logprobs.content[0].top_logprobs);
+
+  const debugClassProbs = {};
+  for (let key in classProbs) {
+    debugClassProbs[key] = Math.exp(classProbs[key]);
+  }
+  console.log(debugClassProbs);
+
+  // going to apply log-sum-exp trick instead because it's more numerically stable than exponentiating each term and normalize by sum
+  // https://gregorygundersen.com/blog/2020/02/09/log-sum-exp/
+  // https://cookbook.openai.com/examples/using_logprobs
+  const log_p_max = Math.max(...Object.values(classProbs));
+
+  let sum_prob = 0;
+  for (let key in classProbs) {
+    classProbs[key] = Math.exp(classProbs[key] - log_p_max);
+    sum_prob += classProbs[key];
+  }
+
+  for (let key in classProbs) {
+    classProbs[key] /= sum_prob;
+  }
+
+  return classProbs;
+}
+
+// LLM_classification(["positive", "negative"], "I am happy").then((res) => {
+//   console.log(res);
+// });
+
+// LLM_classification(["cat", "dog"], "Is known for being territorial.").then(
+//   (res) => {
+//     console.log(res);
+//   }
+// );
+
+// LLM_classification(["True", "False"], "ChatGPT 4.0 is better than 3.0").then(
+//   (res) => {
+//     console.log(res);
+//   }
+// );
+
+// LLM_classification(["True", "False"], "Goldfish has a short memory span").then(
+//   (res) => {
+//     console.log(res);
+//   }
+// );
+
+// LLM_classification(["Mammals", "Birds", "Fish"], "Dolphins").then((res) => {
+//   console.log(res);
+// });
+
+// LLM_classification(
+//   ["sadness", "joy", "love", "anger", "fear", "suprise"],
+//   "i would think that whomever would be lucky enough to stay in this suite must feel like it is the mos..."
+// ).then((res) => {
+//   console.log(res);
+// });
+
+// LLM_classification(
+//   ["True", "False"],
+//   "Is this spam? Update On Your Application Status"
+// ).then((res) => {
+//   console.log(res);
+// });
+
+// LLM_classification(
+//   ["Positive", "Neutral", "Negative"],
+//   "Perform sentiment analysis on 'He does his job, nothing more, nothing less'"
+// ).then((res) => {
+//   console.log(res);
+// });
+
+// LLM_classification(
+//   ["Sports", "Arts", "Technology", "Science"],
+//   "Tennis Champion Showcases Talents in Symphony Orchestra Debut"
+// ).then((res) => {
+//   console.log("");
+//   console.log(res);
+// });
+
+// LLM_classification(
+//   ["Sports", "Arts", "Technology", "Science"],
+//   "Tennis Champion Showcases Talents"
+// ).then((res) => {
+//   console.log("");
+//   console.log(res);
+// });
+
+// LLM_classification(
+//   ["Sports", "Arts", "Technology", "Science"],
+//   "Supercomputing and scientific simulations"
+// ).then((res) => {
+//   console.log("");
+//   console.log(res);
+// });
+
+// LLM_classification(
+//   ["Capitalism", "Socialism"],
+//   "Best form of economic system"
+// ).then((res) => {
+//   console.log("");
+//   console.log(res);
+// });
+
+// LLM_classification(
+//   ["Cat (territorial)", "Dog (not territorial)"],
+//   "Is known for being territorial."
+// ).then((res) => {
+//   console.log(res);
+// });
+
+// LLM_classification(
+//   ["Cat (territorial)", "Dog (not territorial)"],
+//   "Is known for being territorial."
+// ).then((res) => {
+//   console.log(res);
+// });
+
+// LLM_classification(
+//   ["A (neutron)", "B (electron)", "C (proton)"],
+//   "Is a subatomic particle"
+// ).then((res) => {
+//   console.log(res);
+// });
+
+// LLM_classification(["Red", "Green", "Blue"], "Is a color").then((res) => {
+//   console.log(res);
+// });
+
+LLM_classification(["Better", "Worse"], "Naruto compared to Dragon Balls").then((res) => {
+  console.log(res);
+});
