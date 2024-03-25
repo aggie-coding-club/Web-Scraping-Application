@@ -7,7 +7,7 @@ const tiktoken = require("tiktoken");
 // TODO: Turn back into TS
 
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-const enc = tiktoken.encoding_for_model("gpt-4-turbo-preview");
+const enc = tiktoken.encoding_for_model("gpt-3.5-turbo-0125");
 
 const transcribed_image = `
 Exil - Hiboky
@@ -129,7 +129,7 @@ async function generate_structured_data(data_schema, input) {
   ];
   
   const completion = await client.chat.completions.create({
-    model: "gpt-4-turbo-preview",
+    model: "gpt-3.5-turbo-0125",
     messages: [{ role: "user", content: input }],
     temperature: 0,
     top_p: 0,
@@ -168,13 +168,14 @@ async function LLM_classification(categories, input) {
   let classProbs = {};
   for (let category of categories) {
     const completion = await client.chat.completions.create({
-      model: "gpt-4-turbo-preview",
+      model: "gpt-3.5-turbo-0125",
       messages: [
         // Two different ways, classification or answering question with categories
-        // {
-        //   role: "system",
-        //   content: `Classify the input or respond to the question with the following categories: ${formattedCategories}. Your goal is to output only one of the categories`,
-        // },
+        // For the web scraping app, adds some instruction for the user on how to best format categories and descriptions
+        {
+          role: "system",
+          content: `Classify the input or respond to the question with the following categories: ${formattedCategories}. Your goal is to output only one of the categories`,
+        },
         { role: "user", content: input },
       ],
       logprobs: true,
@@ -225,6 +226,10 @@ generate_structured_data(yt_data, transcribed_image).then((res) => {
   console.log(res);
 });
 
+LLM_classification(["True", "False"], "Is this sarcasm? 'Is it time for your medication or mine?'").then((res) => {
+  console.log(res);
+});
+
 // LLM_classification(["Yes", "No"], `Is this sarcasm? 'He's so smart his IQ is the same as a gorrila'`).then((res) => {
 //   console.log(res);
 // });
@@ -234,10 +239,6 @@ generate_structured_data(yt_data, transcribed_image).then((res) => {
 // });
 
 // LLM_classification(["True", "False"], "Is this sarcasm? 'I don't have the energy to pretend to like you today'").then((res) => {
-//   console.log(res);
-// });
-
-// LLM_classification(["True", "False"], "Is this sarcasm? 'Is it time for your medication or mine?'").then((res) => {
 //   console.log(res);
 // });
 
