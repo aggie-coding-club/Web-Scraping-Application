@@ -1,5 +1,5 @@
 import { Request, RequestHandler, Response } from "express";
-import { ISelector } from "../models/selectorModel";
+import { ISelector, SelectorModel } from "../models/selectorModel";
 import {
   ISelectorMetadata,
   IScrapeMetadata,
@@ -14,20 +14,6 @@ import { Schema } from "mongoose";
 export const testGet = async (req: Request, res: Response) => {
   try {
     console.log("[SUCCESS] Test Get");
-    const { userId } = req.session;
-
-    const { name, note, url, scrapeIntervalMinute, emailNotification } =
-      req.body;
-
-    console.log("userId:", userId);
-
-    console.log("name:", name);
-    console.log("name:", name);
-    console.log("note:", note);
-    console.log("url:", url);
-    console.log("scrapeIntervalMinute:", scrapeIntervalMinute);
-    console.log("emailNotification:", emailNotification);
-
     res.status(200).send();
   } catch (error) {
     console.error("Error in test:", error);
@@ -55,12 +41,20 @@ export const testPost = async (req: Request, res: Response) => {
     console.log("selectors:");
     for (const selector of selectors) {
       console.log("-------:");
-      console.log("key: ", selector.key);
       console.log("name: ", selector.name);
       console.log("value: ", selector.selectorValue);
     }
 
     res.status(200).send();
+  } catch (error) {
+    console.error("Error in test:", error);
+  }
+};
+
+export const testDelete = async (req: Request, res: Response) => {
+  try {
+    console.log("[SUCCESS] Test Delete");
+    res.status(200).send("Test Delete");
   } catch (error) {
     console.error("Error in test:", error);
   }
@@ -131,49 +125,35 @@ export const getScrapingConfigs = async (req: Request, res: Response) => {
   }
 };
 
-// gets selector data based on name
-export const getSelectorDataByKey: RequestHandler = async (req, res, next) => {
-  const { userId } = req.session;
-  const { scrapingConfigId, key } = req.params;
+export const deleteScrapingConfig = async (req: Request, res: Response) => {
   try {
+    const { configId } = req.params;
     const myScrapingConfig: IScrapeMetadata | null =
-      await ScrapeMetadataModel.findById(scrapingConfigId).exec();
+      await ScrapeMetadataModel.findByIdAndDelete(configId).exec();
 
     if (!myScrapingConfig) {
-      return res
-        .status(404)
-        .json({ message: "Scraping configuration not found" });
+      return res.status(404).send("Scraping configuration not found");
     }
 
-    if (myScrapingConfig.userId.toString() !== userId?.toString()) {
-      throw createHttpError(403, "Forbidden");
-    }
-
-    let objectId: Schema.Types.ObjectId | null = null;
+    // delete selectors
+    // FIXME: Can be done more efficiently. Instead of waiting one by one,
+    //  can run them in parallel
     for (const selectorMetadata of myScrapingConfig.selectorsMetadata) {
-      if (selectorMetadata.key === key) {
-        // get selector
-        objectId = selectorMetadata.objectId;
-        break;
+      const selectorId = selectorMetadata.selectorId;
+      const deletedSelector = await SelectorModel.findByIdAndDelete(
+        selectorId
+      ).exec();
+
+      if (!deletedSelector) {
+        console.error(`[FAILED] Selector ${selectorId} not found`);
       }
     }
 
-    if (objectId == null) {
-      throw createHttpError(404, "Selector ID not Found in config");
-    }
-
-    let selectorData: ISelector | null = await getSelectorByObjectId(objectId);
-
-    if (selectorData == null) {
-      console.error("Selector ID in found metadata, but not in database o.O");
-      throw createHttpError(500, "Internal Server Error");
-    }
-
-    return res.status(200).json(selectorData);
+    res.status(200).send();
   } catch (error) {
-    console.error("Error in getSelectorData:", error);
-    next(error);
+    console.error("Error in deleteScrapingConfig", error);
+    res.status(500).send("Internal server error");
   }
 };
+
 // FIXME: add updateScrapingConfig
-// FIXME: add deleteScrapingConfig

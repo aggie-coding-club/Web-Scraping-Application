@@ -33,7 +33,7 @@ app.use(
 app.use("/api/users", userRoutes);
 app.use("/api/objs", requiresAuth, notesRoutes);
 app.use("/api/scrape", scrapingRoutes); // Use scraping routes
-app.use("/api/scrapeMetadata", scrapeMetadataRoutes);
+app.use("/api/scrapeMetadata", requiresAuth, scrapeMetadataRoutes);
 
 // middleware error handler
 // not setup endpoint error

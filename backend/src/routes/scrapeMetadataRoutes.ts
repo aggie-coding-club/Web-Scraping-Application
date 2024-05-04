@@ -6,17 +6,19 @@ const router = express.Router();
 router.get(
   "/testGet/:scrapingConfigId/:key",
   scrapingMetadataController.testGet
-);
+); // DELETE ME
 router.get("/getScrapeMetadata", scrapingMetadataController.getScrapingConfigs);
-router.get(
-  "/getSelectorData/:scrapingconfigId/:key",
-  scrapingMetadataController.getSelectorDataByKey
-);
 
-router.post("/testPost", scrapingMetadataController.testPost);
+router.post("/testPost", scrapingMetadataController.testPost); // DELETE ME
 router.post(
   "/createScrapeMetadata",
   scrapingMetadataController.createScrapingConfig
+);
+
+router.delete("/testDelete", scrapingMetadataController.testDelete); // DELETE ME
+router.delete(
+  "/deleteScrapeMetadata/:configId",
+  scrapingMetadataController.deleteScrapingConfig
 );
 
 export default router;

@@ -7,7 +7,6 @@ export const createSelector = async (
 ): Promise<ISelectorMetadata | null> => {
   try {
     const mySelector = new SelectorModel({
-      key: selector.key,
       name: selector.name,
       selectorValue: selector.selectorValue,
       data: [],
@@ -16,10 +15,9 @@ export const createSelector = async (
     const savedSelector = await mySelector.save();
 
     const metadata: ISelectorMetadata = {
-      key: selector.key,
       name: selector.name,
       selectorValue: selector.selectorValue,
-      objectId: savedSelector._id,
+      selectorId: savedSelector._id,
     };
 
     return metadata;

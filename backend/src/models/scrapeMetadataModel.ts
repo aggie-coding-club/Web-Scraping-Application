@@ -1,10 +1,9 @@
 import { Document, model, Schema } from "mongoose";
 
 export interface ISelectorMetadata {
-  key: string;
   name: string;
   selectorValue: string;
-  objectId: Schema.Types.ObjectId;
+  selectorId: Schema.Types.ObjectId;
 }
 
 export interface IScrapeMetadata extends Document {
@@ -36,7 +35,7 @@ const scrapeMetadataSchema = new Schema<IScrapeMetadata>(
       {
         name: { type: String, required: true },
         selectorValue: { type: String, required: true },
-        objectId: {
+        selectorId: {
           type: Schema.Types.ObjectId,
           required: true,
           ref: "Selector",
