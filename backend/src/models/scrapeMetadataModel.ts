@@ -33,6 +33,7 @@ const scrapeMetadataSchema = new Schema<IScrapeMetadata>(
     lastSuccessfulScrape: { type: Date },
     selectorsMetadata: [
       {
+        _id: false,
         name: { type: String, required: true },
         selectorValue: { type: String, required: true },
         selectorId: {
