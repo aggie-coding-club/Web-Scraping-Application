@@ -37,7 +37,7 @@ export const testPost = async (req: Request, res: Response) => {
     console.log("scrapeIntervalMinute:", scrapeIntervalMinute);
     console.log("emailNotification:", emailNotification);
 
-    const { selectors }: { selectors: ISelector[] } = req.body;
+    const { selectors }: { selectors: ISelectorMetadata[] } = req.body;
     console.log("selectors:");
     for (const selector of selectors) {
       console.log("-------:");
@@ -69,7 +69,7 @@ export const createScrapingConfig = async (req: Request, res: Response) => {
       req.body;
 
     // ------- Create Selectors ---------------
-    const { selectors }: { selectors: ISelector[] } = req.body;
+    const { selectors }: { selectors: ISelectorMetadata[] } = req.body;
     let selectorsMetadata: ISelectorMetadata[] = [];
 
     // FIXME: can be done more efficiently; but ppl should have THAT many selectors so prob fine
@@ -157,3 +157,29 @@ export const deleteScrapingConfig = async (req: Request, res: Response) => {
 };
 
 // FIXME: add updateScrapingConfig
+export const updateScrapingConfig = async (req: Request, res: Response) => {
+  try {
+    const { name, note, url, scrapeIntervalMinute, emailNotification } =
+      req.body;
+    const { configId } = req.params;
+
+    const config = await ScrapeMetadataModel.findByIdAndUpdate(configId, {
+      name,
+      note,
+      url,
+      scrapeIntervalMinute,
+      emailNotification,
+    }).exec();
+
+    if (!config) {
+      return res.status(404).send("Scraping Configuration not found");
+    }
+
+    // setNextScrapeTimeout(0); // FIXME
+
+    res.status(200).send(config);
+  } catch (error) {
+    console.error("Error in updateScrapingConfig", error);
+    res.status(500).send("Internal server error");
+  }
+};

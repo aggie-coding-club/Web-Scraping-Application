@@ -2,25 +2,27 @@ import { ISelector, SelectorModel } from "../models/selectorModel";
 import { ISelectorMetadata } from "../models/scrapeMetadataModel";
 import mongoose from "mongoose";
 
+/**
+ *
+ * @returns Metadata loaded with newly created id
+ */
 export const createSelector = async (
-  selector: ISelector
+  selector: ISelectorMetadata
 ): Promise<ISelectorMetadata | null> => {
   try {
     const mySelector = new SelectorModel({
-      name: selector.name,
-      selectorValue: selector.selectorValue,
       data: [],
     });
 
     const savedSelector = await mySelector.save();
 
-    const metadata: ISelectorMetadata = {
-      name: selector.name,
-      selectorValue: selector.selectorValue,
-      selectorId: savedSelector._id,
-    };
+    if (!savedSelector) {
+      return null;
+    }
 
-    return metadata;
+    selector.selectorId = savedSelector._id;
+
+    return selector;
   } catch (error) {
     console.error("Error in createSelector", error);
   }
