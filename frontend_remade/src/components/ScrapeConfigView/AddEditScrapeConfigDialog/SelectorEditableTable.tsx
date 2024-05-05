@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Input } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
-import { scrapeParameterInterface } from "../../../models/scrapeConfig";
+import { SelectorTable } from "../../../models/scrapeConfig";
 import { v4 as uuidv4 } from "uuid";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
@@ -9,10 +9,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import { ButtonGroup, IconButton, Tooltip } from "@mui/material";
 
 interface SelectorEditableTableProps {
-  scrapeParametersArray: scrapeParameterInterface[];
-  setScrapeParametersArray: React.Dispatch<
-    React.SetStateAction<scrapeParameterInterface[]>
-  >;
+  selectorsArray: SelectorTable[];
+  setSelectorsArray: React.Dispatch<React.SetStateAction<SelectorTable[]>>;
 }
 
 interface onChangeProps {
@@ -21,8 +19,8 @@ interface onChangeProps {
 }
 
 const SelectorEditableTable = ({
-  scrapeParametersArray,
-  setScrapeParametersArray,
+  selectorsArray,
+  setSelectorsArray,
 }: SelectorEditableTableProps) => {
   // ---- State -----
   const [nameError, setNameError] = useState<boolean>(false);
@@ -38,22 +36,22 @@ const SelectorEditableTable = ({
       }
       if (event.data.selector) {
         // set selector value at end of array
-        let myArr: scrapeParameterInterface[] = [...scrapeParametersArray];
-        myArr[myArr.length - 1].value = event.data.selector;
-        setScrapeParametersArray([...myArr]);
+        let myArr: SelectorTable[] = [...selectorsArray];
+        myArr[myArr.length - 1].selectorValue = event.data.selector;
+        setSelectorsArray([...myArr]);
       }
     };
 
     window.addEventListener("message", receiveMessage);
     return () => window.removeEventListener("message", receiveMessage);
-  }, [scrapeParametersArray]);
+  }, [selectorsArray]);
 
   const onSelectorInputChange = ({ event, index }: onChangeProps) => {
     if (selectorError) setSelectorError(false);
 
-    setScrapeParametersArray(
-      scrapeParametersArray.map((item, idx) =>
-        idx === index ? { ...item, value: event.target.value } : item
+    setSelectorsArray(
+      selectorsArray.map((item, idx) =>
+        idx === index ? { ...item, selectorValue: event.target.value } : item
       )
     );
   };
@@ -61,8 +59,8 @@ const SelectorEditableTable = ({
   const onNameInputChange = ({ event, index }: onChangeProps) => {
     if (nameError) setNameError(false);
 
-    setScrapeParametersArray(
-      scrapeParametersArray.map((item, idx) =>
+    setSelectorsArray(
+      selectorsArray.map((item, idx) =>
         idx === index ? { ...item, name: event.target.value } : item
       )
     );
@@ -74,45 +72,44 @@ const SelectorEditableTable = ({
     index: number
   ) => {
     e.preventDefault();
-    const element = scrapeParametersArray[index];
-    if (!element.name || !element.value) {
+    const element = selectorsArray[index];
+    if (!element.name || !element.selectorValue) {
       if (!element.name) {
         setNameError(true);
       }
 
-      if (!element.value) {
+      if (!element.selectorValue) {
         setSelectorError(true);
       }
       return;
     }
 
-    let newArr: scrapeParameterInterface[] = [...scrapeParametersArray];
+    let newArr: SelectorTable[] = [...selectorsArray];
 
     delete newArr[index].edit; // remove edit field to make it like Selector field
 
     // if last element add new empty table column
-    if (index == scrapeParametersArray.length - 1) {
+    if (index == selectorsArray.length - 1) {
       newArr.push({
-        id: uuidv4(),
+        key: uuidv4(),
         name: "",
-        value: "",
-        description: "",
+        selectorValue: "",
         edit: true,
       });
     }
 
-    setScrapeParametersArray(newArr);
+    setSelectorsArray(newArr);
   };
 
   const onEdit = (index: number) => {
-    let newArr = [...scrapeParametersArray];
+    let newArr = [...selectorsArray];
     newArr[index].edit = true;
 
-    setScrapeParametersArray(newArr);
+    setSelectorsArray(newArr);
   };
 
   const onDelete = (index: number) => {
-    setScrapeParametersArray((prevArray) => [
+    setSelectorsArray((prevArray) => [
       ...prevArray.slice(0, index),
       ...prevArray.slice(index + 1),
     ]);
@@ -120,10 +117,10 @@ const SelectorEditableTable = ({
   const columns: ColumnsType<any> = [
     {
       title: "Selector",
-      dataIndex: "value",
-      key: "value",
+      dataIndex: "selectorValue",
+      key: "selectorValue",
       render: (text, _, index) =>
-        scrapeParametersArray[index].edit ? (
+        selectorsArray[index].edit ? (
           <Input
             defaultValue={text}
             value={text}
@@ -140,7 +137,7 @@ const SelectorEditableTable = ({
       dataIndex: "name",
       key: "name",
       render: (text, _, index) =>
-        scrapeParametersArray[index].edit ? (
+        selectorsArray[index].edit ? (
           <Input
             defaultValue={text}
             placeholder="Title of Video"
@@ -155,7 +152,7 @@ const SelectorEditableTable = ({
       title: "Operation",
       key: "operation",
       render: (_, __, index) => {
-        return scrapeParametersArray[index].edit ? (
+        return selectorsArray[index].edit ? (
           <Tooltip title="Add" arrow>
             <IconButton onClick={(e) => onAdd(e, index)} color="secondary">
               <AddCircleIcon fontSize="small" />
@@ -181,7 +178,7 @@ const SelectorEditableTable = ({
 
   return (
     <Table
-      dataSource={scrapeParametersArray}
+      dataSource={selectorsArray}
       columns={columns}
       size="small"
       pagination={false}
