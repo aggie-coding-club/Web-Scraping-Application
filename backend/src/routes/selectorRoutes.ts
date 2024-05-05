@@ -3,4 +3,4 @@ import * as selectorController from "../controllers/selectorController";
 
 const router = express.Router();
 
-router.get("/getSelectors");
+// router.get("/getSelectors");

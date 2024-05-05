@@ -1,6 +1,5 @@
 import { Schema } from "mongoose";
 import { ISelector, SelectorModel } from "../models/selectorModel";
-import { ISelectorMetadata } from "../models/scrapeMetadataModel";
 import mongoose from "mongoose";
 
 /**

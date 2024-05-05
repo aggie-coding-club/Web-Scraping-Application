@@ -1,64 +1,12 @@
-import { Request, RequestHandler, Response } from "express";
-import { ISelector, SelectorModel } from "../models/selectorModel";
+import { Request, Response } from "express";
+import { SelectorModel } from "../models/selectorModel";
 import {
   ISelectorMetadata,
   IScrapeMetadata,
   ScrapeMetadataModel,
 } from "../models/scrapeMetadataModel";
 import { assertIsDefined } from "../util/assertIsDefined";
-import { createSelector, getSelectorByObjectId } from "./selectorController";
-import { setNextScrapeTimeout } from "../util/checkAndExecuteScrape";
-import createHttpError from "http-errors";
-import { Schema } from "mongoose";
-
-export const testGet = async (req: Request, res: Response) => {
-  try {
-    console.log("[SUCCESS] Test Get");
-    res.status(200).send();
-  } catch (error) {
-    console.error("Error in test:", error);
-  }
-};
-
-export const testPost = async (req: Request, res: Response) => {
-  try {
-    console.log("[SUCCESS] Test Post");
-    console.log("Session:", req.session);
-    const { userId } = req.session;
-
-    const { name, note, url, scrapeIntervalMinute, emailNotification } =
-      req.body;
-
-    console.log("userId:", userId);
-
-    console.log("name:", name);
-    console.log("note:", note);
-    console.log("url:", url);
-    console.log("scrapeIntervalMinute:", scrapeIntervalMinute);
-    console.log("emailNotification:", emailNotification);
-
-    const { selectors }: { selectors: ISelectorMetadata[] } = req.body;
-    console.log("selectors:");
-    for (const selector of selectors) {
-      console.log("-------:");
-      console.log("name: ", selector.name);
-      console.log("value: ", selector.selectorValue);
-    }
-
-    res.status(200).send();
-  } catch (error) {
-    console.error("Error in test:", error);
-  }
-};
-
-export const testDelete = async (req: Request, res: Response) => {
-  try {
-    console.log("[SUCCESS] Test Delete");
-    res.status(200).send("Test Delete");
-  } catch (error) {
-    console.error("Error in test:", error);
-  }
-};
+import { createSelector } from "./selectorController";
 
 export const createScrapingConfig = async (req: Request, res: Response) => {
   try {
