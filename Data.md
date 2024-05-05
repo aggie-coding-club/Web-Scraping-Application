@@ -15,13 +15,13 @@
   "selectors": [
     {
       "name": "sub count",
-      "selector": "yt-formatted-string#sub-count",
-      "objectId": ObjectId("selectorData_id1")
+      "selectorValue": "yt-formatted-string#sub-count",
+      "selectorId": ObjectId("selectorData_id1")
     },
     {
       "name": "view count",
-      "selector": "yt-formatted-string#view-count",
-      "objectId": ObjectId("selectorData_id2")
+      "selectorValue": "yt-formatted-string#view-count",
+      "selectorId": ObjectId("selectorData_id2")
     }
   ]
 }
@@ -32,8 +32,6 @@
 ```json
 {
   "_id": ObjectId("selectorData_id1"),
-  "name": "sub count",
-  "selector": "yt-formatted-string#sub-count",
   "data": [
     {
       "timestamp": "2235",
@@ -54,9 +52,6 @@
 ```json
 {
   "_id": ObjectId("selectorData_id2"),
-  "metadataId": ObjectId("unique_metadata_id"),
-  "name": "view count",
-  "selector": "yt-formatted-string#view-count",
   "data": [
     {
       "timestamp": "2235",

@@ -21,4 +21,13 @@ router.delete(
   scrapingMetadataController.deleteScrapingConfig
 );
 
+router.delete(
+  "/deleteSelector/:configId/:selectorId",
+  scrapingMetadataController.deleteSelector
+);
+
+router.patch(
+  "/updateScrapeMetadata/:configId",
+  scrapingMetadataController.updateScrapingConfig
+);
 export default router;

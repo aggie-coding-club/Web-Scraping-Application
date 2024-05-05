@@ -1,3 +1,4 @@
+import { Schema } from "mongoose";
 import { ISelector, SelectorModel } from "../models/selectorModel";
 import { ISelectorMetadata } from "../models/scrapeMetadataModel";
 import mongoose from "mongoose";
@@ -6,29 +7,26 @@ import mongoose from "mongoose";
  *
  * @returns Metadata loaded with newly created id
  */
-export const createSelector = async (
-  selector: ISelectorMetadata
-): Promise<ISelectorMetadata | null> => {
-  try {
-    const mySelector = new SelectorModel({
-      data: [],
-    });
+export const createSelector =
+  async (): Promise<Schema.Types.ObjectId | null> => {
+    try {
+      const mySelector = new SelectorModel({
+        data: [],
+      });
 
-    const savedSelector = await mySelector.save();
+      const savedSelector = await mySelector.save();
 
-    if (!savedSelector) {
-      return null;
+      if (!savedSelector) {
+        return null;
+      }
+
+      return savedSelector._id;
+    } catch (error) {
+      console.error("Error in createSelector", error);
     }
 
-    selector.selectorId = savedSelector._id;
-
-    return selector;
-  } catch (error) {
-    console.error("Error in createSelector", error);
-  }
-
-  return null;
-};
+    return null;
+  };
 
 export const getSelectorByObjectId = async (
   objectId: mongoose.Schema.Types.ObjectId
