@@ -41,7 +41,7 @@ const ScrapeConfigPage = () => {
       try {
         setShowObjsLoadingError(false);
         setObjsLoading(true);
-        const objs = await ObjsApi.fetchObjs();
+        const objs = await ObjsApi.getScrapingConfigs();
         setObjs(objs);
       } catch (error) {
         console.error(error);

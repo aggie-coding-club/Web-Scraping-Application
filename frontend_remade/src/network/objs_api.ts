@@ -79,8 +79,8 @@ export async function logout(): Promise<void> {
   await request("/users/logout", { method: "POST" });
 }
 
-export async function fetchObjs(): Promise<ScrapeConfig[]> {
-  return request("/scrape/getScrapingConfigs", { method: "GET" });
+export async function getScrapingConfigs(): Promise<ScrapeConfig[]> {
+  return request("/scrapeMetadata/getScrapeMetadata", { method: "GET" });
 }
 
 export async function createScrapeConfig(
