@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { ConflictError, UnauthorizedError } from "../errors/http_errors";
 import { LoginCredentials } from "../models/loginCredentials";
-import { ScrapeConfig } from "../models/scrapeConfig";
+import { ScrapeConfig, ScrapeConfigInput } from "../models/scrapeConfig";
 import { SignUpCredentials } from "../models/signUpCredentials";
 import { User } from "../models/user";
 import UserContext from "../providers/UserProvider";
@@ -83,27 +83,29 @@ export async function fetchObjs(): Promise<ScrapeConfig[]> {
   return request("/scrape/getScrapingConfigs", { method: "GET" });
 }
 
-export async function createObj(obj: any): Promise<ScrapeConfig> {
-  return request("/scrape/createScrapingConfig", {
+export async function createScrapeConfig(
+  obj: ScrapeConfigInput
+): Promise<ScrapeConfig> {
+  return request("/scrapeMetadata/createScrapeMetadata", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(obj),
   });
 }
 
-export async function updateObj(
+export async function updateScrapeConfig(
   objId: string,
-  obj: any
+  obj: ScrapeConfigInput
 ): Promise<ScrapeConfig> {
-  return request(`/scrape/updateScrapingConfig/${objId}`, {
+  return request(`/scrapeMetadata/updateScrapeMetadata/${objId}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(obj),
   });
 }
 
-export async function deleteObj(objId: string): Promise<void> {
-  await request(`/scrape/deleteScrapingConfig/${objId}`, {
+export async function deleteScrapeConfig(objId: string): Promise<void> {
+  await request(`/scrapeMetadata/deleteScrapeMetadata/${objId}`, {
     method: "DELETE",
   });
 }

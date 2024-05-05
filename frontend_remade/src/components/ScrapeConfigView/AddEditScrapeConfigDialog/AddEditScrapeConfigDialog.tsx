@@ -82,17 +82,16 @@ const AddEditObjDialog = ({
     };
 
     console.log(scrapeConfigPackage);
-    /*
+
     try {
       const scrapeConfigResponse = scrapeConfig
-        ? await ObjApi.updateObj(scrapeConfig._id, inputWithScrapeParameters)
-        : await ObjApi.createObj(inputWithScrapeParameters);
+        ? await ObjApi.updateScrapeConfig(scrapeConfig._id, scrapeConfigPackage)
+        : await ObjApi.createScrapeConfig(scrapeConfigPackage);
       onScrapeConfigSaved(scrapeConfigResponse);
     } catch (error) {
       console.error(error);
       alert(error);
     }
-    */
   }
 
   return (

@@ -55,7 +55,7 @@ const ScrapeConfigPage = () => {
 
   async function deleteObj(obj: ScrapeConfig) {
     try {
-      await ObjsApi.deleteObj(obj._id);
+      await ObjsApi.deleteScrapeConfig(obj._id);
       setObjs(objs.filter((existingObj) => existingObj._id !== obj._id));
     } catch (error) {
       console.error(error);
