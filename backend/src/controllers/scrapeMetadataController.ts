@@ -13,7 +13,7 @@ export const createScrapingConfig = async (req: Request, res: Response) => {
     const { userId } = req.session;
     assertIsDefined(userId, "User ID must be defined");
 
-    const { name, note, url, scrapeIntervalMinute, emailNotification } =
+    const { name, description, url, scrapeIntervalMinute, emailNotification } =
       req.body;
 
     // ------- Create Selectors ---------------
@@ -36,7 +36,7 @@ export const createScrapingConfig = async (req: Request, res: Response) => {
     const config = new ScrapeMetadataModel({
       userId,
       name,
-      note,
+      description,
       url,
       selectorsMetadata,
       scrapeIntervalMinute,
@@ -140,7 +140,7 @@ export const deleteSelector = async (req: Request, res: Response) => {
 
 export const updateScrapingConfig = async (req: Request, res: Response) => {
   try {
-    const { name, note, url, scrapeIntervalMinute, emailNotification } =
+    const { name, description, url, scrapeIntervalMinute, emailNotification } =
       req.body;
     const { configId } = req.params;
 
@@ -164,7 +164,7 @@ export const updateScrapingConfig = async (req: Request, res: Response) => {
 
     const config = await ScrapeMetadataModel.findByIdAndUpdate(configId, {
       name,
-      note,
+      description,
       url,
       scrapeIntervalMinute,
       emailNotification,

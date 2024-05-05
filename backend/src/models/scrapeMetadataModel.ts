@@ -9,7 +9,7 @@ export interface ISelectorMetadata {
 export interface IScrapeMetadata extends Document {
   userId: Schema.Types.ObjectId;
   name: string;
-  note: string;
+  description: string;
   url: string;
   status: string;
   timeToScrape: Date;
@@ -24,7 +24,7 @@ const scrapeMetadataSchema = new Schema<IScrapeMetadata>(
   {
     userId: { type: Schema.Types.ObjectId, ref: "User" },
     name: { type: String, required: true },
-    note: { type: String },
+    description: { type: String },
     url: { type: String, required: true },
     status: { type: String, default: "pending" },
     timeToScrape: { type: Date, required: true },
