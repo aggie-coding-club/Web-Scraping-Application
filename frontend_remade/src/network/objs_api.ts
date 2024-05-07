@@ -5,6 +5,7 @@ import { ScrapeConfig, ScrapeConfigInput } from "../models/scrapeConfig";
 import { SignUpCredentials } from "../models/signUpCredentials";
 import { User } from "../models/user";
 import UserContext from "../providers/UserProvider";
+import { supabase } from "../providers/supabaseClient";
 
 const API_BASE = "/api";
 
@@ -56,8 +57,25 @@ export async function getLoggedInUserContext(): Promise<User | null> {
 }
 
 export async function getLoggedInUser(): Promise<User> {
-  return request("/users", { method: "GET" });
+  const { data: sessionResponse } = await supabase.auth.getSession();
+  const session = sessionResponse.session;
+
+  if (!session) throw new UnauthorizedError('No active session');
+
+  // Now access the access_token from the session object
+  const accessToken = session.access_token;
+  if (!accessToken) throw new UnauthorizedError('Access token not found');
+
+  return request("/users", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${accessToken}`, // Correctly access the access_token
+    },
+  });
 }
+
+
 
 export async function signUp(credentials: SignUpCredentials): Promise<User> {
   return request("/users/signup", {
