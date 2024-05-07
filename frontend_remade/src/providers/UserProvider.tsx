@@ -36,14 +36,19 @@ export const UserProvider = ({ children }: UserProviderProps) => {
       }
     }
 
+    fetchLoggedInUser();
+
+    /*
     const fetchSession = async () => {
       const session = await supabase.auth.getSession();
       if (session) {
         fetchLoggedInUser(); // Call only if there's a session
       }
+
     };
 
     fetchSession();
+    */
   }, []);
 
   return (

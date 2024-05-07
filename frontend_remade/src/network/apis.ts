@@ -57,6 +57,8 @@ export async function getLoggedInUserContext(): Promise<User | null> {
 }
 
 export async function getLoggedInUser(): Promise<User> {
+  return request("/users", { method: "GET" });
+  /*
   const { data: sessionResponse } = await supabase.auth.getSession();
   const session = sessionResponse.session;
 
@@ -73,6 +75,7 @@ export async function getLoggedInUser(): Promise<User> {
       Authorization: `Bearer ${accessToken}`, // Correctly access the access_token
     },
   });
+  */
 }
 
 export async function signUp(credentials: SignUpCredentials): Promise<User> {
