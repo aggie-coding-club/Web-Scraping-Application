@@ -7,10 +7,10 @@ import {
   ScrapeConfig,
   ScrapeConfigInput,
 } from "../../../models/scrapeConfig";
-import * as ObjApi from "../../../network/objs_api";
-import { fetchHtmlContent } from "../../../network/objs_api";
+import * as Apis from "../../../network/apis";
+import { fetchHtmlContent } from "../../../network/apis";
 import { SelectorEditableTable } from "./SelectorEditableTable";
-import TextInputField from "./TextInputField";
+import { TextInputField } from "./TextInputField";
 import { v4 as uuidv4 } from "uuid";
 
 interface AddEditScrapeConfigProps {
@@ -19,7 +19,7 @@ interface AddEditScrapeConfigProps {
   onScrapeConfigSaved: (scrapeConfig: ScrapeConfig) => void;
 }
 
-const AddEditObjDialog = ({
+const AddEditScrapeConfigDialog = ({
   scrapeConfig,
   onDismiss,
   onScrapeConfigSaved,
@@ -85,8 +85,10 @@ const AddEditObjDialog = ({
 
     try {
       const scrapeConfigResponse = scrapeConfig
-        ? await ObjApi.updateScrapeConfig(scrapeConfig._id, scrapeConfigPackage)
-        : await ObjApi.createScrapeConfig(scrapeConfigPackage);
+        ? await Apis.updateScrapeConfig(scrapeConfig._id, scrapeConfigPackage)
+        : await Apis.createScrapeConfig(scrapeConfigPackage);
+
+      console.log(scrapeConfigResponse);
       onScrapeConfigSaved(scrapeConfigResponse);
     } catch (error) {
       console.error(error);
@@ -188,4 +190,4 @@ const AddEditObjDialog = ({
   );
 };
 
-export default AddEditObjDialog;
+export { AddEditScrapeConfigDialog };

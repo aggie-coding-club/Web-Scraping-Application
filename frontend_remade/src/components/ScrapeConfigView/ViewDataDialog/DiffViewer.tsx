@@ -78,4 +78,4 @@ const DiffViewer = ({ oldText, newText }: DiffViewerProps) => {
   );
 };
 
-export default DiffViewer;
+export { DiffViewer };

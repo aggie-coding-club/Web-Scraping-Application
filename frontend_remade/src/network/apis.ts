@@ -4,8 +4,8 @@ import { LoginCredentials } from "../models/loginCredentials";
 import { ScrapeConfig, ScrapeConfigInput } from "../models/scrapeConfig";
 import { SignUpCredentials } from "../models/signUpCredentials";
 import { User } from "../models/user";
-import UserContext from "../providers/UserProvider";
 import { supabase } from "../providers/supabaseClient";
+import { UserContext } from "../providers/UserProvider";
 
 const API_BASE = "/api";
 
@@ -60,22 +60,20 @@ export async function getLoggedInUser(): Promise<User> {
   const { data: sessionResponse } = await supabase.auth.getSession();
   const session = sessionResponse.session;
 
-  if (!session) throw new UnauthorizedError('No active session');
+  if (!session) throw new UnauthorizedError("No active session");
 
   // Now access the access_token from the session object
   const accessToken = session.access_token;
-  if (!accessToken) throw new UnauthorizedError('Access token not found');
+  if (!accessToken) throw new UnauthorizedError("Access token not found");
 
   return request("/users", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${accessToken}`, // Correctly access the access_token
+      Authorization: `Bearer ${accessToken}`, // Correctly access the access_token
     },
   });
 }
-
-
 
 export async function signUp(credentials: SignUpCredentials): Promise<User> {
   return request("/users/signup", {
@@ -102,34 +100,36 @@ export async function getScrapingConfigs(): Promise<ScrapeConfig[]> {
 }
 
 export async function createScrapeConfig(
-  obj: ScrapeConfigInput
+  scrapeConfig: ScrapeConfigInput
 ): Promise<ScrapeConfig> {
   return request("/scrapeMetadata/createScrapeMetadata", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(obj),
+    body: JSON.stringify(scrapeConfig),
   });
 }
 
 export async function updateScrapeConfig(
-  objId: string,
-  obj: ScrapeConfigInput
+  scrapeConfigId: string,
+  scrapeConfig: ScrapeConfigInput
 ): Promise<ScrapeConfig> {
-  return request(`/scrapeMetadata/updateScrapeMetadata/${objId}`, {
+  return request(`/scrapeMetadata/updateScrapeMetadata/${scrapeConfigId}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(obj),
+    body: JSON.stringify(scrapeConfig),
   });
 }
 
-export async function deleteScrapeConfig(objId: string): Promise<void> {
-  await request(`/scrapeMetadata/deleteScrapeMetadata/${objId}`, {
+export async function deleteScrapeConfig(
+  scrapeConfigId: string
+): Promise<void> {
+  await request(`/scrapeMetadata/deleteScrapeMetadata/${scrapeConfigId}`, {
     method: "DELETE",
   });
 }
 
-export async function getObj(objId: string): Promise<any> {
-  return request(`/objs/${objId}`, { method: "GET" });
+export async function getNote(scrapeConfigId: string): Promise<any> {
+  return request(`/objs/${scrapeConfigId}`, { method: "GET" });
 }
 
 export async function fetchHtmlContent(url: string): Promise<string> {

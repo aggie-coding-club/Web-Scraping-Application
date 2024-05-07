@@ -1,4 +1,4 @@
-interface SelectorInput {
+export interface SelectorInput {
   name: string;
   selectorValue: string; // selector value
   selectorId?: string;

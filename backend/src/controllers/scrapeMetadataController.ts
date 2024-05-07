@@ -48,7 +48,7 @@ export const createScrapingConfig = async (req: Request, res: Response) => {
 
     // setNextScrapeTimeout(0); // FIXME!!!
 
-    res.status(204).send();
+    res.status(200).send(config);
   } catch (error) {
     console.error(
       "Error in createScrapingConfig in scrapeMetadataController.ts:",

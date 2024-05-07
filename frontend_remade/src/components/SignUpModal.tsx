@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Alert, Form, Modal } from "react-bootstrap";
 import { User } from "../models/user";
 import { SignUpCredentials } from "../models/signUpCredentials";
-import * as ObjsApi from "../network/objs_api";
-import TextInputField from "./ScrapeConfigView/AddEditScrapeConfigDialog/TextInputField";
+import * as ObjsApi from "../network/apis";
+import { Alert, Form, Modal } from "react-bootstrap";
+import { TextInputField } from "./ScrapeConfigView/AddEditScrapeConfigDialog/TextInputField";
 import styleUtils from "../styles/utils.module.css";
 import { ConflictError } from "../errors/http_errors";
 import { supabase } from "../providers/supabaseClient";
@@ -197,4 +197,4 @@ const SignUpModal = ({ onDismiss, onSignUpSuccessful }: SignUpModalProps) => {
   );
 };
 
-export default SignUpModal;
+export { SignUpModal };

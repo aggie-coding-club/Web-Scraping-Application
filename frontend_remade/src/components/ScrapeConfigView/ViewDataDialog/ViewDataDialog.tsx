@@ -3,22 +3,23 @@ import { Button } from "@mui/material";
 import { useState } from "react";
 import { Form, Modal, Tab, Tabs } from "react-bootstrap";
 import { ScrapeConfig } from "../../../models/scrapeConfig";
-import DataArrayTable from "./DataArrayTable";
-import DataTable from "./DataTable";
-import DiffViewer from "./DiffViewer";
-import SelectorsTable from "./SelectorsTable";
+import { DataArrayTable } from "./DataArrayTable";
+import { DataTable } from "./DataTable";
+import { DiffViewer } from "./DiffViewer";
+import { SelectorsTable } from "./SelectorsTable";
+import { SelectorInput } from "../../../models/scrapeConfig";
 
 interface ViewDataDialogProps {
   scrapeConfig: ScrapeConfig;
   dataToView?: any[];
   onDismiss: () => void;
-  scrapeParametersArray: any[];
+  selectorsMetadata: SelectorInput[];
 }
 
 const ViewDataDialog = ({
   dataToView,
   onDismiss,
-  scrapeParametersArray,
+  selectorsMetadata,
 }: ViewDataDialogProps) => {
   if (dataToView === undefined) {
     dataToView = [];
@@ -42,7 +43,7 @@ const ViewDataDialog = ({
             <Form.Label style={{ marginBottom: "20px" }}>
               Selectors Table
             </Form.Label>
-            <SelectorsTable dataSource={scrapeParametersArray} />
+            <SelectorsTable dataSource={selectorsMetadata} />
             {index !== null && (
               <>
                 <Form.Label style={{ marginBottom: "20px" }}>
@@ -63,7 +64,7 @@ const ViewDataDialog = ({
               as={TextareaAutosize}
               style={{ marginBottom: "30px" }}
               readOnly
-              value={JSON.stringify(scrapeParametersArray, null, 2)}
+              value={JSON.stringify(selectorsMetadata, null, 2)}
             />
             <Form.Label style={{ marginBottom: "20px" }}>Data JSON</Form.Label>
             <Form.Control
@@ -99,4 +100,4 @@ const ViewDataDialog = ({
   );
 };
 
-export default ViewDataDialog;
+export { ViewDataDialog };
