@@ -6,7 +6,7 @@ export interface IData {
 }
 
 export interface ISelector extends Document {
-  data?: IData[];
+  data: IData[];
 }
 
 const selectorSchema = new Schema<ISelector>({

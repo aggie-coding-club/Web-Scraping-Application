@@ -7,31 +7,6 @@ import { IData } from "../models/selectorModel";
 
 let scrapeTimeout: NodeJS.Timeout;
 
-function isScrapedDataChanged(
-  oldScrapedData: ScrapedData,
-  newScrapedData: ScrapedData
-): boolean {
-  if (oldScrapedData.url !== newScrapedData.url) {
-    return true;
-  }
-
-  if (oldScrapedData.selectors.length != newScrapedData.selectors.length) {
-    return true;
-  }
-
-  const oldScrapedDataSelectorObject: { [key: string]: ScrapedSelector } = {};
-  oldScrapedData.selectors.forEach(
-    (selector) => (oldScrapedDataSelectorObject[selector.selectorId] = selector)
-  );
-
-  return newScrapedData.selectors.some(
-    (selector) =>
-      oldScrapedDataSelectorObject[selector.selectorId] === undefined ||
-      selector.content !=
-        oldScrapedDataSelectorObject[selector.selectorId].content
-  );
-}
-
 const checkAndExecuteScrape = async () => {
   const [currentScrape] = await ScrapeMetadataModel.find({})
     .sort({ timeToScrape: 1 })
@@ -46,12 +21,11 @@ const checkAndExecuteScrape = async () => {
 
   try {
     if (currentScrape.timeToScrape.getTime() <= Date.now()) {
+      let currentDate = new Date().toLocaleString("en-US", {
+        timeZone: "America/Chicago",
+      });
       console.log(
-        "Scraping for:",
-        currentScrape.url,
-        "at time:",
-        new Date().toLocaleString("en-US", { timeZone: "America/Chicago" }),
-        "America/Chicago"
+        `Scraping for: ${currentScrape.url} at time: ${currentDate}, America/Chicago`
       );
 
       const scrapedData = await scrapeWebsite(
@@ -61,80 +35,57 @@ const checkAndExecuteScrape = async () => {
 
       if (scrapedData === undefined) {
         throw Error("Scrape failed.");
-      } else {
-        // check when the last time the data was scraped
-        //
-
-        console.log("scrapedData: ", scrapedData);
-        scrapedData.selectors.map(async (selector) => {
-          // check to see if data has changed
-          /*
-          const lastScrapedData = await SelectorModel.findOne(
-            { selectorId: selector.selectorId },
-            { content: { $slice: -1 } }
-          );
-
-          console.log(lastScrapedData);
-          */
-
-          const myData: IData = {
-            timestamp: new Date(scrapedData.timestamp), // fixme
-            content: selector.content ? selector.content : "",
-          };
-
-          console.log("idata:", myData);
-          console.log("update at:", selector.selectorId);
-
-          await SelectorModel.updateOne(
-            { _id: selector.selectorId },
-            {
-              $push: { data: myData },
-            }
-          );
-        });
-
-        currentScrape.status = "success";
-        await currentScrape.save();
-        /*
-        const lastScrapedData = (
-          await SelectorModel.findOne(
-            { configId: currentScrape._id },
-            { scrapedData: { $slice: -1 } }
-          )
-        )?.scrapedData[0];
-        const isChanged = lastScrapedData
-          ? isScrapedDataChanged(lastScrapedData, scrapedData)
-          : true;
-
-        if (isChanged) {
-          await NoteModel.updateOne(
-            currentScrape.selectorId,
-            { $push: { scrapedData } }
-          );
-          await ScrapeConfigModel.updateOne(
-            { _id: currentScrape._id },
-            { lastChanged: new Date() }
-          );
-        }
-        console.log(isChanged);
-
-        const userId = currentScrape.userId;
-        const user = await UserModel.findById(userId).select("+email");
-        if (user) {
-          const { email } = user;
-          const { emailNotification } = currentScrape;
-          if (emailNotification === "update_on_scrape") {
-            sendEmail(email!, "Test Config", scrapedData);
-          }
-        }
-        console.log("Scrape successful.");
-        await ScrapeConfigModel.updateOne(
-          { _id: currentScrape._id },
-          { status: "success" }
-      
-        );
-        */
       }
+
+      console.log("scrapedData: ", scrapedData);
+      scrapedData.selectors.forEach(async (selector) => {
+        // check to see if data has changed
+        const mySelector = await SelectorModel.findOne(
+          { _id: selector.selectorId },
+          { data: { $slice: -1 } }
+        );
+
+        if (!mySelector) {
+          throw new Error(`Selector ${selector.selectorId} not found`);
+        }
+
+        // check if content changed
+        if (
+          !selector.content ||
+          mySelector.data[0]?.content === selector.content
+        ) {
+          console.log("content not changed...  do not save"); // DELETE ME
+          return;
+        }
+
+        // insert new data into selector
+        const myData: IData = {
+          timestamp: new Date(scrapedData.timestamp),
+          content: selector.content,
+        };
+
+        await SelectorModel.updateOne(
+          { _id: selector.selectorId },
+          {
+            $push: { data: myData },
+          }
+        );
+      });
+
+      // send email
+      const userId = currentScrape.userId;
+      const user = await UserModel.findById(userId).select("+email");
+      if (user) {
+        const { email } = user;
+        const { emailNotification } = currentScrape;
+        if (emailNotification === "update_on_scrape") {
+          sendEmail(email!, "Test Config", scrapedData);
+        }
+      }
+      console.log("Scrape successful.");
+
+      currentScrape.status = "success";
+      await currentScrape.save();
     } else {
       setNextScrapeTimeout(currentScrape.timeToScrape.getTime() - Date.now());
     }
@@ -157,7 +108,7 @@ const checkAndExecuteScrape = async () => {
 };
 
 export const setNextScrapeTimeout = (interval: number) => {
-  console.log("next scrape after:", interval);
+  console.log("next scrape after:", interval); // DELETE ME
   try {
     clearTimeout(scrapeTimeout);
     scrapeTimeout = setTimeout(checkAndExecuteScrape, interval);
