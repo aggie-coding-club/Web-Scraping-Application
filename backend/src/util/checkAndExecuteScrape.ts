@@ -37,40 +37,41 @@ const checkAndExecuteScrape = async () => {
         throw Error("Scrape failed.");
       }
 
-      console.log("scrapedData: ", scrapedData);
-      scrapedData.selectors.forEach(async (selector) => {
-        // check to see if data has changed
-        const mySelector = await SelectorModel.findOne(
-          { _id: selector.selectorId },
-          { data: { $slice: -1 } }
-        );
+      Promise.all(
+        scrapedData.selectors.map(async (selector) => {
+          // check to see if data has changed
+          const mySelector = await SelectorModel.findOne(
+            { _id: selector.selectorId },
+            { data: { $slice: -1 } }
+          );
 
-        if (!mySelector) {
-          throw new Error(`Selector ${selector.selectorId} not found`);
-        }
-
-        // check if content changed
-        if (
-          !selector.content ||
-          mySelector.data[0]?.content === selector.content
-        ) {
-          console.log("content not changed...  do not save"); // DELETE ME
-          return;
-        }
-
-        // insert new data into selector
-        const myData: IData = {
-          timestamp: new Date(scrapedData.timestamp),
-          content: selector.content,
-        };
-
-        await SelectorModel.updateOne(
-          { _id: selector.selectorId },
-          {
-            $push: { data: myData },
+          if (!mySelector) {
+            throw new Error(`Selector ${selector.selectorId} not found`);
           }
-        );
-      });
+
+          // check if content changed
+          if (
+            !selector.content ||
+            mySelector.data[0]?.content === selector.content
+          ) {
+            console.log("duplicate content, do not save...");
+            return;
+          }
+
+          // insert new data into selector
+          const myData: IData = {
+            timestamp: new Date(scrapedData.timestamp),
+            content: selector.content,
+          };
+
+          await SelectorModel.updateOne(
+            { _id: selector.selectorId },
+            {
+              $push: { data: myData },
+            }
+          );
+        })
+      );
 
       // send email
       const userId = currentScrape.userId;
