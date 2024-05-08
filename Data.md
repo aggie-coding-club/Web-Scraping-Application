@@ -35,15 +35,15 @@
   "data": [
     {
       "timestamp": "2235",
-      "value": "50,123 subscribers"
+      "content": "50,123 subscribers"
     },
     {
       "timestamp": "2235",
-      "value": "50,123 subscribers"
+      "content": "50,123 subscribers"
     },
     {
       "timestamp": "2235",
-      "value": "50,123 subscribers"
+      "content": "50,123 subscribers"
     }
   ]
 }
@@ -55,15 +55,15 @@
   "data": [
     {
       "timestamp": "2235",
-      "value": "50,123 views"
+      "content": "50,123 views"
     },
     {
       "timestamp": "2235",
-      "value": "50,123 views"
+      "content": "50,123 views"
     },
     {
       "timestamp": "2235",
-      "value": "50,123 views"
+      "content": "50,123 views"
     }
   ]
 }

@@ -3,7 +3,7 @@ import { Document, model, Schema } from "mongoose";
 export interface ISelectorMetadata {
   name: string;
   selectorValue: string;
-  selectorId?: Schema.Types.ObjectId; // make optional so can load later
+  selectorId: Schema.Types.ObjectId; // make optional so can load later
 }
 
 export interface IScrapeMetadata extends Document {

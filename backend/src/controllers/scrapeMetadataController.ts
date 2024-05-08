@@ -7,6 +7,7 @@ import {
 } from "../models/scrapeMetadataModel";
 import { assertIsDefined } from "../util/assertIsDefined";
 import { createSelector } from "./selectorController";
+import { setNextScrapeTimeout } from "../util/checkAndExecuteScrape";
 
 export const createScrapingConfig = async (req: Request, res: Response) => {
   try {
@@ -46,7 +47,7 @@ export const createScrapingConfig = async (req: Request, res: Response) => {
 
     await config.save();
 
-    // setNextScrapeTimeout(0); // FIXME!!!
+    setNextScrapeTimeout(0);
 
     res.status(200).send(config);
   } catch (error) {
@@ -175,7 +176,7 @@ export const updateScrapingConfig = async (req: Request, res: Response) => {
       return res.status(404).send("Scraping Configuration not found");
     }
 
-    // setNextScrapeTimeout(0); // FIXME
+    setNextScrapeTimeout(0);
 
     res.status(200).send(config);
   } catch (error) {

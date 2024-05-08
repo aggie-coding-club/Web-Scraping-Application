@@ -1,8 +1,8 @@
 import { Document, model, Schema } from "mongoose";
 
-interface IData {
+export interface IData {
   timestamp: Date;
-  value: string;
+  content: string;
 }
 
 export interface ISelector extends Document {
@@ -12,8 +12,9 @@ export interface ISelector extends Document {
 const selectorSchema = new Schema<ISelector>({
   data: [
     {
+      _id: false,
       timestamp: { type: Date, required: true },
-      value: { type: String, required: true },
+      content: { type: String, required: true },
     },
   ],
 });

@@ -1,21 +1,19 @@
-type Selector = {
-    id: string;
-    name: string;
-    value: string;
-    description: string;
-};
+// from ISelectorMetadata
+interface SelectorMetadata {
+  name: string;
+  selectorValue: string;
+  selectorId: any;
+}
 
-type SelectorArray = Selector[];
-
-interface ScrapedSelector extends Selector {
-    content?: string;
-    error?: string;
+interface ScrapedSelector extends SelectorMetadata {
+  content?: string;
+  error?: string;
 }
 
 type ScrapedSelectorArray = ScrapedSelector[];
 
 type ScrapedData = {
-    url: string;
-    timestamp: number;
-    selectors: ScrapedSelectorArray;
+  url: string;
+  timestamp: number;
+  selectors: ScrapedSelectorArray;
 };
