@@ -10,7 +10,6 @@
   "url": "www.awesomeness.com",
   "status": "Success",
   "lastSuccessfulScraped": "233455", // time that data was successfully scraped
-"lastDataChangeTime": "923235", // time that the scraped data was actually different
   "interval": 60,
   "selectors": [
     {

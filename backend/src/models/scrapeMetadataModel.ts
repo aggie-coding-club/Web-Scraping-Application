@@ -16,7 +16,6 @@ export interface IScrapeMetadata extends Document {
   scrapeIntervalMinute: number;
   emailNotification: string;
   lastSuccessfulScrape: Date;
-  lastDataChangeTime: Date; //
   selectorsMetadata: ISelectorMetadata[];
 }
 
