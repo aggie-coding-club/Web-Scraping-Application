@@ -21,11 +21,12 @@ const checkAndExecuteScrape = async () => {
 
   try {
     if (currentScrape.timeToScrape.getTime() <= Date.now()) {
-      let currentDate = new Date().toLocaleString("en-US", {
+      let currentDate = new Date();
+      let currentDateStr = currentDate.toLocaleString("en-US", {
         timeZone: "America/Chicago",
       });
       console.log(
-        `Scraping for: ${currentScrape.url} at time: ${currentDate}, America/Chicago`
+        `Scraping for: ${currentScrape.url} at time: ${currentDateStr}, America/Chicago`
       );
 
       const scrapedData = await scrapeWebsite(
@@ -86,6 +87,7 @@ const checkAndExecuteScrape = async () => {
       console.log("Scrape successful.");
 
       currentScrape.status = "success";
+      currentScrape.lastSuccessfulScrape = currentDate;
       await currentScrape.save();
     } else {
       setNextScrapeTimeout(currentScrape.timeToScrape.getTime() - Date.now());

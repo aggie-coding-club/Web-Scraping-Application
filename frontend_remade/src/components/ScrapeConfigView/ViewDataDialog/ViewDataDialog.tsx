@@ -30,7 +30,6 @@ const ViewDataDialog = ({
       <p>Interval: {scrapeConfig.scrapeIntervalMinute} min</p>
       <h3>Selectors:</h3>
       <SelectorTable selectorsMetadata={scrapeConfig.selectorsMetadata} />
-      <Button onClick={() => console.log(scrapeConfig)}>click me</Button>
       <Button onClick={handleClose} variant="contained">
         Close
       </Button>
