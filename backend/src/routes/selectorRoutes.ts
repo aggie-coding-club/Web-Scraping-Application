@@ -3,7 +3,7 @@ import * as selectorController from "../controllers/selectorController";
 
 const router = express.Router();
 
-// router.get("/getSelectors");
+router.get("/getSelector/:selectorId", selectorController.getSelector);
 
 router.delete("/deleteAllSelectors", selectorController.deleteAllSelectors);
 
