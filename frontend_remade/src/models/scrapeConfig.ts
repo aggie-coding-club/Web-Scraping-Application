@@ -4,7 +4,15 @@ export interface SelectorInput {
   selectorId?: string;
 }
 
-// FIXME: Rename this Selector when fix all errors
+export interface Data {
+  timestamp: Date;
+  content: string;
+}
+
+export interface SelectorData extends SelectorInput {
+  data: Data[];
+}
+
 export interface SelectorTable extends SelectorInput {
   edit?: boolean;
   key: string;

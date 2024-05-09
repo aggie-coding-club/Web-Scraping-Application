@@ -5,6 +5,7 @@ import {
   ScrapeConfig,
   ScrapeConfigInput,
   SelectorInput,
+  SelectorData,
 } from "../models/scrapeConfig";
 import { SignUpCredentials } from "../models/signUpCredentials";
 import { User } from "../models/user";
@@ -147,7 +148,7 @@ export async function deleteSelector(
   );
 }
 
-export async function getSelector(selectorId: string): Promise<SelectorInput> {
+export async function getSelector(selectorId: string): Promise<SelectorData> {
   return await request(`/selectors/getSelector/${selectorId}`, {
     method: "GET",
   });

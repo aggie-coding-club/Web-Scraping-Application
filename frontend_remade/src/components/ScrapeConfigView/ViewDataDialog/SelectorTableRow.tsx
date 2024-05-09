@@ -36,7 +36,7 @@ const SelectorTableRow = ({ selector }: RowProps) => {
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
-            <SelectorDataTable />
+            {open && <SelectorDataTable selector={selector} />}
           </Collapse>
         </TableCell>
       </TableRow>
