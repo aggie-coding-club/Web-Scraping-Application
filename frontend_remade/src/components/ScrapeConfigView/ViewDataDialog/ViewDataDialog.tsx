@@ -1,8 +1,6 @@
-import { TextareaAutosize } from "@mui/base/TextareaAutosize";
 import { Button, Dialog } from "@mui/material";
-import { useState } from "react";
 import { ScrapeConfig } from "../../../models/scrapeConfig";
-import { SelectorInput } from "../../../models/scrapeConfig";
+import { SelectorTable } from "./SelectorTable";
 
 interface ViewDataDialogProps {
   scrapeConfig: ScrapeConfig;
@@ -18,6 +16,8 @@ const ViewDataDialog = ({
   const handleClose = () => {
     setOpenViewDialog(false);
   };
+
+  if (!scrapeConfig) return <></>;
 
   return (
     <Dialog fullScreen open={openViewDialog} onClose={handleClose}>
@@ -36,7 +36,11 @@ const ViewDataDialog = ({
           </div>
         ))}
       </div>
+      <SelectorTable selectorsMetadata={scrapeConfig.selectorsMetadata} />
       <Button onClick={() => console.log(scrapeConfig)}>click me</Button>
+      <Button onClick={handleClose} variant="contained">
+        Close
+      </Button>
     </Dialog>
   );
 };
