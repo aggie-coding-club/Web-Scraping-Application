@@ -163,14 +163,18 @@ export const updateScrapingConfig = async (req: Request, res: Response) => {
       }
     }
 
-    const config = await ScrapeMetadataModel.findByIdAndUpdate(configId, {
-      name,
-      description,
-      url,
-      scrapeIntervalMinute,
-      emailNotification,
-      selectorsMetadata,
-    }).exec();
+    const config = await ScrapeMetadataModel.findByIdAndUpdate(
+      configId,
+      {
+        name,
+        description,
+        url,
+        scrapeIntervalMinute,
+        emailNotification,
+        selectorsMetadata,
+      },
+      { new: true }
+    ).exec();
 
     if (!config) {
       return res.status(404).send("Scraping Configuration not found");
