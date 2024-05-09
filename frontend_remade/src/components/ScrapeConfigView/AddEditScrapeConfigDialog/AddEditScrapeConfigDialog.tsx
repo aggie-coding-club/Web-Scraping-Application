@@ -81,8 +81,6 @@ const AddEditScrapeConfigDialog = ({
         .map(({ name, selectorValue }) => ({ name, selectorValue })),
     };
 
-    console.log(scrapeConfigPackage);
-
     try {
       const scrapeConfigResponse = scrapeConfig
         ? await Apis.updateScrapeConfig(scrapeConfig._id, scrapeConfigPackage)

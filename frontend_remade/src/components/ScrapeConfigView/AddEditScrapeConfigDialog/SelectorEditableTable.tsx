@@ -7,6 +7,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditIcon from "@mui/icons-material/Edit";
 import { ButtonGroup, IconButton, Tooltip } from "@mui/material";
+import { DeleteAlertDialog } from "./DeleteAlertDialog";
 
 interface SelectorEditableTableProps {
   selectorsArray: SelectorTable[];
@@ -25,6 +26,8 @@ const SelectorEditableTable = ({
   // ---- State -----
   const [nameError, setNameError] = useState<boolean>(false);
   const [selectorError, setSelectorError] = useState<boolean>(false);
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [rowToDelete, setRowToDelete] = useState<SelectorTable>();
 
   // ---- Input Change Functions -----
 
@@ -109,10 +112,34 @@ const SelectorEditableTable = ({
   };
 
   const onDelete = (index: number) => {
-    setSelectorsArray((prevArray) => [
-      ...prevArray.slice(0, index),
-      ...prevArray.slice(index + 1),
-    ]);
+    setRowToDelete(selectorsArray[index]);
+    setOpenDialog(true);
+  };
+
+  /**
+   *
+   * @param isDeleteConfirmed true if the delete has been confirmed, false if the delete process was cancelled
+   * @returns
+   */
+  const handleCloseDeleteDialog = (isDeleteConfirmed: boolean) => {
+    setOpenDialog(false);
+
+    if (!isDeleteConfirmed) {
+      return;
+    }
+
+    if (!rowToDelete) {
+      console.log("[ERROR] Row to Delete Undefined");
+      return;
+    }
+
+    // Call API to delete Selector
+
+    const newArr = selectorsArray.filter(
+      (selector) => selector.key != rowToDelete.key
+    );
+
+    setSelectorsArray([...newArr]);
   };
   const columns: ColumnsType<any> = [
     {
@@ -177,13 +204,20 @@ const SelectorEditableTable = ({
   ];
 
   return (
-    <Table
-      dataSource={selectorsArray}
-      columns={columns}
-      size="small"
-      pagination={false}
-      rowKey="value"
-    />
+    <>
+      <Table
+        dataSource={selectorsArray}
+        columns={columns}
+        size="small"
+        pagination={false}
+        rowKey="value"
+      />
+      <DeleteAlertDialog
+        openDialog={openDialog}
+        handleCloseDeleteDialog={handleCloseDeleteDialog}
+        rowToDelete={rowToDelete}
+      />
+    </>
   );
 };
 

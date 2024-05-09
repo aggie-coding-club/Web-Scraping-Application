@@ -109,7 +109,6 @@ const checkAndExecuteScrape = async () => {
 };
 
 export const setNextScrapeTimeout = (interval: number) => {
-  console.log("next scrape after:", interval); // DELETE ME
   try {
     clearTimeout(scrapeTimeout);
     scrapeTimeout = setTimeout(checkAndExecuteScrape, interval);
