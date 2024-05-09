@@ -28,6 +28,14 @@ const ViewDataDialog = ({
       {/* FIXME: confirm that updatedAt DOES mean last scraped */}
       <p>Last Scraped: {scrapeConfig.updatedAt}</p>{" "}
       <p>Interval: {scrapeConfig.scrapeIntervalMinute}</p>
+      <h3>Selectors:</h3>
+      <div>
+        {scrapeConfig.selectorsMetadata.map((selector) => (
+          <div>
+            {selector.name} - {selector.selectorValue}
+          </div>
+        ))}
+      </div>
       <Button onClick={() => console.log(scrapeConfig)}>click me</Button>
     </Dialog>
   );
