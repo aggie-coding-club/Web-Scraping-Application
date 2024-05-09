@@ -26,17 +26,16 @@ const ScrapeConfigView = () => {
     useState(false);
   const [scrapeConfigToEdit, setScrapeConfigToEdit] =
     useState<ScrapeConfig | null>(null);
-  const [dataToView, setDataToView] = useState<any>(null);
+  const [openViewDialog, setOpenViewDialog] = useState<boolean>(false);
 
   const theme = useTheme();
   const urlStyle = {
     color: theme.palette.secondary.main,
     fontWeight: 500,
   };
-  const onSelectClick = async (record: ScrapeConfig, index: number) => {
-    const note = await apis.getNote(record._id);
-    setDataToView(note.scrapedData);
-    setSelectedScrapeConfig(scrapeConfigs[index]);
+  const onView = async (record: ScrapeConfig) => {
+    setSelectedScrapeConfig(record);
+    setOpenViewDialog(true);
   };
 
   useEffect(() => {
@@ -154,7 +153,7 @@ const ScrapeConfigView = () => {
       key: "view",
       align: "center",
       render: (_, record, index) => (
-        <IconButton onClick={() => onSelectClick(record, index)}>
+        <IconButton onClick={() => onView(record, index)}>
           <VisibilityIcon />
         </IconButton>
       ),
@@ -188,7 +187,6 @@ const ScrapeConfigView = () => {
         onClick={() => setShowAddScrapeConfigDialog(true)}
         startIcon={<AddIcon />}
         variant="contained"
-        style={{ boxShadow: "0 0 2px 2px rgba(0,0,0,0.08)" }}
       >
         Configuration
       </Button>
@@ -232,14 +230,11 @@ const ScrapeConfigView = () => {
           }}
         />
       )}
-      {dataToView && (
-        <ViewDataDialog
-          scrapeConfig={selectedScrapeConfig!}
-          dataToView={dataToView}
-          onDismiss={() => setDataToView(null)}
-          selectorsMetadata={selectedScrapeConfig!.selectorsMetadata}
-        />
-      )}
+      <ViewDataDialog
+        scrapeConfig={selectedScrapeConfig!}
+        openViewDialog={openViewDialog}
+        setOpenViewDialog={setOpenViewDialog}
+      />
     </>
   );
 };
