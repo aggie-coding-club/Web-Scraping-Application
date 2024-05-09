@@ -4,6 +4,7 @@ import notesRoutes from "./routes/objects";
 import userRoutes from "./routes/users";
 import scrapingRoutes from "./routes/scrapingRoutes";
 import scrapeMetadataRoutes from "./routes/scrapeMetadataRoutes";
+import selectorRoutes from "./routes/selectorRoutes";
 import morgan from "morgan";
 import createHttpError, { isHttpError } from "http-errors";
 import session from "express-session";
@@ -34,6 +35,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/objs", requiresAuth, notesRoutes);
 app.use("/api/scrape", scrapingRoutes); // Use scraping routes
 app.use("/api/scrapeMetadata", requiresAuth, scrapeMetadataRoutes);
+app.use("/api/selectors", requiresAuth, selectorRoutes);
 
 // middleware error handler
 // not setup endpoint error

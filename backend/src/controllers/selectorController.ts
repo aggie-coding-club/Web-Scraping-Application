@@ -1,6 +1,7 @@
 import { Schema } from "mongoose";
 import { ISelector, SelectorModel } from "../models/selectorModel";
 import mongoose from "mongoose";
+import { Request, Response } from "express";
 
 /**
  *
@@ -55,6 +56,17 @@ export const updateSelector = async (
     return updatedSelector;
   } catch (error) {
     console.error("Error in updateSelector:", error);
+    throw error;
+  }
+};
+
+/* DELETE ME!!!! Only for Debugging */
+export const deleteAllSelectors = async (req: Request, res: Response) => {
+  try {
+    await SelectorModel.deleteMany({});
+    res.status(200).send();
+  } catch (error) {
+    console.error("Error in deleting all selectors:", error);
     throw error;
   }
 };
