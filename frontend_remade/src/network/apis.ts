@@ -131,6 +131,18 @@ export async function deleteScrapeConfig(
   });
 }
 
+export async function deleteSelector(
+  scrapeConfigId: string,
+  selectorId: string
+): Promise<void> {
+  await request(
+    `/scrapeMetadata/deleteSelector/${scrapeConfigId}/${selectorId}`,
+    {
+      method: "DELETE",
+    }
+  );
+}
+
 export async function getNote(scrapeConfigId: string): Promise<any> {
   return request(`/objs/${scrapeConfigId}`, { method: "GET" });
 }

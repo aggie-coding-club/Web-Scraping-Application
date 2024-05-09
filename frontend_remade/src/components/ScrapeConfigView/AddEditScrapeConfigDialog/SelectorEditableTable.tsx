@@ -8,10 +8,11 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditIcon from "@mui/icons-material/Edit";
 import { ButtonGroup, IconButton, Tooltip } from "@mui/material";
 import { DeleteAlertDialog } from "./DeleteAlertDialog";
-
+import * as api from "../../../network/apis";
 interface SelectorEditableTableProps {
   selectorsArray: SelectorTable[];
   setSelectorsArray: React.Dispatch<React.SetStateAction<SelectorTable[]>>;
+  scrapeConfigId: string | undefined;
 }
 
 interface onChangeProps {
@@ -22,6 +23,7 @@ interface onChangeProps {
 const SelectorEditableTable = ({
   selectorsArray,
   setSelectorsArray,
+  scrapeConfigId,
 }: SelectorEditableTableProps) => {
   // ---- State -----
   const [nameError, setNameError] = useState<boolean>(false);
@@ -112,8 +114,17 @@ const SelectorEditableTable = ({
   };
 
   const onDelete = (index: number) => {
-    setRowToDelete(selectorsArray[index]);
-    setOpenDialog(true);
+    if (!scrapeConfigId) {
+      // creating new config - just remove selector
+      setSelectorsArray((prevArray) => [
+        ...prevArray.slice(0, index),
+        ...prevArray.slice(index + 1),
+      ]);
+    } else {
+      // editing config - warn user about to remove selector + all associated data
+      setRowToDelete(selectorsArray[index]);
+      setOpenDialog(true);
+    }
   };
 
   /**
@@ -128,12 +139,13 @@ const SelectorEditableTable = ({
       return;
     }
 
-    if (!rowToDelete) {
-      console.log("[ERROR] Row to Delete Undefined");
+    if (!rowToDelete || !rowToDelete.selectorId || !scrapeConfigId) {
+      console.log("[ERROR] Row, ScrapeConfigId, or SelectorId Undefined");
       return;
     }
 
     // Call API to delete Selector
+    api.deleteSelector(scrapeConfigId, rowToDelete.selectorId);
 
     const newArr = selectorsArray.filter(
       (selector) => selector.key != rowToDelete.key

@@ -78,7 +78,11 @@ const AddEditScrapeConfigDialog = ({
       ...input,
       selectorsMetadata: selectorsArray
         .slice(0, -1)
-        .map(({ name, selectorValue }) => ({ name, selectorValue })),
+        .map(({ name, selectorValue, selectorId }) => ({
+          name,
+          selectorValue,
+          selectorId,
+        })),
     };
 
     try {
@@ -171,6 +175,7 @@ const AddEditScrapeConfigDialog = ({
               <SelectorEditableTable
                 selectorsArray={selectorsArray}
                 setSelectorsArray={setSelectorsArray}
+                scrapeConfigId={scrapeConfig?._id}
               />
               <Button
                 style={{ margin: "20px 0" }}
