@@ -29,13 +29,6 @@ const ViewDataDialog = ({
       <p>Last Scraped: {scrapeConfig.updatedAt}</p>{" "}
       <p>Interval: {scrapeConfig.scrapeIntervalMinute}</p>
       <h3>Selectors:</h3>
-      <div>
-        {scrapeConfig.selectorsMetadata.map((selector) => (
-          <div>
-            {selector.name} - {selector.selectorValue}
-          </div>
-        ))}
-      </div>
       <SelectorTable selectorsMetadata={scrapeConfig.selectorsMetadata} />
       <Button onClick={() => console.log(scrapeConfig)}>click me</Button>
       <Button onClick={handleClose} variant="contained">

@@ -1,7 +1,11 @@
 import { useContext } from "react";
 import { ConflictError, UnauthorizedError } from "../errors/http_errors";
 import { LoginCredentials } from "../models/loginCredentials";
-import { ScrapeConfig, ScrapeConfigInput } from "../models/scrapeConfig";
+import {
+  ScrapeConfig,
+  ScrapeConfigInput,
+  SelectorInput,
+} from "../models/scrapeConfig";
 import { SignUpCredentials } from "../models/signUpCredentials";
 import { User } from "../models/user";
 import { supabase } from "../providers/supabaseClient";
@@ -143,8 +147,10 @@ export async function deleteSelector(
   );
 }
 
-export async function getNote(scrapeConfigId: string): Promise<any> {
-  return request(`/objs/${scrapeConfigId}`, { method: "GET" });
+export async function getSelector(selectorId: string): Promise<SelectorInput> {
+  return await request(`/selectors/getSelector/${selectorId}`, {
+    method: "GET",
+  });
 }
 
 export async function fetchHtmlContent(url: string): Promise<string> {

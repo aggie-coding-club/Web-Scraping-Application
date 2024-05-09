@@ -2,6 +2,7 @@ import * as React from "react";
 import { Collapse, IconButton, TableCell, TableRow } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import GetAppIcon from "@mui/icons-material/GetApp";
 import { SelectorInput } from "../../../models/scrapeConfig";
 import { SelectorDataTable } from "./SelectorDataTable";
 
@@ -27,8 +28,10 @@ const SelectorTableRow = ({ selector }: RowProps) => {
         <TableCell component="th" scope="row">
           {selector.name}
         </TableCell>
-        <TableCell align="right">{selector.selectorValue}</TableCell>
-        <TableCell align="right">Download</TableCell>
+        <TableCell>{selector.selectorValue}</TableCell>
+        <TableCell align="center">
+          <GetAppIcon color="primary" />
+        </TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>

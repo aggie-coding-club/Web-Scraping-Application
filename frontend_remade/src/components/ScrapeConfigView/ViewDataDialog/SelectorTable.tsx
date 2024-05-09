@@ -34,8 +34,8 @@ const SelectorTable = ({ selectorsMetadata }: SelectorTableRowProps) => {
           <TableRow sx={tableHeaderStyle}>
             <TableCell />
             <TableCell>Name</TableCell>
-            <TableCell align="right">Selector</TableCell>
-            <TableCell align="right">Download</TableCell>
+            <TableCell>Selector</TableCell>
+            <TableCell />
           </TableRow>
         </TableHead>
         <TableBody>
