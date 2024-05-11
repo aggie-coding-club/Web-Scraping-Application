@@ -1,17 +1,17 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Alert, Form, Modal } from "react-bootstrap";
 import { User } from "../models/user";
 import { SignUpCredentials } from "../models/signUpCredentials";
-import * as ObjsApi from "../network/objs_api";
-import TextInputField from "./ScrapeConfigView/AddEditScrapeConfigDialog/TextInputField";
+import * as ObjsApi from "../network/apis";
+import { Alert, Form, Modal } from "react-bootstrap";
+import { TextInputField } from "./ScrapeConfigView/AddEditScrapeConfigDialog/TextInputField";
 import styleUtils from "../styles/utils.module.css";
 import { ConflictError } from "../errors/http_errors";
-import MyButton from "./ui/MyButton";
 import { supabase } from "../providers/supabaseClient";
 // import { Auth } from '@supabase/auth-ui-react';
 // import { ThemeSupa } from '@supabase/auth-ui-shared';
 import googleLogo from "../assets/google.svg";
+import { Button } from "@mui/material";
 interface SignUpModalProps {
   onDismiss: () => void;
   onSignUpSuccessful: (user: User) => void;
@@ -47,23 +47,23 @@ const SignUpModal = ({ onDismiss, onSignUpSuccessful }: SignUpModalProps) => {
 
   const handleGoogleSignUp = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
+      provider: "google",
     });
-  
+
     if (error) {
-      setErrorText( error.message);
+      setErrorText(error.message);
       console.log("Google Login Error");
       return;
     }
-  
+
     // After a successful sign-in, retrieve the user details
     const { data: userData, error: userError } = await supabase.auth.getUser();
-  
+
     if (userError) {
       setErrorText(userError.message);
       return;
     }
-  
+
     // Ensure we have the user and their email is defined
     if (userData.user && userData.user.email) {
       // Extract user details
@@ -72,14 +72,14 @@ const SignUpModal = ({ onDismiss, onSignUpSuccessful }: SignUpModalProps) => {
       //   // Use 'full_name' from user_metadata if available
       //   fullName: userData.user.user_metadata.full_name,
       // };
-  
+
       // Construct credentials for signing up or linking account
       // const credentials: SignUpCredentials = {
       //   username: userDetails.fullName || "DefaultUsername", // Fallback username if full name is not available
       //   email: userDetails.email,
       //   password: 'testing', // Password is not needed for OAuth users
       // };
-  
+
       // Call your API to handle the sign-up / link account process
       try {
         // const newUser = await ObjsApi.signUp(credentials);
@@ -98,7 +98,7 @@ const SignUpModal = ({ onDismiss, onSignUpSuccessful }: SignUpModalProps) => {
       setErrorText("Failed to retrieve user details from Google.");
     }
   };
-  
+
   // FOR NORMAL LOGIN W/ SUPABASE IN CASE FULL SWITCH
   // useEffect(() => {
   //   const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
@@ -135,7 +135,6 @@ const SignUpModal = ({ onDismiss, onSignUpSuccessful }: SignUpModalProps) => {
   //   return () => authListener.subscription.unsubscribe();
   // }, [onSignUpSuccessful]);
 
-
   return (
     <Modal show onHide={onDismiss}>
       <Modal.Header closeButton>
@@ -171,16 +170,22 @@ const SignUpModal = ({ onDismiss, onSignUpSuccessful }: SignUpModalProps) => {
             registerOptions={{ required: "Password is required" }}
             error={errors.password}
           />
-          <MyButton disabled={isSubmitting} className={styleUtils.width100} onClick={handleSubmit(onSubmit)}>
-            Sign Up
-          </MyButton>
-          <MyButton className={`${styleUtils.width100} mt-3 ${styleUtils.googlesignupbtn}`} onClick={handleGoogleSignUp}>
-           <img src={googleLogo} alt="Google" />
+          <div style={buttonContainerStyle}>
+            <Button disabled={isSubmitting} type="submit" variant="contained">
+              Sign up
+            </Button>
+          </div>
+
+          <Button
+            className={`${styleUtils.width100} mt-3 ${styleUtils.googlesignupbtn}`}
+            onClick={handleGoogleSignUp}
+          >
+            <img src={googleLogo} alt="Google" />
             Sign Up with Google
-          </MyButton>
+          </Button>
         </Form>
         {/* // FOR NORMAL LOGIN W/ SUPABASE IN CASE FULL SWITCH */}
-          {/* <Auth
+        {/* <Auth
           supabaseClient={supabase}
           providers={['google']}
           socialLayout="horizontal"
@@ -192,4 +197,4 @@ const SignUpModal = ({ onDismiss, onSignUpSuccessful }: SignUpModalProps) => {
   );
 };
 
-export default SignUpModal;
+export { SignUpModal };

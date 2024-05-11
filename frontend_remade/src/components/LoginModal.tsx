@@ -1,15 +1,16 @@
+import { Button } from "@mui/material";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
 import { Alert, Form, Modal } from "react-bootstrap";
-import { User } from "../models/user";
-import { LoginCredentials } from "../models/loginCredentials";
-import * as ObjsApi from "../network/objs_api";
-import TextInputField from "./ScrapeConfigView/AddEditScrapeConfigDialog/TextInputField";
+import { useForm } from "react-hook-form";
 import { UnauthorizedError } from "../errors/http_errors";
-import MyButton from "./ui/MyButton";
-import { supabase } from "../providers/supabaseClient";
-import googleLogo from "../assets/google.svg";
+import { LoginCredentials } from "../models/loginCredentials";
+import { User } from "../models/user";
+import * as api from "../network/apis";
+import { TextInputField } from "./ScrapeConfigView/AddEditScrapeConfigDialog/TextInputField";
 import styleUtils from "../styles/utils.module.css";
+import googleLogo from "../assets/google.svg";
+import { supabase } from "../providers/supabaseClient";
+
 interface LoginModalProps {
   onDismiss: () => void;
   onLoginSuccessful: (user: User) => void;
@@ -31,7 +32,7 @@ const LoginModal = ({ onDismiss, onLoginSuccessful }: LoginModalProps) => {
   // Handle MongoDB based login
   async function onSubmit(credentials: LoginCredentials) {
     try {
-      const user = await ObjsApi.login(credentials);
+      const user = await api.login(credentials);
       onLoginSuccessful(user);
     } catch (error) {
       if (error instanceof UnauthorizedError) {
@@ -46,7 +47,7 @@ const LoginModal = ({ onDismiss, onLoginSuccessful }: LoginModalProps) => {
   // Handle Google OAuth login
   const handleGoogleLogin = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
+      provider: "google",
     });
     if (error) {
       setErrorText(error.message);
@@ -83,18 +84,23 @@ const LoginModal = ({ onDismiss, onLoginSuccessful }: LoginModalProps) => {
             registerOptions={{ required: "Required" }}
             error={errors.password}
           />
-          <MyButton className={styleUtils.width100} disabled={isSubmitting} type="submit">
-            Log In
-          </MyButton>
+          <div style={buttonContainerStyle}>
+            <Button disabled={isSubmitting} variant="contained" type="submit">
+              Log In
+            </Button>
+          </div>
           {/* Add a button for Google OAuth login */}
-          <MyButton className={`${styleUtils.width100} mt-3 ${styleUtils.googlesignupbtn}`} onClick={handleGoogleLogin}>
+          <Button
+            className={`${styleUtils.width100} mt-3 ${styleUtils.googlesignupbtn}`}
+            onClick={handleGoogleLogin}
+          >
             <img src={googleLogo} alt="Google" />
             Log In with Google
-          </MyButton>
+          </Button>
         </Form>
       </Modal.Body>
     </Modal>
   );
 };
 
-export default LoginModal;
+export { LoginModal };

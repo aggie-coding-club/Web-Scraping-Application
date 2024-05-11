@@ -6,7 +6,7 @@ import {
   ReactNode,
 } from "react";
 import { User } from "../models/user";
-import * as ObjsApi from "../network/objs_api";
+import * as api from "../network/apis";
 import { supabase } from "../providers/supabaseClient";
 
 type UserContextType = {
@@ -29,21 +29,26 @@ export const UserProvider = ({ children }: UserProviderProps) => {
   useEffect(() => {
     async function fetchLoggedInUser() {
       try {
-        const user = await ObjsApi.getLoggedInUser();
+        const user = await api.getLoggedInUser();
         setLoggedInUser(user);
       } catch (error) {
         console.error(error);
       }
     }
 
+    fetchLoggedInUser();
+
+    /*
     const fetchSession = async () => {
       const session = await supabase.auth.getSession();
       if (session) {
         fetchLoggedInUser(); // Call only if there's a session
       }
+
     };
 
     fetchSession();
+    */
   }, []);
 
   return (
@@ -64,4 +69,4 @@ export const useUserContext = () => {
   return { loggedInUser, setLoggedInUser };
 };
 
-export default UserContext;
+export { UserContext };

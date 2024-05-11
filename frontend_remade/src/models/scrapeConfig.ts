@@ -1,22 +1,30 @@
-interface Selector {
-  id: string;
+export interface SelectorInput {
   name: string;
-  value: string; // selector value
-  description?: string;
+  selectorValue: string; // selector value
+  selectorId?: string;
 }
 
-export interface scrapeParameterInterface extends Selector {
+export interface Data {
+  timestamp: Date;
+  content: string;
+}
+
+export interface SelectorData extends SelectorInput {
+  data: Data[];
+}
+
+export interface SelectorTable extends SelectorInput {
   edit?: boolean;
+  key: string;
 }
 
 export interface ScrapeConfigInput {
   name: string;
   description: string;
   url: string;
-  scrapeParameters: Selector[];
   scrapeIntervalMinute: number;
   emailNotification: string;
-  saveDataOn: string;
+  selectorsMetadata: SelectorInput[];
 }
 
 export interface ScrapeConfig extends ScrapeConfigInput {
@@ -24,4 +32,5 @@ export interface ScrapeConfig extends ScrapeConfigInput {
   createdAt: string;
   updatedAt: string;
   lastChanged?: string;
+  status: string;
 }

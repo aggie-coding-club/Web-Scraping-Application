@@ -3,14 +3,14 @@ import { useEffect, useState } from "react";
 import { Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import {
-  scrapeParameterInterface,
+  SelectorTable,
   ScrapeConfig,
   ScrapeConfigInput,
 } from "../../../models/scrapeConfig";
-import * as ObjApi from "../../../network/objs_api";
-import { fetchHtmlContent } from "../../../network/objs_api";
+import * as Apis from "../../../network/apis";
+import { fetchHtmlContent } from "../../../network/apis";
 import { SelectorEditableTable } from "./SelectorEditableTable";
-import TextInputField from "./TextInputField";
+import { TextInputField } from "./TextInputField";
 import { v4 as uuidv4 } from "uuid";
 
 interface AddEditScrapeConfigProps {
@@ -19,27 +19,30 @@ interface AddEditScrapeConfigProps {
   onScrapeConfigSaved: (scrapeConfig: ScrapeConfig) => void;
 }
 
-const AddEditObjDialog = ({
+const AddEditScrapeConfigDialog = ({
   scrapeConfig,
   onDismiss,
   onScrapeConfigSaved,
 }: AddEditScrapeConfigProps) => {
-  const initializeScrapeParemetersArray = (): scrapeParameterInterface[] => {
-    let initialArr: scrapeParameterInterface[] = [
-      { id: uuidv4(), name: "", value: "", description: "", edit: true },
-    ];
-    if (scrapeConfig?.scrapeParameters) {
-      initialArr.unshift(...scrapeConfig.scrapeParameters); // add to beginning of array
+  const initializeSelectorsArray = (): SelectorTable[] => {
+    let initialArr: SelectorTable[] = [];
+
+    if (scrapeConfig?.selectorsMetadata) {
+      for (const selector of scrapeConfig.selectorsMetadata) {
+        initialArr.push({ ...selector, key: uuidv4() });
+      }
     }
+
+    initialArr.push({ key: uuidv4(), name: "", selectorValue: "", edit: true });
 
     return initialArr;
   };
 
   // ------ States -------
   const [iframeSrc, setIframeSrc] = useState("");
-  const [scrapeParametersArray, setScrapeParametersArray] = useState<
-    scrapeParameterInterface[]
-  >(initializeScrapeParemetersArray());
+  const [selectorsArray, setSelectorsArray] = useState<SelectorTable[]>(
+    initializeSelectorsArray()
+  );
 
   const {
     register,
@@ -51,10 +54,9 @@ const AddEditObjDialog = ({
       name: scrapeConfig?.name || "",
       description: scrapeConfig?.description || "",
       url: scrapeConfig?.url || "",
-      scrapeParameters: scrapeParametersArray.slice(0, -1),
+      selectorsMetadata: selectorsArray.slice(0, -1),
       scrapeIntervalMinute: scrapeConfig?.scrapeIntervalMinute || 60,
       emailNotification: "none",
-      saveDataOn: "save_on_changes",
     },
   });
 
@@ -72,15 +74,23 @@ const AddEditObjDialog = ({
   }, [url]);
 
   async function onSubmit(input: ScrapeConfigInput) {
-    const inputWithScrapeParameters = {
+    const scrapeConfigPackage: ScrapeConfigInput = {
       ...input,
-      scrapeParameters: scrapeParametersArray.slice(0, -1),
+      selectorsMetadata: selectorsArray
+        .slice(0, -1)
+        .map(({ name, selectorValue, selectorId }) => ({
+          name,
+          selectorValue,
+          selectorId,
+        })),
     };
 
     try {
       const scrapeConfigResponse = scrapeConfig
-        ? await ObjApi.updateObj(scrapeConfig._id, inputWithScrapeParameters)
-        : await ObjApi.createObj(inputWithScrapeParameters);
+        ? await Apis.updateScrapeConfig(scrapeConfig._id, scrapeConfigPackage)
+        : await Apis.createScrapeConfig(scrapeConfigPackage);
+
+      console.log(scrapeConfigResponse);
       onScrapeConfigSaved(scrapeConfigResponse);
     } catch (error) {
       console.error(error);
@@ -148,18 +158,6 @@ const AddEditObjDialog = ({
                 error={errors.scrapeIntervalMinute}
               />
               <Form.Group className="mb-3">
-                <Form.Label>Data Saving</Form.Label>
-                <Form.Select
-                  {...register("saveDataOn")}
-                  aria-label="Save Data Setting Select"
-                >
-                  <option value="save_on_changes">Save only on changes</option>
-                  <option value="save_on_scrape">
-                    Save on successful scrape
-                  </option>
-                </Form.Select>
-              </Form.Group>
-              <Form.Group className="mb-3">
                 <Form.Label>Email Notification</Form.Label>
                 <Form.Select
                   {...register("emailNotification")}
@@ -175,8 +173,9 @@ const AddEditObjDialog = ({
                 </Form.Select>
               </Form.Group>
               <SelectorEditableTable
-                scrapeParametersArray={scrapeParametersArray}
-                setScrapeParametersArray={setScrapeParametersArray}
+                selectorsArray={selectorsArray}
+                setSelectorsArray={setSelectorsArray}
+                scrapeConfigId={scrapeConfig?._id}
               />
               <Button
                 style={{ margin: "20px 0" }}
@@ -194,4 +193,4 @@ const AddEditObjDialog = ({
   );
 };
 
-export default AddEditObjDialog;
+export { AddEditScrapeConfigDialog };

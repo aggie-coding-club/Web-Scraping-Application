@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 import { Input } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
-import { scrapeParameterInterface } from "../../../models/scrapeConfig";
+import { SelectorTable } from "../../../models/scrapeConfig";
 import { v4 as uuidv4 } from "uuid";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditIcon from "@mui/icons-material/Edit";
 import { ButtonGroup, IconButton, Tooltip } from "@mui/material";
-
+import { DeleteAlertDialog } from "./DeleteAlertDialog";
+import * as api from "../../../network/apis";
 interface SelectorEditableTableProps {
-  scrapeParametersArray: scrapeParameterInterface[];
-  setScrapeParametersArray: React.Dispatch<
-    React.SetStateAction<scrapeParameterInterface[]>
-  >;
+  selectorsArray: SelectorTable[];
+  setSelectorsArray: React.Dispatch<React.SetStateAction<SelectorTable[]>>;
+  scrapeConfigId: string | undefined;
 }
 
 interface onChangeProps {
@@ -21,12 +21,15 @@ interface onChangeProps {
 }
 
 const SelectorEditableTable = ({
-  scrapeParametersArray,
-  setScrapeParametersArray,
+  selectorsArray,
+  setSelectorsArray,
+  scrapeConfigId,
 }: SelectorEditableTableProps) => {
   // ---- State -----
   const [nameError, setNameError] = useState<boolean>(false);
   const [selectorError, setSelectorError] = useState<boolean>(false);
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [rowToDelete, setRowToDelete] = useState<SelectorTable>();
 
   // ---- Input Change Functions -----
 
@@ -38,22 +41,22 @@ const SelectorEditableTable = ({
       }
       if (event.data.selector) {
         // set selector value at end of array
-        let myArr: scrapeParameterInterface[] = [...scrapeParametersArray];
-        myArr[myArr.length - 1].value = event.data.selector;
-        setScrapeParametersArray([...myArr]);
+        let myArr: SelectorTable[] = [...selectorsArray];
+        myArr[myArr.length - 1].selectorValue = event.data.selector;
+        setSelectorsArray([...myArr]);
       }
     };
 
     window.addEventListener("message", receiveMessage);
     return () => window.removeEventListener("message", receiveMessage);
-  }, [scrapeParametersArray]);
+  }, [selectorsArray]);
 
   const onSelectorInputChange = ({ event, index }: onChangeProps) => {
     if (selectorError) setSelectorError(false);
 
-    setScrapeParametersArray(
-      scrapeParametersArray.map((item, idx) =>
-        idx === index ? { ...item, value: event.target.value } : item
+    setSelectorsArray(
+      selectorsArray.map((item, idx) =>
+        idx === index ? { ...item, selectorValue: event.target.value } : item
       )
     );
   };
@@ -61,8 +64,8 @@ const SelectorEditableTable = ({
   const onNameInputChange = ({ event, index }: onChangeProps) => {
     if (nameError) setNameError(false);
 
-    setScrapeParametersArray(
-      scrapeParametersArray.map((item, idx) =>
+    setSelectorsArray(
+      selectorsArray.map((item, idx) =>
         idx === index ? { ...item, name: event.target.value } : item
       )
     );
@@ -74,56 +77,89 @@ const SelectorEditableTable = ({
     index: number
   ) => {
     e.preventDefault();
-    const element = scrapeParametersArray[index];
-    if (!element.name || !element.value) {
+    const element = selectorsArray[index];
+    if (!element.name || !element.selectorValue) {
       if (!element.name) {
         setNameError(true);
       }
 
-      if (!element.value) {
+      if (!element.selectorValue) {
         setSelectorError(true);
       }
       return;
     }
 
-    let newArr: scrapeParameterInterface[] = [...scrapeParametersArray];
+    let newArr: SelectorTable[] = [...selectorsArray];
 
     delete newArr[index].edit; // remove edit field to make it like Selector field
 
     // if last element add new empty table column
-    if (index == scrapeParametersArray.length - 1) {
+    if (index == selectorsArray.length - 1) {
       newArr.push({
-        id: uuidv4(),
+        key: uuidv4(),
         name: "",
-        value: "",
-        description: "",
+        selectorValue: "",
         edit: true,
       });
     }
 
-    setScrapeParametersArray(newArr);
+    setSelectorsArray(newArr);
   };
 
   const onEdit = (index: number) => {
-    let newArr = [...scrapeParametersArray];
+    let newArr = [...selectorsArray];
     newArr[index].edit = true;
 
-    setScrapeParametersArray(newArr);
+    setSelectorsArray(newArr);
   };
 
   const onDelete = (index: number) => {
-    setScrapeParametersArray((prevArray) => [
-      ...prevArray.slice(0, index),
-      ...prevArray.slice(index + 1),
-    ]);
+    if (!scrapeConfigId) {
+      // creating new config - just remove selector
+      setSelectorsArray((prevArray) => [
+        ...prevArray.slice(0, index),
+        ...prevArray.slice(index + 1),
+      ]);
+    } else {
+      // editing config - warn user about to remove selector + all associated data
+      setRowToDelete(selectorsArray[index]);
+      setOpenDialog(true);
+    }
+  };
+
+  /**
+   *
+   * @param isDeleteConfirmed true if the delete has been confirmed, false if the delete process was cancelled
+   * @returns
+   */
+  const handleCloseDeleteDialog = (isDeleteConfirmed: boolean) => {
+    setOpenDialog(false);
+
+    if (!isDeleteConfirmed) {
+      return;
+    }
+
+    if (!rowToDelete || !rowToDelete.selectorId || !scrapeConfigId) {
+      console.log("[ERROR] Row, ScrapeConfigId, or SelectorId Undefined");
+      return;
+    }
+
+    // Call API to delete Selector
+    api.deleteSelector(scrapeConfigId, rowToDelete.selectorId);
+
+    const newArr = selectorsArray.filter(
+      (selector) => selector.key != rowToDelete.key
+    );
+
+    setSelectorsArray([...newArr]);
   };
   const columns: ColumnsType<any> = [
     {
       title: "Selector",
-      dataIndex: "value",
-      key: "value",
+      dataIndex: "selectorValue",
+      key: "selectorValue",
       render: (text, _, index) =>
-        scrapeParametersArray[index].edit ? (
+        selectorsArray[index].edit ? (
           <Input
             defaultValue={text}
             value={text}
@@ -140,7 +176,7 @@ const SelectorEditableTable = ({
       dataIndex: "name",
       key: "name",
       render: (text, _, index) =>
-        scrapeParametersArray[index].edit ? (
+        selectorsArray[index].edit ? (
           <Input
             defaultValue={text}
             placeholder="Title of Video"
@@ -155,7 +191,7 @@ const SelectorEditableTable = ({
       title: "Operation",
       key: "operation",
       render: (_, __, index) => {
-        return scrapeParametersArray[index].edit ? (
+        return selectorsArray[index].edit ? (
           <Tooltip title="Add" arrow>
             <IconButton onClick={(e) => onAdd(e, index)} color="secondary">
               <AddCircleIcon fontSize="small" />
@@ -180,13 +216,20 @@ const SelectorEditableTable = ({
   ];
 
   return (
-    <Table
-      dataSource={scrapeParametersArray}
-      columns={columns}
-      size="small"
-      pagination={false}
-      rowKey="value"
-    />
+    <>
+      <Table
+        dataSource={selectorsArray}
+        columns={columns}
+        size="small"
+        pagination={false}
+        rowKey="value"
+      />
+      <DeleteAlertDialog
+        openDialog={openDialog}
+        handleCloseDeleteDialog={handleCloseDeleteDialog}
+        rowToDelete={rowToDelete}
+      />
+    </>
   );
 };
 

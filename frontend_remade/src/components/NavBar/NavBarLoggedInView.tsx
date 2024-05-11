@@ -1,4 +1,4 @@
-import * as ObjsApi from "../../network/objs_api";
+import * as api from "../../network/apis";
 import "../../styles/Navbar.css";
 import Button from "@mui/material/Button";
 
@@ -11,7 +11,7 @@ const NavBarLoggedInView = ({
 }: NavBarLoggedInViewProps) => {
   async function logout() {
     try {
-      await ObjsApi.logout();
+      await api.logout();
       onLogoutSuccessful();
     } catch (error) {
       console.error(error);
@@ -26,4 +26,4 @@ const NavBarLoggedInView = ({
   );
 };
 
-export default NavBarLoggedInView;
+export { NavBarLoggedInView };
