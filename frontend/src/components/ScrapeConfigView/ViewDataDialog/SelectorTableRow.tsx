@@ -3,7 +3,7 @@ import { Collapse, IconButton, TableCell, TableRow } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import GetAppIcon from "@mui/icons-material/GetApp";
-import { SelectorInput } from "../../../models/scrapeConfig";
+import { SelectorData, SelectorInput } from "../../../models/scrapeConfig";
 import { SelectorDataTable } from "./SelectorDataTable";
 import * as api from "../../../network/apis";
 
@@ -13,21 +13,46 @@ interface RowProps {
 
 const SelectorTableRow = ({ selector }: RowProps) => {
   const [open, setOpen] = useState(false);
+  const [selectorData, setSelectorData] = useState<SelectorData | null>(null);
 
-  async function downloadJson() {
+  async function loadData() {
     if (!selector.selectorId) {
       console.log("[ERROR] SelectorId undefined");
+      return null;
+    }
+
+    let data = await api.getSelector(selector.selectorId);
+    setSelectorData(data);
+    return data;
+  }
+
+  async function handleOpen() {
+    if (!open && selectorData == undefined) {
+      loadData();
+    }
+
+    setOpen(!open);
+  }
+
+  async function downloadJson() {
+    let data = {
+      name: selector.name,
+      selectorValue: selector.selectorValue,
+      data: selectorData ? selectorData.data : await loadData(),
+    };
+
+    if (!data.data) {
+      console.log("[ERROR] No data to download");
       return;
     }
 
-    const data = await api.getSelector(selector.selectorId);
     const json = JSON.stringify(data);
     const blob = new Blob([json], { type: "application/json" });
     const url = URL.createObjectURL(blob);
 
     const a = document.createElement("a");
     a.href = url;
-    a.download = "data.json";
+    a.download = `${data.name}/${data.selectorValue}.json`;
     document.body.appendChild(a);
 
     a.click();
@@ -40,11 +65,7 @@ const SelectorTableRow = ({ selector }: RowProps) => {
     <Fragment>
       <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
         <TableCell>
-          <IconButton
-            aria-label="expand row"
-            size="small"
-            onClick={() => setOpen(!open)}
-          >
+          <IconButton aria-label="expand row" size="small" onClick={handleOpen}>
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
@@ -61,7 +82,7 @@ const SelectorTableRow = ({ selector }: RowProps) => {
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
-            {open && <SelectorDataTable selector={selector} />}
+            {open && <SelectorDataTable selectorData={selectorData} />}
           </Collapse>
         </TableCell>
       </TableRow>
