@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 
 interface SelectorDataTableProps {
-  selectorData: SelectorData | undefined;
+  selectorData: SelectorData | null;
 }
 
 const SelectorDataTable = ({ selectorData }: SelectorDataTableProps) => {

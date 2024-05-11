@@ -1,5 +1,12 @@
 import { Fragment, useState } from "react";
-import { Collapse, IconButton, TableCell, TableRow } from "@mui/material";
+import {
+  Collapse,
+  IconButton,
+  TableCell,
+  TableRow,
+  Menu,
+  MenuItem,
+} from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import GetAppIcon from "@mui/icons-material/GetApp";
@@ -12,8 +19,18 @@ interface RowProps {
 }
 
 const SelectorTableRow = ({ selector }: RowProps) => {
-  const [open, setOpen] = useState(false);
+  const [openDataTable, setOpenDataTable] = useState<boolean>(false);
   const [selectorData, setSelectorData] = useState<SelectorData | null>(null);
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const openDownloadMenu = Boolean(anchorEl);
+
+  const handleDownloadClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleDownloadClose = () => {
+    setAnchorEl(null);
+  };
 
   async function loadData() {
     if (!selector.selectorId) {
@@ -21,17 +38,69 @@ const SelectorTableRow = ({ selector }: RowProps) => {
       return null;
     }
 
-    let data = await api.getSelector(selector.selectorId);
+    let data: SelectorData = await api.getSelector(selector.selectorId);
     setSelectorData(data);
-    return data;
+    return data.data;
   }
 
-  async function handleOpen() {
-    if (!open && selectorData == undefined) {
+  async function handleDataTableOpen() {
+    if (!openDataTable && selectorData == undefined) {
       loadData();
     }
 
-    setOpen(!open);
+    setOpenDataTable(!openDataTable);
+  }
+
+  async function downloadCsv() {
+    let data = {
+      name: selector.name,
+      selectorValue: selector.selectorValue,
+      data: selectorData ? selectorData.data : await loadData(),
+    };
+
+    if (!data.data) {
+      console.log("[ERROR] No data to download");
+      return;
+    }
+
+    // Convert data to CSV format
+    const csv = convertToCsv(data);
+
+    // Create a Blob object representing the data as a CSV file
+    const blob = new Blob([csv], { type: "text/csv" });
+
+    // Create a URL for the Blob object
+    const url = URL.createObjectURL(blob);
+
+    // Create a temporary anchor element
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${data.name}_${data.selectorValue}.csv`;
+
+    // Append the anchor to the document body
+    document.body.appendChild(a);
+
+    // Click the anchor to trigger the download
+    a.click();
+
+    // Remove the anchor from the document body
+    document.body.removeChild(a);
+
+    // Release the URL object
+    URL.revokeObjectURL(url);
+
+    // handle any other close event
+    handleDownloadClose();
+  }
+
+  // Function to convert JSON data to CSV format
+  function convertToCsv(data: any) {
+    // Assuming data is an array of objects with similar structure
+    const headers = Object.keys(data.data[0]).join(",");
+    const rows = data.data
+      .map((obj: any) => Object.values(obj).join(","))
+      .join("\n");
+    return `${headers}\n${rows}`;
   }
 
   async function downloadJson() {
@@ -59,14 +128,24 @@ const SelectorTableRow = ({ selector }: RowProps) => {
 
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+
+    handleDownloadClose();
   }
 
   return (
     <Fragment>
       <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
         <TableCell>
-          <IconButton aria-label="expand row" size="small" onClick={handleOpen}>
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          <IconButton
+            aria-label="expand row"
+            size="small"
+            onClick={handleDataTableOpen}
+          >
+            {openDataTable ? (
+              <KeyboardArrowUpIcon />
+            ) : (
+              <KeyboardArrowDownIcon />
+            )}
           </IconButton>
         </TableCell>
         <TableCell component="th" scope="row">
@@ -74,15 +153,26 @@ const SelectorTableRow = ({ selector }: RowProps) => {
         </TableCell>
         <TableCell>{selector.selectorValue}</TableCell>
         <TableCell align="center">
-          <IconButton color="primary" onClick={downloadJson}>
+          <IconButton color="primary" onClick={handleDownloadClick}>
             <GetAppIcon />
           </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            open={openDownloadMenu}
+            onClose={handleDownloadClose}
+            MenuListProps={{
+              "aria-labelledby": "basic-button",
+            }}
+          >
+            <MenuItem onClick={downloadJson}>Download .json</MenuItem>
+            <MenuItem onClick={downloadCsv}>Download .csv</MenuItem>
+          </Menu>
         </TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            {open && <SelectorDataTable selectorData={selectorData} />}
+          <Collapse in={openDataTable} timeout="auto" unmountOnExit>
+            {openDataTable && <SelectorDataTable selectorData={selectorData} />}
           </Collapse>
         </TableCell>
       </TableRow>
