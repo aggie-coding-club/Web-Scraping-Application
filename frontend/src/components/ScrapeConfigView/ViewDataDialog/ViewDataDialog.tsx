@@ -1,6 +1,7 @@
 import { Button, Dialog } from "@mui/material";
 import { ScrapeConfig } from "../../../models/scrapeConfig";
 import { SelectorTable } from "./SelectorTable";
+import { DownloadAll } from "./DownloadAll";
 
 interface ViewDataDialogProps {
   scrapeConfig: ScrapeConfig;
@@ -29,6 +30,7 @@ const ViewDataDialog = ({
       <p>Last Scraped: {scrapeConfig.updatedAt}</p>{" "}
       <p>Interval: {scrapeConfig.scrapeIntervalMinute} min</p>
       <h3>Selectors:</h3>
+      <DownloadAll />
       <SelectorTable selectorsMetadata={scrapeConfig.selectorsMetadata} />
       <Button onClick={handleClose} variant="contained">
         Close

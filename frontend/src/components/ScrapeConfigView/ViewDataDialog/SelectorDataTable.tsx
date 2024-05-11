@@ -1,6 +1,5 @@
-import { useState, useEffect, Fragment } from "react";
-import { SelectorData, SelectorInput } from "../../../models/scrapeConfig";
-import * as api from "../../../network/apis";
+import { Fragment } from "react";
+import { SelectorData } from "../../../models/scrapeConfig";
 import {
   TableContainer,
   Table,
