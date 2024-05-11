@@ -10,12 +10,21 @@ import {
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import GetAppIcon from "@mui/icons-material/GetApp";
-import { SelectorData, SelectorInput } from "../../../models/scrapeConfig";
+import {
+  SelectorData,
+  SelectorInput,
+  SelectorDataDownload,
+} from "../../../models/scrapeConfig";
 import { SelectorDataTable } from "./SelectorDataTable";
 import * as api from "../../../network/apis";
 
 interface RowProps {
   selector: SelectorInput;
+}
+
+enum DownloadOption {
+  CSV = 1,
+  JSON = 2,
 }
 
 const SelectorTableRow = ({ selector }: RowProps) => {
@@ -51,8 +60,8 @@ const SelectorTableRow = ({ selector }: RowProps) => {
     setOpenDataTable(!openDataTable);
   }
 
-  async function downloadCsv() {
-    let data = {
+  async function download(option: DownloadOption) {
+    let data: SelectorDataDownload = {
       name: selector.name,
       selectorValue: selector.selectorValue,
       data: selectorData ? selectorData.data : await loadData(),
@@ -63,73 +72,52 @@ const SelectorTableRow = ({ selector }: RowProps) => {
       return;
     }
 
-    // Convert data to CSV format
-    const csv = convertToCsv(data);
+    let downloadData;
+    let downloadType = { type: "" };
+    let extension = "";
+    if (option == DownloadOption.CSV) {
+      downloadData = convertToCsv(data);
+      downloadType.type = "text/csv";
+      extension = "csv";
+    } else if (option == DownloadOption.JSON) {
+      downloadData = JSON.stringify(data);
+      downloadType.type = "application/json";
+      extension = "json";
+    }
 
-    // Create a Blob object representing the data as a CSV file
-    const blob = new Blob([csv], { type: "text/csv" });
+    if (!downloadData) {
+      return;
+    }
 
-    // Create a URL for the Blob object
+    const blob = new Blob([downloadData], downloadType);
     const url = URL.createObjectURL(blob);
 
-    // Create a temporary anchor element
     const a = document.createElement("a");
     a.href = url;
-    a.download = `${data.name}_${data.selectorValue}.csv`;
+    a.download = `${data.name}_${data.selectorValue}.${extension}`;
 
-    // Append the anchor to the document body
     document.body.appendChild(a);
-
-    // Click the anchor to trigger the download
     a.click();
 
-    // Remove the anchor from the document body
     document.body.removeChild(a);
-
-    // Release the URL object
     URL.revokeObjectURL(url);
 
-    // handle any other close event
     handleDownloadClose();
   }
 
   // Function to convert JSON data to CSV format
-  function convertToCsv(data: any) {
+  function convertToCsv(data: SelectorDataDownload) {
     // Assuming data is an array of objects with similar structure
-    const headers = Object.keys(data.data[0]).join(",");
-    const rows = data.data
-      .map((obj: any) => Object.values(obj).join(","))
-      .join("\n");
-    return `${headers}\n${rows}`;
-  }
-
-  async function downloadJson() {
-    let data = {
-      name: selector.name,
-      selectorValue: selector.selectorValue,
-      data: selectorData ? selectorData.data : await loadData(),
-    };
-
     if (!data.data) {
-      console.log("[ERROR] No data to download");
+      console.error("[ERROR] no data to convert to csv");
       return;
     }
 
-    const json = JSON.stringify(data);
-    const blob = new Blob([json], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${data.name}/${data.selectorValue}.json`;
-    document.body.appendChild(a);
-
-    a.click();
-
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-
-    handleDownloadClose();
+    const headers = Object.keys(data.data[0]).join(",");
+    const rows = data.data
+      .map((obj) => Object.values(obj).join(","))
+      .join("\n");
+    return `${headers}\n${rows}`;
   }
 
   return (
@@ -164,8 +152,12 @@ const SelectorTableRow = ({ selector }: RowProps) => {
               "aria-labelledby": "basic-button",
             }}
           >
-            <MenuItem onClick={downloadJson}>Download .json</MenuItem>
-            <MenuItem onClick={downloadCsv}>Download .csv</MenuItem>
+            <MenuItem onClick={() => download(DownloadOption.JSON)}>
+              Download .json
+            </MenuItem>
+            <MenuItem onClick={() => download(DownloadOption.CSV)}>
+              Download .csv
+            </MenuItem>
           </Menu>
         </TableCell>
       </TableRow>

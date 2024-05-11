@@ -18,6 +18,12 @@ export interface SelectorTable extends SelectorInput {
   key: string;
 }
 
+export interface SelectorDataDownload {
+  name: string;
+  selectorValue: string;
+  data: Data[] | null;
+}
+
 export interface ScrapeConfigInput {
   name: string;
   description: string;
