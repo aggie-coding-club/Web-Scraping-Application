@@ -1,20 +1,43 @@
-import * as React from "react";
+import { Fragment, useState } from "react";
 import { Collapse, IconButton, TableCell, TableRow } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import GetAppIcon from "@mui/icons-material/GetApp";
 import { SelectorInput } from "../../../models/scrapeConfig";
 import { SelectorDataTable } from "./SelectorDataTable";
+import * as api from "../../../network/apis";
 
 interface RowProps {
   selector: SelectorInput;
 }
 
 const SelectorTableRow = ({ selector }: RowProps) => {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+
+  async function downloadJson() {
+    if (!selector.selectorId) {
+      console.log("[ERROR] SelectorId undefined");
+      return;
+    }
+
+    const data = await api.getSelector(selector.selectorId);
+    const json = JSON.stringify(data);
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "data.json";
+    document.body.appendChild(a);
+
+    a.click();
+
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
 
   return (
-    <React.Fragment>
+    <Fragment>
       <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
         <TableCell>
           <IconButton
@@ -30,7 +53,9 @@ const SelectorTableRow = ({ selector }: RowProps) => {
         </TableCell>
         <TableCell>{selector.selectorValue}</TableCell>
         <TableCell align="center">
-          <GetAppIcon color="primary" />
+          <IconButton color="primary" onClick={downloadJson}>
+            <GetAppIcon />
+          </IconButton>
         </TableCell>
       </TableRow>
       <TableRow>
@@ -40,7 +65,7 @@ const SelectorTableRow = ({ selector }: RowProps) => {
           </Collapse>
         </TableCell>
       </TableRow>
-    </React.Fragment>
+    </Fragment>
   );
 };
 
