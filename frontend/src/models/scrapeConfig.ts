@@ -37,6 +37,7 @@ export interface ScrapeConfig extends ScrapeConfigInput {
   _id: string;
   createdAt: string;
   updatedAt: string;
+  lastSuccessfulScrape: Date;
   lastChanged?: string;
   status: string;
 }

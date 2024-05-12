@@ -2,6 +2,7 @@ import { Button, Dialog } from "@mui/material";
 import { ScrapeConfig } from "../../../models/scrapeConfig";
 import { SelectorTable } from "./SelectorTable";
 import { DownloadAll } from "./DownloadAll";
+import { formatDate } from "../../../utils/formatDate";
 
 interface ViewDataDialogProps {
   scrapeConfig: ScrapeConfig;
@@ -26,8 +27,7 @@ const ViewDataDialog = ({
       <p>Description: {scrapeConfig.description}</p>
       <p>Status: {scrapeConfig.status}</p>
       <p>URL: {scrapeConfig.url}</p>
-      {/* FIXME: confirm that updatedAt DOES mean last scraped */}
-      <p>Last Scraped: {scrapeConfig.updatedAt}</p>{" "}
+      <p>Last Scraped: {formatDate(scrapeConfig.lastSuccessfulScrape)}</p>
       <p>Interval: {scrapeConfig.scrapeIntervalMinute} min</p>
       <h3>Selectors:</h3>
       <DownloadAll />
