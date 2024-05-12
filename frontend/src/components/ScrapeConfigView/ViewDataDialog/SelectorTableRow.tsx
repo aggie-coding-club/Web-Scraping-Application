@@ -16,15 +16,15 @@ import {
   SelectorDataDownload,
 } from "../../../models/scrapeConfig";
 import { SelectorDataTable } from "./SelectorDataTable";
+import {
+  DownloadOptions,
+  convertSelectorDataDownloadToCSV,
+  download,
+} from "../../../utils/download";
 import * as api from "../../../network/apis";
 
 interface RowProps {
   selector: SelectorInput;
-}
-
-enum DownloadOption {
-  CSV = 1,
-  JSON = 2,
 }
 
 const SelectorTableRow = ({ selector }: RowProps) => {
@@ -60,7 +60,7 @@ const SelectorTableRow = ({ selector }: RowProps) => {
     setOpenDataTable(!openDataTable);
   }
 
-  async function download(option: DownloadOption) {
+  async function handleDownload(option: DownloadOptions) {
     let data: SelectorDataDownload = {
       name: selector.name,
       selectorValue: selector.selectorValue,
@@ -73,51 +73,20 @@ const SelectorTableRow = ({ selector }: RowProps) => {
     }
 
     let downloadData;
-    let downloadType = { type: "" };
-    let extension = "";
-    if (option == DownloadOption.CSV) {
-      downloadData = convertToCsv(data);
-      downloadType.type = "text/csv";
-      extension = "csv";
-    } else if (option == DownloadOption.JSON) {
+    if (option == DownloadOptions.CSV) {
+      downloadData = convertSelectorDataDownloadToCSV(data);
+    } else if (option == DownloadOptions.JSON) {
       downloadData = JSON.stringify(data);
-      downloadType.type = "application/json";
-      extension = "json";
-    }
-
-    if (!downloadData) {
+    } else {
+      console.error("Invalid Download option");
       return;
     }
 
-    const blob = new Blob([downloadData], downloadType);
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${data.name}_${data.selectorValue}.${extension}`;
-
-    document.body.appendChild(a);
-    a.click();
-
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-
-    handleDownloadClose();
-  }
-
-  // Function to convert JSON data to CSV format
-  function convertToCsv(data: SelectorDataDownload) {
-    // Assuming data is an array of objects with similar structure
-    if (!data.data) {
-      console.error("[ERROR] no data to convert to csv");
-      return;
-    }
-
-    const headers = Object.keys(data.data[0]).join(",");
-    const rows = data.data
-      .map((obj) => Object.values(obj).join(","))
-      .join("\n");
-    return `${headers}\n${rows}`;
+    download(
+      downloadData,
+      option,
+      `${selector.name}|${selector.selectorValue}`
+    );
   }
 
   return (
@@ -152,10 +121,10 @@ const SelectorTableRow = ({ selector }: RowProps) => {
               "aria-labelledby": "basic-button",
             }}
           >
-            <MenuItem onClick={() => download(DownloadOption.JSON)}>
+            <MenuItem onClick={() => handleDownload(DownloadOptions.JSON)}>
               Download .json
             </MenuItem>
-            <MenuItem onClick={() => download(DownloadOption.CSV)}>
+            <MenuItem onClick={() => handleDownload(DownloadOptions.CSV)}>
               Download .csv
             </MenuItem>
           </Menu>

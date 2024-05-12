@@ -7,7 +7,11 @@ import {
 } from "../../../models/scrapeConfig";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import * as api from "../../../network/apis";
-import { DownloadOptions, download } from "../../../utils/download";
+import {
+  DownloadOptions,
+  download,
+  convertScrapeConfigDataDownloadToCSV,
+} from "../../../utils/download";
 
 interface DownloadAllProps {
   scrapeConfig: ScrapeConfig;
@@ -26,10 +30,12 @@ const DownloadAll = ({ scrapeConfig }: DownloadAllProps) => {
   const formControlStyle = {
     minWidth: "100px",
   };
-  const [downloadOption, setDownloadOption] = useState("csv");
+  const [downloadOption, setDownloadOption] = useState<DownloadOptions>(
+    DownloadOptions.CSV
+  );
 
   const handleChange = (event: SelectChangeEvent) => {
-    setDownloadOption(event.target.value as string);
+    setDownloadOption(event.target.value as DownloadOptions);
   };
 
   async function loadData() {
@@ -66,11 +72,19 @@ const DownloadAll = ({ scrapeConfig }: DownloadAllProps) => {
 
   async function handleDownload() {
     let data = await loadData();
-    console.log(downloadOption);
-    if (downloadOption == "json") {
-      download(data, DownloadOptions.JSON);
-    } else if (downloadOption == "csv") {
-      download(data, DownloadOptions.CSV);
+
+    switch (downloadOption) {
+      case DownloadOptions.CSV:
+        download(
+          convertScrapeConfigDataDownloadToCSV(data),
+          DownloadOptions.CSV
+        );
+        break;
+      case DownloadOptions.JSON:
+        download(JSON.stringify(data), DownloadOptions.JSON);
+        break;
+      default:
+        console.error("[ERROR] Invalid download option selected");
     }
   }
 
@@ -85,8 +99,8 @@ const DownloadAll = ({ scrapeConfig }: DownloadAllProps) => {
           value={downloadOption}
           onChange={handleChange}
         >
-          <MenuItem value={"csv"}>.csv</MenuItem>
-          <MenuItem value={"json"}>.json</MenuItem>
+          <MenuItem value={DownloadOptions.CSV}>.csv</MenuItem>
+          <MenuItem value={DownloadOptions.JSON}>.json</MenuItem>
         </Select>
       </FormControl>
     </div>

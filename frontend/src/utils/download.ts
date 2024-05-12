@@ -1,40 +1,39 @@
-import { ScrapeConfigDataDownload } from "../models/scrapeConfig";
+import {
+  ScrapeConfigDataDownload,
+  SelectorDataDownload,
+} from "../models/scrapeConfig";
 
 // import { DownloadOption } from "../models/Download";
 export enum DownloadOptions {
-  CSV = 1,
-  JSON = 2,
+  CSV = "CSV",
+  JSON = "JSON",
 }
 
 /**
  * Downloads data to user's computer in option form
- *
- * @param data Any json object
- * @param option
- * @returns
  */
 export function download(
-  data: ScrapeConfigDataDownload,
+  downloadData: string,
   option: DownloadOptions,
   fileName?: string
 ) {
-  let downloadType = { type: "application/json" };
-  let extension = "json";
-  let downloadData = JSON.stringify(data);
+  let downloadType = { type: "" };
+  let extension = "";
 
   if (!fileName) fileName = "data";
 
-  if (option == DownloadOptions.CSV) {
-    console.log("about to convert to csv");
-    console.log(data);
-    downloadData = convertToCSV(data);
-    downloadType.type = "text/csv";
-    extension = "csv";
-  }
-
-  if (!downloadData) {
-    console.error("Error in downloading data");
-    return;
+  switch (option) {
+    case DownloadOptions.CSV:
+      downloadType.type = "text/csv";
+      extension = "csv";
+      break;
+    case DownloadOptions.JSON:
+      downloadType = { type: "application/json" };
+      extension = "json";
+      break;
+    default:
+      console.error("Not valid download option");
+      return;
   }
 
   const blob = new Blob([downloadData], downloadType);
@@ -51,12 +50,31 @@ export function download(
   URL.revokeObjectURL(url);
 }
 
-function convertToCSV(data: ScrapeConfigDataDownload) {
+export function convertSelectorDataDownloadToCSV(data: SelectorDataDownload) {
+  let metadata = "";
+  metadata += `name,${data.name}\n`;
+  metadata += `selector value,${data.selectorValue}\n`;
+  metadata += `date downloaded:${new Date()}`;
+
+  let dataHeader = "timestamp,content";
+  let rows = "";
+
+  data.data.forEach((dat) => {
+    rows += `${dat.timestamp},${dat.content}\n`;
+  });
+
+  return `${metadata}\n\n${dataHeader}\n${rows}`;
+}
+
+export function convertScrapeConfigDataDownloadToCSV(
+  data: ScrapeConfigDataDownload
+) {
   let metadata = "";
   metadata += `name,${data.name}\n`;
   metadata += `description,${data.description}\n`;
   metadata += `url,${data.url}\n`;
-  metadata += `scrape interval (min),${data.scrapeIntervalMinute}`;
+  metadata += `scrape interval (min),${data.scrapeIntervalMinute}\n`;
+  metadata += `date downloaded:${new Date()}`;
 
   let selectorNames = "selector name:,";
   let selectorValues = "selector values:,";
@@ -66,8 +84,8 @@ function convertToCSV(data: ScrapeConfigDataDownload) {
   let maxSelectorDataLength = 0;
 
   data.selectors.forEach((selector) => {
-    selectorNames += selector.name + ",,,"; // skip a column
-    selectorValues += selector.selectorValue += ",,,"; // skip a column
+    selectorNames += selector.name + ",,,"; // skip 2 columns
+    selectorValues += selector.selectorValue += ",,,"; // skip 2 columns
     selectorContentHeader += "timestamp,content,,";
 
     maxSelectorDataLength = Math.max(
@@ -89,9 +107,6 @@ function convertToCSV(data: ScrapeConfigDataDownload) {
   }
 
   const selectorContent = selectorContentArr.join("");
-  console.log(selectorContent);
 
-  let toReturn = `${metadata}\n\n${selectorNames}\n${selectorValues}\n\n${selectorContentHeader}\n${selectorContent}`;
-  console.log(toReturn);
-  return toReturn;
+  return `${metadata}\n\n${selectorNames}\n${selectorValues}\n\n${selectorContentHeader}\n${selectorContent}`;
 }
