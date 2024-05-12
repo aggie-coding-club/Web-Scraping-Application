@@ -1,6 +1,8 @@
 import { Button, Dialog } from "@mui/material";
 import { ScrapeConfig } from "../../../models/scrapeConfig";
 import { SelectorTable } from "./SelectorTable";
+import { DownloadAll } from "./DownloadAll";
+import { formatDate } from "../../../utils/formatDate";
 
 interface ViewDataDialogProps {
   scrapeConfig: ScrapeConfig;
@@ -22,13 +24,15 @@ const ViewDataDialog = ({
   return (
     <Dialog fullScreen open={openViewDialog} onClose={handleClose}>
       <h1>View: {scrapeConfig.name}</h1>
-      <p>Description: {scrapeConfig.description}</p>
+      {scrapeConfig.description && (
+        <p>Description: {scrapeConfig.description}</p>
+      )}
       <p>Status: {scrapeConfig.status}</p>
       <p>URL: {scrapeConfig.url}</p>
-      {/* FIXME: confirm that updatedAt DOES mean last scraped */}
-      <p>Last Scraped: {scrapeConfig.updatedAt}</p>{" "}
+      <p>Last Scrape: {formatDate(scrapeConfig.lastSuccessfulScrape)}</p>
       <p>Interval: {scrapeConfig.scrapeIntervalMinute} min</p>
       <h3>Selectors:</h3>
+      <DownloadAll scrapeConfig={scrapeConfig} />
       <SelectorTable selectorsMetadata={scrapeConfig.selectorsMetadata} />
       <Button onClick={handleClose} variant="contained">
         Close

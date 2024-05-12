@@ -1,6 +1,5 @@
-import { useState, useEffect, Fragment } from "react";
-import { SelectorData, SelectorInput } from "../../../models/scrapeConfig";
-import * as api from "../../../network/apis";
+import { Fragment } from "react";
+import { SelectorData } from "../../../models/scrapeConfig";
 import {
   TableContainer,
   Table,
@@ -12,22 +11,10 @@ import {
 } from "@mui/material";
 
 interface SelectorDataTableProps {
-  selector: SelectorInput;
+  selectorData: SelectorData | null;
 }
 
-const SelectorDataTable = ({ selector }: SelectorDataTableProps) => {
-  const [selectorData, setSelectorData] = useState<SelectorData | undefined>(
-    undefined
-  );
-  useEffect(() => {
-    async function loadData() {
-      if (selector.selectorId) {
-        setSelectorData(await api.getSelector(selector.selectorId));
-      }
-    }
-    loadData();
-  }, []);
-
+const SelectorDataTable = ({ selectorData }: SelectorDataTableProps) => {
   const cstOptions = {
     timeZone: "America/Chicago", // CST timezone
   };
@@ -39,10 +26,6 @@ const SelectorDataTable = ({ selector }: SelectorDataTableProps) => {
   const tableHeaderStyle = {
     backgroundColor: "#F5F5F5",
   };
-
-  if (!selector.selectorId) {
-    return <p>Error rendering data</p>;
-  }
 
   if (!selectorData) {
     return <p>Loading</p>;
