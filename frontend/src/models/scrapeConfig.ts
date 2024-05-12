@@ -22,7 +22,7 @@ export interface SelectorTable extends SelectorBase {
 }
 
 export interface SelectorDataDownload extends SelectorBase {
-  data: Data[] | null;
+  data: Data[] | [];
 }
 
 export interface ScrapeConfigBase {

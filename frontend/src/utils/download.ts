@@ -1,3 +1,5 @@
+import { ScrapeConfigDataDownload } from "../models/scrapeConfig";
+
 // import { DownloadOption } from "../models/Download";
 export enum DownloadOptions {
   CSV = 1,
@@ -12,7 +14,7 @@ export enum DownloadOptions {
  * @returns
  */
 export function download(
-  data: any,
+  data: ScrapeConfigDataDownload,
   option: DownloadOptions,
   fileName?: string
 ) {
@@ -49,8 +51,47 @@ export function download(
   URL.revokeObjectURL(url);
 }
 
-function convertToCSV(data: any) {
-  const headers = Object.keys(data[0]).join(",");
-  const rows = data.map((obj: any) => Object.values(obj).join(",")).join("\n");
-  return `${headers}\n${rows}`;
+function convertToCSV(data: ScrapeConfigDataDownload) {
+  let metadata = "";
+  metadata += `name,${data.name}\n`;
+  metadata += `description,${data.description}\n`;
+  metadata += `url,${data.url}\n`;
+  metadata += `scrape interval (min),${data.scrapeIntervalMinute}`;
+
+  let selectorNames = "selector name:,";
+  let selectorValues = "selector values:,";
+  let selectorContentHeader = ",";
+  let selectorContentArr = [","];
+
+  let maxSelectorDataLength = 0;
+
+  data.selectors.forEach((selector) => {
+    selectorNames += selector.name + ",,,"; // skip a column
+    selectorValues += selector.selectorValue += ",,,"; // skip a column
+    selectorContentHeader += "timestamp,content,,";
+
+    maxSelectorDataLength = Math.max(
+      maxSelectorDataLength,
+      selector.data.length
+    );
+  });
+
+  selectorContentHeader = selectorContentHeader.slice(0, -1);
+
+  for (let i = 0; i < maxSelectorDataLength; i++) {
+    data.selectors.forEach((selector) => {
+      if (i >= selector.data.length) return;
+      selectorContentArr.push(
+        `${selector.data[i].timestamp},${selector.data[i].content},,`
+      );
+    });
+    selectorContentArr.push("\n,");
+  }
+
+  const selectorContent = selectorContentArr.join("");
+  console.log(selectorContent);
+
+  let toReturn = `${metadata}\n\n${selectorNames}\n${selectorValues}\n\n${selectorContentHeader}\n${selectorContent}`;
+  console.log(toReturn);
+  return toReturn;
 }

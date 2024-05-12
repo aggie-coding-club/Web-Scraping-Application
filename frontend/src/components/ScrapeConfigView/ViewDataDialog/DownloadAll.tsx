@@ -40,7 +40,7 @@ const DownloadAll = ({ scrapeConfig }: DownloadAllProps) => {
           return {
             name: selector.name,
             selectorValue: selector.selectorValue,
-            data: null,
+            data: [],
           };
         }
 
@@ -70,10 +70,7 @@ const DownloadAll = ({ scrapeConfig }: DownloadAllProps) => {
     if (downloadOption == "json") {
       download(data, DownloadOptions.JSON);
     } else if (downloadOption == "csv") {
-      data.selectors.map((selector) => {
-        console.log("yo");
-        download(selector.data, DownloadOptions.CSV, selector.name);
-      });
+      download(data, DownloadOptions.CSV);
     }
   }
 

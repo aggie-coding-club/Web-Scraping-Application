@@ -44,7 +44,7 @@ const SelectorTableRow = ({ selector }: RowProps) => {
   async function loadData() {
     if (!selector.selectorId) {
       console.log("[ERROR] SelectorId undefined");
-      return null;
+      return [];
     }
 
     let data: SelectorData = await api.getSelector(selector.selectorId);
