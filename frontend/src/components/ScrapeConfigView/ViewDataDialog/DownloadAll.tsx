@@ -64,6 +64,7 @@ const DownloadAll = ({ scrapeConfig }: DownloadAllProps) => {
       description: scrapeConfig.description,
       url: scrapeConfig.url,
       scrapeIntervalMinute: scrapeConfig.scrapeIntervalMinute,
+      dateDownloaded: new Date(),
       selectors: dataSelectors,
     };
 

@@ -54,7 +54,7 @@ export function convertSelectorDataDownloadToCSV(data: SelectorDataDownload) {
   let metadata = "";
   metadata += `name,${data.name}\n`;
   metadata += `selector value,${data.selectorValue}\n`;
-  metadata += `date downloaded:${new Date()}`;
+  metadata += `date downloaded,${new Date()}`;
 
   let dataHeader = "timestamp,content";
   let rows = "";
@@ -74,7 +74,7 @@ export function convertScrapeConfigDataDownloadToCSV(
   metadata += `description,${data.description}\n`;
   metadata += `url,${data.url}\n`;
   metadata += `scrape interval (min),${data.scrapeIntervalMinute}\n`;
-  metadata += `date downloaded:${new Date()}`;
+  metadata += `date downloaded,${new Date()}`;
 
   let selectorNames = "selector name:,";
   let selectorValues = "selector values:,";

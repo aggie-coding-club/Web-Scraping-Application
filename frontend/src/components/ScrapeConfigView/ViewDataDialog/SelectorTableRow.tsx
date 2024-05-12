@@ -64,6 +64,7 @@ const SelectorTableRow = ({ selector }: RowProps) => {
     let data: SelectorDataDownload = {
       name: selector.name,
       selectorValue: selector.selectorValue,
+      dateDownloaded: new Date(),
       data: selectorData ? selectorData.data : await loadData(),
     };
 
@@ -73,13 +74,16 @@ const SelectorTableRow = ({ selector }: RowProps) => {
     }
 
     let downloadData;
-    if (option == DownloadOptions.CSV) {
-      downloadData = convertSelectorDataDownloadToCSV(data);
-    } else if (option == DownloadOptions.JSON) {
-      downloadData = JSON.stringify(data);
-    } else {
-      console.error("Invalid Download option");
-      return;
+    switch (option) {
+      case DownloadOptions.CSV:
+        downloadData = convertSelectorDataDownloadToCSV(data);
+        break;
+      case DownloadOptions.JSON:
+        downloadData = JSON.stringify(data);
+        break;
+      default:
+        console.error("Invalid Download option");
+        return;
     }
 
     download(

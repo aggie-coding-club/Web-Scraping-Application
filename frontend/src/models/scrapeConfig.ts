@@ -23,6 +23,7 @@ export interface SelectorTable extends SelectorBase {
 
 export interface SelectorDataDownload extends SelectorBase {
   data: Data[] | [];
+  dateDownloaded?: Date;
 }
 
 export interface ScrapeConfigBase {
@@ -47,5 +48,6 @@ export interface ScrapeConfig extends ScrapeConfigInput {
 }
 
 export interface ScrapeConfigDataDownload extends ScrapeConfigBase {
+  dateDownloaded: Date;
   selectors: SelectorDataDownload[];
 }
