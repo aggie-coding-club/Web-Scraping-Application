@@ -51,3 +51,9 @@ export interface ScrapeConfigDataDownload extends ScrapeConfigBase {
   dateDownloaded: Date;
   selectors: SelectorDataDownload[];
 }
+
+export enum statusStates {
+  success = "success",
+  pending = "pending",
+  failed = "failed",
+}

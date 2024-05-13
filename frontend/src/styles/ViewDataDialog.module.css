@@ -1,0 +1,19 @@
+.container {
+  margin: 40px 60px;
+}
+
+.metadataContainer {
+  margin: 32px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  justify-content: center;
+}
+
+.metadataContainer > * {
+  margin: 0;
+}
+
+.metadataLink {
+  font-weight: 600;
+}
