@@ -9,6 +9,7 @@ import {
   Paper,
 } from "@mui/material";
 import { SelectorTableRow } from "./SelectorTableRow";
+import styles from "../../../styles/ViewDataDialog.module.css";
 
 interface SelectorTableRowProps {
   selectorsMetadata: SelectorInput[];
@@ -19,19 +20,11 @@ const SelectorTable = ({ selectorsMetadata }: SelectorTableRowProps) => {
     return <h1>No metadata</h1>;
   }
 
-  const tableContainerStyle = {
-    maxWidth: 650,
-  };
-
-  const tableHeaderStyle = {
-    backgroundColor: "#F5F5F5",
-  };
-
   return (
-    <TableContainer component={Paper} sx={tableContainerStyle}>
+    <TableContainer component={Paper} className={styles.selectorTableContainer}>
       <Table aria-label="collapsible table" size="small">
         <TableHead>
-          <TableRow sx={tableHeaderStyle}>
+          <TableRow className={styles.tableHeader}>
             <TableCell />
             <TableCell>
               <b>Name</b>

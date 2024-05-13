@@ -19,13 +19,6 @@ interface DownloadAllProps {
 }
 
 const DownloadAll = ({ scrapeConfig }: DownloadAllProps) => {
-  const btnStyle = {
-    maxWidth: "150px",
-  };
-
-  const formControlStyle = {
-    minWidth: "100px",
-  };
   const [downloadOption, setDownloadOption] = useState<DownloadOptions>(
     DownloadOptions.CSV
   );

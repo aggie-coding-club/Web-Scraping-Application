@@ -1,3 +1,8 @@
+.tableHeader {
+  background-color: #f5f5f5;
+}
+
+/*********** ViewDataDialog.tsx ***********/
 .container {
   margin: 40px 60px;
   height: auto;
@@ -42,4 +47,20 @@
 
 .downloadAllFormControl {
   min-width: 100px;
+}
+
+/************* SelectorTable.tsx ******************/
+.selectorTableContainer {
+  max-width: 800px;
+}
+
+/************** SelectorDataTable.tsx **************/
+.selectorDataTableContainer {
+  margin: 20px 10px 20px 10vw;
+  overflow: auto;
+  max-height: 200px;
+}
+
+.selectorDataTable {
+  max-width: 600px;
 }
