@@ -136,8 +136,8 @@ const ScrapeConfigView = () => {
     },
     {
       title: "Last Changed",
-      key: "lastChanged",
-      dataIndex: "lastChanged",
+      key: "lastSuccessfulScrape",
+      dataIndex: "lastSuccessfulScrape",
       render: (text) => {
         return text ? new Date(text).toLocaleString() : "N/A";
       },
@@ -152,8 +152,8 @@ const ScrapeConfigView = () => {
       title: "View",
       key: "view",
       align: "center",
-      render: (_, record, index) => (
-        <IconButton onClick={() => onView(record, index)}>
+      render: (_, record) => (
+        <IconButton onClick={() => onView(record)}>
           <VisibilityIcon />
         </IconButton>
       ),

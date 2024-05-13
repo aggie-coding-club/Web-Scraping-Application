@@ -1,6 +1,5 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
-
-:root {
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Lato:wght@700&display=swap");
+root {
   font-family: "Inter", system-ui, Avenir, Helvetica, Arial, sans-serif !important;
   line-height: 1.5;
   font-weight: 400;
@@ -35,6 +34,7 @@ a {
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+  font-weight: 400;
 }
 @media (prefers-color-scheme: light) {
   :root {

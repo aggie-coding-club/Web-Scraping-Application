@@ -25,12 +25,22 @@ const ViewDataDialog = ({
     <Dialog fullScreen open={openViewDialog} onClose={handleClose}>
       <h1>View: {scrapeConfig.name}</h1>
       {scrapeConfig.description && (
-        <p>Description: {scrapeConfig.description}</p>
+        <p>
+          <b>Description</b>: {scrapeConfig.description}
+        </p>
       )}
-      <p>Status: {scrapeConfig.status}</p>
-      <p>URL: {scrapeConfig.url}</p>
-      <p>Last Scrape: {formatDate(scrapeConfig.lastSuccessfulScrape)}</p>
-      <p>Interval: {scrapeConfig.scrapeIntervalMinute} min</p>
+      <p>
+        <b>Status</b>: {scrapeConfig.status}
+      </p>
+      <p>
+        <b>URL</b>: {scrapeConfig.url}
+      </p>
+      <p>
+        <b>Last Scrape</b>: {formatDate(scrapeConfig.lastSuccessfulScrape)}
+      </p>
+      <p>
+        <b>Interval</b>: {scrapeConfig.scrapeIntervalMinute} min
+      </p>
       <h3>Selectors:</h3>
       <DownloadAll scrapeConfig={scrapeConfig} />
       <SelectorTable selectorsMetadata={scrapeConfig.selectorsMetadata} />
