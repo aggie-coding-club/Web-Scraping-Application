@@ -9,6 +9,7 @@ import {
   TableBody,
   Paper,
 } from "@mui/material";
+import styles from "../../../styles/ViewDataDialog.module.css";
 
 interface SelectorDataTableProps {
   selectorData: SelectorData | null;
@@ -19,27 +20,18 @@ const SelectorDataTable = ({ selectorData }: SelectorDataTableProps) => {
     timeZone: "America/Chicago", // CST timezone
   };
 
-  const tableContainerStyle = {
-    maxWidth: 600,
-  };
-
-  const tableHeaderStyle = {
-    backgroundColor: "#F5F5F5",
-  };
-
   if (!selectorData) {
     return <p>Loading</p>;
   }
 
   return (
-    <>
-      <TableContainer component={Paper} sx={tableContainerStyle}>
+    <div className={styles.selectorDataTableContainer}>
+      <TableContainer component={Paper} className={styles.selectorDataTable}>
         <Table aria-label="collapsible table" size="small">
           <TableHead>
-            <TableRow sx={tableHeaderStyle}>
+            <TableRow className={styles.tableHeader}>
               <TableCell align="left">Timestamp (CST)</TableCell>
               <TableCell>Value</TableCell>
-              <TableCell />
             </TableRow>
           </TableHead>
           <TableBody>
@@ -62,7 +54,7 @@ const SelectorDataTable = ({ selectorData }: SelectorDataTableProps) => {
           </TableBody>
         </Table>
       </TableContainer>
-    </>
+    </div>
   );
 };
 

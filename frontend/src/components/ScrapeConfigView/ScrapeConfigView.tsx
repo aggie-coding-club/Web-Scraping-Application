@@ -13,6 +13,7 @@ import * as apis from "../../network/apis";
 import styleUtils from "../../styles/utils.module.css";
 import { AddEditScrapeConfigDialog } from "./AddEditScrapeConfigDialog/AddEditScrapeConfigDialog";
 import { ViewDataDialog } from "./ViewDataDialog/ViewDataDialog";
+import { statusStates } from "../../models/scrapeConfig";
 
 const ScrapeConfigView = () => {
   const [scrapeConfigs, setScrapeConfigs] = useState<ScrapeConfig[]>([]);
@@ -77,12 +78,7 @@ const ScrapeConfigView = () => {
       key: "name",
     },
     {
-      title: "Description",
-      dataIndex: "description",
-      key: "description",
-    },
-    {
-      title: "Last Scrape",
+      title: "status",
       key: "status",
       dataIndex: "status",
       align: "center",
@@ -90,10 +86,10 @@ const ScrapeConfigView = () => {
         let backgroundColor;
         let label;
 
-        if (text === "success") {
+        if (text === statusStates.success) {
           backgroundColor = theme.palette.primary.main;
-          label = "Finished";
-        } else if (text === "failed") {
+          label = "Success";
+        } else if (text === statusStates.failed) {
           backgroundColor = theme.palette.warning.main;
           label = "Failed";
         } else {
@@ -136,8 +132,8 @@ const ScrapeConfigView = () => {
     },
     {
       title: "Last Changed",
-      key: "lastChanged",
-      dataIndex: "lastChanged",
+      key: "lastSuccessfulScrape",
+      dataIndex: "lastSuccessfulScrape",
       render: (text) => {
         return text ? new Date(text).toLocaleString() : "N/A";
       },
@@ -152,8 +148,8 @@ const ScrapeConfigView = () => {
       title: "View",
       key: "view",
       align: "center",
-      render: (_, record, index) => (
-        <IconButton onClick={() => onView(record, index)}>
+      render: (_, record) => (
+        <IconButton onClick={() => onView(record)}>
           <VisibilityIcon />
         </IconButton>
       ),
