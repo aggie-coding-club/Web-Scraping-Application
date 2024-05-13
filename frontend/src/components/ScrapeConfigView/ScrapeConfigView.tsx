@@ -13,6 +13,7 @@ import * as apis from "../../network/apis";
 import styleUtils from "../../styles/utils.module.css";
 import { AddEditScrapeConfigDialog } from "./AddEditScrapeConfigDialog/AddEditScrapeConfigDialog";
 import { ViewDataDialog } from "./ViewDataDialog/ViewDataDialog";
+import { statusStates } from "../../models/scrapeConfig";
 
 const ScrapeConfigView = () => {
   const [scrapeConfigs, setScrapeConfigs] = useState<ScrapeConfig[]>([]);
@@ -85,10 +86,10 @@ const ScrapeConfigView = () => {
         let backgroundColor;
         let label;
 
-        if (text === "success") {
+        if (text === statusStates.success) {
           backgroundColor = theme.palette.primary.main;
           label = "Success";
-        } else if (text === "failed") {
+        } else if (text === statusStates.failed) {
           backgroundColor = theme.palette.warning.main;
           label = "Failed";
         } else {
