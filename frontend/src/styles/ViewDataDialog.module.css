@@ -1,5 +1,6 @@
 .container {
   margin: 40px 60px;
+  height: auto;
 }
 
 .metadataContainer {
@@ -16,4 +17,29 @@
 
 .metadataLink {
   font-weight: 600;
+}
+
+.headerContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dataContainer {
+  margin: 24px 0;
+}
+
+/***** DownloadAll.tsx ***********************/
+.downloadAllContainer {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.downloadAllBtn {
+  width: 120px;
+}
+
+.downloadAllFormControl {
+  min-width: 100px;
 }

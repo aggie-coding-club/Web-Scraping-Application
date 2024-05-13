@@ -12,17 +12,13 @@ import {
   download,
   convertScrapeConfigDataDownloadToCSV,
 } from "../../../utils/download";
+import styles from "../../../styles/ViewDataDialog.module.css";
 
 interface DownloadAllProps {
   scrapeConfig: ScrapeConfig;
 }
 
 const DownloadAll = ({ scrapeConfig }: DownloadAllProps) => {
-  const containerStyle = {
-    display: "flex",
-    gap: "10px",
-  };
-
   const btnStyle = {
     maxWidth: "150px",
   };
@@ -90,11 +86,15 @@ const DownloadAll = ({ scrapeConfig }: DownloadAllProps) => {
   }
 
   return (
-    <div style={containerStyle}>
-      <Button variant="contained" style={btnStyle} onClick={handleDownload}>
+    <div className={styles.downloadAllContainer}>
+      <Button
+        variant="contained"
+        className={styles.downloadAllBtn}
+        onClick={handleDownload}
+      >
         Download All
       </Button>
-      <FormControl variant="standard" style={formControlStyle}>
+      <FormControl variant="standard" className={styles.downloadAllFormControl}>
         <Select
           labelId="download-option-label"
           value={downloadOption}

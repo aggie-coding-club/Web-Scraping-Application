@@ -77,12 +77,7 @@ const ScrapeConfigView = () => {
       key: "name",
     },
     {
-      title: "Description",
-      dataIndex: "description",
-      key: "description",
-    },
-    {
-      title: "Last Scrape",
+      title: "status",
       key: "status",
       dataIndex: "status",
       align: "center",
@@ -92,7 +87,7 @@ const ScrapeConfigView = () => {
 
         if (text === "success") {
           backgroundColor = theme.palette.primary.main;
-          label = "Finished";
+          label = "Success";
         } else if (text === "failed") {
           backgroundColor = theme.palette.warning.main;
           label = "Failed";
